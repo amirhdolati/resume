@@ -86,6 +86,33 @@ a {
   color: var(--navy);
 }
 
+.boot-progress {
+  width: 100%;
+  height: 18px;
+  padding: 2px;
+  background: var(--light);
+  border-top: 2px solid var(--mid);
+  border-left: 2px solid var(--mid);
+  border-right: 2px solid var(--light);
+  border-bottom: 2px solid var(--light);
+}
+
+.boot-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(90deg, var(--navy) 0 12px, var(--blue) 12px 24px);
+  transform-origin: left;
+  animation: boot-load 2.5s steps(16) forwards;
+}
+
+@keyframes boot-load {
+  from {
+    transform: scaleX(.05);
+  }
+}
+
 .desktop {
   position: fixed;
   inset: 0;
@@ -203,6 +230,12 @@ a {
   background:
     linear-gradient(35deg, transparent 0 43%, #000080 43% 57%, transparent 57% 100%),
     #ffffff;
+}
+
+.icon-guestbook {
+  background:
+    linear-gradient(#ffd447 0 18%, transparent 18% 100%),
+    linear-gradient(90deg, #ffffff 0 78%, #d9d9d9 78% 100%);
 }
 
 .icon-trash {
@@ -629,6 +662,30 @@ h2 {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.guestbook-list {
+  display: grid;
+  gap: 10px;
+}
+
+.guestbook-list article {
+  padding: 10px;
+  background: #ececec;
+  border-top: 2px solid var(--light);
+  border-left: 2px solid var(--light);
+  border-right: 2px solid var(--mid);
+  border-bottom: 2px solid var(--mid);
+}
+
+.guestbook-list strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--navy);
+}
+
+.guestbook-list p {
+  line-height: 1.5;
 }
 
 .start-menu {

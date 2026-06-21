@@ -8,6 +8,7 @@ const APP_TITLES = {
   life: "Life.exe",
   education: "Education.txt",
   contact: "Contact.cmd",
+  guestbook: "Guestbook.exe",
   taskmgr: "Taskmgr.exe",
   trash: "Trash",
 };
@@ -15,7 +16,7 @@ const APP_TITLES = {
 const clock = document.querySelector("[data-clock]");
 const startupAudio = document.querySelector("#startup-audio");
 const bootScreen = document.querySelector("[data-boot-screen]");
-const enableAudioButton = document.querySelector("[data-enable-audio]");
+const bootStatus = document.querySelector("[data-boot-status]");
 const popupLayer = document.querySelector("[data-popup-layer]");
 const startButton = document.querySelector("[data-start-button]");
 const startMenu = document.querySelector("[data-start-menu]");
@@ -74,17 +75,24 @@ function hideBootScreen() {
 }
 
 async function playStartup() {
-  if (!startupAudio) {
-    hideBootScreen();
-    return;
-  }
+  const bootLines = [
+    "Checking memory...",
+    "Loading HIMEM.SYS...",
+    "Starting AMIRHD desktop...",
+    "Opening resume apps...",
+  ];
+  bootLines.forEach((line, index) => {
+    setTimeout(() => {
+      if (bootStatus) bootStatus.textContent = line;
+    }, index * 620);
+  });
   try {
-    startupAudio.currentTime = 0;
-    await startupAudio.play();
-    setTimeout(hideBootScreen, 900);
-  } catch {
-    if (enableAudioButton) enableAudioButton.hidden = false;
-  }
+    if (startupAudio) {
+      startupAudio.currentTime = 0;
+      await startupAudio.play();
+    }
+  } catch {}
+  setTimeout(hideBootScreen, 2800);
 }
 
 function getWindow(appId) {
@@ -526,7 +534,7 @@ function setupLife() {
   start();
 }
 
-function setupTrash() {
+function setupSmallApps() {
   document.querySelectorAll("[data-restore-file]").forEach((button) => {
     button.addEventListener("click", () => {
       button.closest("div")?.remove();
@@ -538,6 +546,16 @@ function setupTrash() {
     const list = document.querySelector("[data-trash-list]");
     if (list) list.innerHTML = "<div><span>Trash is empty.</span><span></span></div>";
     showPopup("error", "Trash emptied. The bad ideas are gone.");
+  });
+
+  document.querySelectorAll("[data-upvote]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const count = button.querySelector("span");
+      if (!count) return;
+      count.textContent = String(Number(count.textContent) + 1);
+      button.disabled = true;
+      playSystemSound("info");
+    });
   });
 }
 
@@ -553,12 +571,6 @@ function setupDesktopSelection() {
 updateClock();
 setInterval(updateClock, 30000);
 
-enableAudioButton?.addEventListener("click", async () => {
-  if (audioContext?.state === "suspended") await audioContext.resume();
-  await playStartup();
-  hideBootScreen();
-});
-
 document.addEventListener("pointerdown", () => {
   if (audioContext?.state === "suspended") audioContext.resume();
 }, { once: true });
@@ -573,7 +585,7 @@ setupStartMenu();
 setupCommandLine();
 setupOpsConsole();
 setupLife();
-setupTrash();
+setupSmallApps();
 setupDesktopSelection();
 focusApp("resume");
 renderShell();

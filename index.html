@@ -19,8 +19,8 @@
       <div class="boot-box">
         <img src="assets/pixel-avatar.svg" alt="" width="72" height="72">
         <strong>AMIRHD OS 98</strong>
-        <span>Loading desktop shell...</span>
-        <button class="button primary" type="button" data-enable-audio hidden>Start with sound</button>
+        <span data-boot-status>Checking memory...</span>
+        <div class="boot-progress" aria-hidden="true"><span></span></div>
       </div>
     </div>
 
@@ -62,6 +62,10 @@
           <button class="desktop-icon" type="button" data-open-app="contact">
             <span class="icon icon-mail"></span>
             <span>Contact.cmd</span>
+          </button>
+          <button class="desktop-icon" type="button" data-open-app="guestbook">
+            <span class="icon icon-guestbook"></span>
+            <span>Guestbook.exe</span>
           </button>
           <button class="desktop-icon" type="button" data-open-app="taskmgr">
             <span class="icon icon-taskmgr"></span>
@@ -290,6 +294,37 @@
           </div>
         </section>
 
+        <section id="app-guestbook" class="window app-window" data-app="guestbook" style="--x: 470px; --y: 205px; --w: 520px; --h: 370px;">
+          <div class="titlebar">
+            <span>Guestbook.exe</span>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
+            </div>
+          </div>
+          <div class="window-content guestbook-content">
+            <p class="window-intro">Old-web guestbook meets Reddit-style signal: quick notes, tiny karma, no infinite feed.</p>
+            <div class="guestbook-list">
+              <article>
+                <strong>r/webdev style note</strong>
+                <p>Make the gimmick serve the resume: every window should reveal a skill, not hide it.</p>
+                <button class="button tiny" type="button" data-upvote>▲ <span>42</span></button>
+              </article>
+              <article>
+                <strong>r/retrobattlestations style note</strong>
+                <p>Boot screens, taskbars, internal scrollbars, and fake utilities make the illusion feel complete.</p>
+                <button class="button tiny" type="button" data-upvote>▲ <span>31</span></button>
+              </article>
+              <article>
+                <strong>Hiring manager mode</strong>
+                <p>Command prompt is cute, but contact and CV must stay one click away.</p>
+                <button class="button tiny" type="button" data-upvote>▲ <span>27</span></button>
+              </article>
+            </div>
+          </div>
+        </section>
+
         <section id="app-taskmgr" class="window app-window" data-app="taskmgr" style="--x: 612px; --y: 118px; --w: 420px; --h: 390px;">
           <div class="titlebar">
             <span>Task Manager</span>
@@ -333,6 +368,7 @@
           <button type="button" data-open-app="cmd"><span class="mini-icon icon-cmd"></span>Cmd.exe</button>
           <button type="button" data-open-app="exchange"><span class="mini-icon icon-monitor"></span>Exchange.exe</button>
           <button type="button" data-open-app="life"><span class="mini-icon icon-life"></span>Life.exe</button>
+          <button type="button" data-open-app="guestbook"><span class="mini-icon icon-guestbook"></span>Guestbook.exe</button>
           <button type="button" data-open-app="taskmgr"><span class="mini-icon icon-taskmgr"></span>Taskmgr.exe</button>
           <button type="button" data-open-app="trash"><span class="mini-icon icon-trash"></span>Trash</button>
           <hr>
