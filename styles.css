@@ -159,16 +159,22 @@ a {
 }
 
 .workspace {
-  width: min(1120px, calc(100% - 28px));
+  width: min(1180px, calc(100% - 28px));
   margin: 22px auto;
   display: grid;
+  grid-template-columns: 96px repeat(12, minmax(0, 1fr));
+  align-items: start;
   gap: 18px;
 }
 
 .desktop-icons {
-  display: flex;
+  position: sticky;
+  top: 74px;
+  grid-column: 1;
+  grid-row: 1 / span 8;
+  display: grid;
   gap: 12px;
-  flex-wrap: wrap;
+  align-content: start;
 }
 
 .desktop-icon {
@@ -193,17 +199,27 @@ a {
   box-shadow: 4px 4px 0 rgba(0,0,0,.35);
 }
 
-.info-icon {
-  background: linear-gradient(var(--navy) 0 100%);
+.resume-icon {
+  background:
+    linear-gradient(#ffffff 0 16%, transparent 16% 100%),
+    linear-gradient(90deg, #ffffff 0 70%, #d9d9d9 70% 100%);
 }
 
-.error-icon {
-  background: linear-gradient(var(--hot) 0 100%);
+.cmd-icon {
+  background:
+    linear-gradient(#101010 0 100%);
 }
 
 .tools-icon {
   background:
     linear-gradient(90deg, var(--hot) 0 33%, var(--amber) 33% 66%, var(--green) 66% 100%);
+}
+
+.trash-icon {
+  background:
+    linear-gradient(#d9d9d9 0 18%, transparent 18% 100%),
+    linear-gradient(90deg, transparent 0 14%, #ffffff 14% 86%, transparent 86% 100%),
+    #9a9a9a;
 }
 
 .window {
@@ -214,6 +230,33 @@ a {
   border-bottom: 2px solid var(--shadow);
   box-shadow: 6px 6px 0 rgba(0,0,0,.3), inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
   transform-origin: 50% 10%;
+}
+
+.hero-window,
+.stats-window,
+#experience,
+#stack,
+#projects,
+.tools-grid,
+.education-window,
+.contact-window {
+  grid-column: 2 / -1;
+}
+
+.hero-window {
+  grid-column: 2 / 10;
+  grid-row: 1;
+}
+
+.command-window {
+  grid-column: 9 / -1;
+  grid-row: 1;
+  margin-top: 96px;
+  z-index: 4;
+}
+
+.stats-window {
+  grid-row: 2;
 }
 
 .window.focused {
@@ -383,6 +426,36 @@ h2 {
   display: block;
   color: var(--light);
   font-weight: 400;
+}
+
+.command-body {
+  min-height: 270px;
+  padding: 14px;
+  color: #caffbf;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 4px),
+    #080808;
+  line-height: 1.8;
+}
+
+.command-body strong {
+  display: block;
+  color: var(--light);
+  font-weight: 400;
+}
+
+.command-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 14px 0 10px;
+}
+
+.command-output {
+  min-height: 42px;
+  padding: 8px;
+  color: var(--amber);
+  border: 1px dashed #33d17a;
 }
 
 .avatar {
@@ -644,6 +717,34 @@ h2 {
 }
 
 @media (max-width: 900px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .desktop-icons,
+  .hero-window,
+  .command-window,
+  .stats-window,
+  #experience,
+  #stack,
+  #projects,
+  .tools-grid,
+  .education-window,
+  .contact-window {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .desktop-icons {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .command-window {
+    margin-top: 0;
+  }
+
   .tools-grid {
     grid-template-columns: 1fr;
   }

@@ -135,8 +135,25 @@ function setupWindows() {
     });
   });
 
+  document.querySelectorAll("[data-open-target]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const target = document.getElementById(button.dataset.openTarget);
+      if (!target) return;
+      if (target.classList.contains("window")) {
+        target.style.display = "";
+        target.classList.remove("minimized", "closed");
+        target.classList.add("focused", "flash");
+        target.style.zIndex = String(++zIndex);
+        setTimeout(() => target.classList.remove("flash"), 450);
+      }
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+      playSystemSound("info");
+    });
+  });
+
   document.querySelectorAll(".titlebar").forEach((titlebar) => {
     titlebar.addEventListener("pointerdown", (event) => {
+      if (event.target.closest("button")) return;
       const win = titlebar.closest(".window");
       if (!win || win.classList.contains("popup")) return;
       const rect = win.getBoundingClientRect();
@@ -167,6 +184,23 @@ function setupWindows() {
       titlebar.addEventListener("pointermove", move);
       titlebar.addEventListener("pointerup", stop);
       titlebar.addEventListener("pointercancel", stop);
+    });
+  });
+}
+
+function setupCommandLine() {
+  const output = document.querySelector("[data-command-output]");
+  if (!output) return;
+  const commands = {
+    backend: "[backend] Go services, APIs, ledgers, exchange workflows, observability",
+    systems: "[systems] C/C++, concurrency, networking, ROS, embedded UI, low-latency delivery",
+    contact: "[contact] AmirHossein_Dolati@outlook.com | LinkedIn ready",
+  };
+
+  document.querySelectorAll("[data-cmd-run]").forEach((button) => {
+    button.addEventListener("click", () => {
+      output.textContent = commands[button.dataset.cmdRun] || "[error] command not found";
+      playSystemSound(button.dataset.cmdRun === "contact" ? "info" : "info");
     });
   });
 }
@@ -235,7 +269,7 @@ function setupLife() {
   const cols = Math.floor(canvas.width / cell);
   const rows = Math.floor(canvas.height / cell);
   let grid = Array.from({ length: rows }, () => Array(cols).fill(0));
-  let running = false;
+  let running = true;
   let timer;
 
   function randomize() {
@@ -320,6 +354,9 @@ function setupLife() {
 
   randomize();
   draw();
+  const toggleButton = document.querySelector("[data-life-toggle]");
+  if (toggleButton) toggleButton.textContent = "Pause";
+  timer = setInterval(step, 120);
 }
 
 updateClock();
@@ -340,6 +377,7 @@ document.querySelectorAll("[data-popup]").forEach((button) => {
 });
 
 setupWindows();
+setupCommandLine();
 setupOpsConsole();
 setupLife();
 playStartup();

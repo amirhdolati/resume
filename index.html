@@ -41,21 +41,25 @@
 
       <main id="home" class="workspace">
         <aside class="desktop-icons" aria-label="Desktop shortcuts">
-          <button class="desktop-icon" type="button" data-popup="info">
-            <span class="icon-pixel info-icon"></span>
-            Info
+          <button class="desktop-icon" type="button" data-open-target="resume-window">
+            <span class="icon-pixel resume-icon"></span>
+            Resume
           </button>
-          <button class="desktop-icon" type="button" data-popup="error">
-            <span class="icon-pixel error-icon"></span>
-            Error
+          <button class="desktop-icon" type="button" data-open-target="cmd-window">
+            <span class="icon-pixel cmd-icon"></span>
+            Command
           </button>
-          <a class="desktop-icon" href="#tools">
+          <button class="desktop-icon" type="button" data-open-target="tools">
             <span class="icon-pixel tools-icon"></span>
             Tools
-          </a>
+          </button>
+          <button class="desktop-icon" type="button" data-popup="error">
+            <span class="icon-pixel trash-icon"></span>
+            Trash
+          </button>
         </aside>
 
-        <section class="hero-window window" aria-labelledby="intro-title">
+        <section id="resume-window" class="hero-window window" aria-labelledby="intro-title">
           <div class="titlebar">
             <span>resume.exe</span>
             <div class="window-actions">
@@ -89,6 +93,31 @@
               </div>
               <img class="avatar" src="assets/pixel-avatar.svg" alt="Pixel art avatar of AmirHossein">
             </div>
+          </div>
+        </section>
+
+        <section id="cmd-window" class="window command-window" aria-label="Command line profile">
+          <div class="titlebar">
+            <span>C:\AMIRHD\PROFILE.EXE</span>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
+              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
+              <button type="button" aria-label="Close window" data-window-effect="close"></button>
+            </div>
+          </div>
+          <div class="command-body">
+            <div>C:\> whoami</div>
+            <strong>AmirHossein Dolati</strong>
+            <div>C:\> run stack --current</div>
+            <strong>Go backend | financial systems | exchange services | blockchain</strong>
+            <div>C:\> inspect strengths</div>
+            <strong>core logic, concurrency, networking, reliability, systems debugging</strong>
+            <div class="command-actions">
+              <button class="button tiny primary" type="button" data-cmd-run="backend">backend</button>
+              <button class="button tiny" type="button" data-cmd-run="systems">systems</button>
+              <button class="button tiny" type="button" data-cmd-run="contact">contact</button>
+            </div>
+            <div class="command-output" data-command-output>[ready] select a command</div>
           </div>
         </section>
 
@@ -353,6 +382,9 @@
 
       <footer class="taskbar">
         <a class="start-button" href="#home">Start</a>
+        <button class="task-button" type="button" data-open-target="resume-window">Resume</button>
+        <button class="task-button" type="button" data-open-target="cmd-window">CMD</button>
+        <button class="task-button" type="button" data-open-target="tools">Tools</button>
         <button class="task-button" type="button" data-popup="info">Info</button>
         <button class="task-button" type="button" data-popup="error">Error</button>
         <span>Resume loaded successfully</span>
