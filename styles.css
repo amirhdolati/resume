@@ -201,7 +201,7 @@ a {
   background: linear-gradient(var(--hot) 0 100%);
 }
 
-.paint-icon {
+.tools-icon {
   background:
     linear-gradient(90deg, var(--hot) 0 33%, var(--amber) 33% 66%, var(--green) 66% 100%);
 }
@@ -489,15 +489,11 @@ h2 {
   min-width: 0;
 }
 
-.mini-game {
-  grid-column: 1 / -1;
-}
-
 .tool-content {
   padding: 12px;
 }
 
-.paint-toolbar,
+.ops-toolbar,
 .life-toolbar {
   display: flex;
   gap: 8px;
@@ -505,29 +501,58 @@ h2 {
   margin-bottom: 10px;
 }
 
-.swatch {
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  background: var(--swatch);
+.ops-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ops-grid article {
+  min-height: 74px;
+  padding: 10px;
+  background: #ececec;
   border-top: 2px solid var(--light);
   border-left: 2px solid var(--light);
-  border-right: 2px solid var(--shadow);
-  border-bottom: 2px solid var(--shadow);
+  border-right: 2px solid #808080;
+  border-bottom: 2px solid #808080;
 }
 
-.swatch.active {
-  outline: 3px solid var(--navy);
-  outline-offset: 2px;
+.ops-grid span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--navy);
+  font-size: 11px;
 }
 
-.paint-canvas,
-.life-canvas,
-.game-canvas {
+.ops-grid strong {
+  font-size: 18px;
+}
+
+.ops-log {
+  height: 118px;
+  overflow: hidden;
+  padding: 10px;
+  color: #caffbf;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 4px),
+    #080808;
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-right: 2px solid var(--light);
+  border-bottom: 2px solid var(--light);
+  line-height: 1.7;
+}
+
+.ops-log div {
+  white-space: nowrap;
+}
+
+.life-canvas {
   display: block;
   width: 100%;
   max-width: 100%;
-  background: #f8f8f8;
+  background: #080808;
   border-top: 2px solid #808080;
   border-left: 2px solid #808080;
   border-right: 2px solid var(--light);
@@ -536,16 +561,11 @@ h2 {
   touch-action: none;
 }
 
-.life-canvas,
-.game-canvas {
-  background: #080808;
-}
-
-.tool-note,
-.game-hud {
+.tool-note {
   margin-bottom: 10px;
   color: var(--navy);
   font-weight: 800;
+  line-height: 1.5;
 }
 
 .contact-window {

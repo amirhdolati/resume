@@ -171,63 +171,60 @@ function setupWindows() {
   });
 }
 
-function setupPaint() {
-  const canvas = document.querySelector("#paint-canvas");
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-  let color = "#101010";
-  let drawing = false;
+function setupOpsConsole() {
+  const ordersNode = document.querySelector("[data-orders]");
+  const latencyNode = document.querySelector("[data-latency]");
+  const ledgerNode = document.querySelector("[data-ledger]");
+  const riskNode = document.querySelector("[data-risk]");
+  const logNode = document.querySelector("[data-ops-log]");
+  if (!ordersNode || !latencyNode || !ledgerNode || !riskNode || !logNode) return;
 
-  function clear() {
-    ctx.fillStyle = "#f8f8f8";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#c0c0c0";
-    for (let x = 0; x < canvas.width; x += 20) {
-      ctx.fillRect(x, 0, 1, canvas.height);
-    }
-    for (let y = 0; y < canvas.height; y += 20) {
-      ctx.fillRect(0, y, canvas.width, 1);
+  let orders = 1284;
+  let latency = 41;
+  const messages = [
+    "[match] order batch accepted",
+    "[ledger] settlement queue drained",
+    "[wallet] balance snapshot verified",
+    "[risk] exposure limits checked",
+    "[chain] tx indexer caught up",
+    "[api] p95 latency inside budget",
+  ];
+
+  function appendLog(message) {
+    const line = document.createElement("div");
+    line.textContent = message;
+    logNode.prepend(line);
+    while (logNode.children.length > 6) {
+      logNode.lastElementChild?.remove();
     }
   }
 
-  function draw(event) {
-    const rect = canvas.getBoundingClientRect();
-    const x = Math.floor((event.clientX - rect.left) / rect.width * canvas.width / 8) * 8;
-    const y = Math.floor((event.clientY - rect.top) / rect.height * canvas.height / 8) * 8;
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, 8, 8);
+  function render() {
+    ordersNode.textContent = String(orders);
+    latencyNode.textContent = `${latency}ms`;
+    ledgerNode.textContent = latency > 90 ? "LAG" : "OK";
+    riskNode.textContent = latency > 110 ? "WATCH" : "LOW";
+    ledgerNode.style.color = latency > 90 ? "#ff3f8e" : "#000080";
+    riskNode.style.color = latency > 110 ? "#ff3f8e" : "#000080";
   }
 
-  clear();
-  canvas.addEventListener("pointerdown", (event) => {
-    drawing = true;
-    canvas.setPointerCapture(event.pointerId);
-    draw(event);
-    playSystemSound("info");
-  });
-  canvas.addEventListener("pointermove", (event) => {
-    if (drawing) draw(event);
-  });
-  canvas.addEventListener("pointerup", () => {
-    drawing = false;
-  });
-  canvas.addEventListener("pointercancel", () => {
-    drawing = false;
+  function tick() {
+    orders += Math.floor(6 + Math.random() * 42);
+    latency = Math.max(18, Math.floor(latency + (Math.random() * 28 - 11)));
+    appendLog(messages[Math.floor(Math.random() * messages.length)]);
+    render();
+    playSystemSound(latency > 110 ? "error" : "info");
+  }
+
+  document.querySelector("[data-ops-tick]")?.addEventListener("click", tick);
+  document.querySelector("[data-ops-check]")?.addEventListener("click", () => {
+    latency = Math.max(22, latency - 18);
+    appendLog("[check] reconciliation passed");
+    render();
+    showPopup("info");
   });
 
-  document.querySelectorAll("[data-color]").forEach((button) => {
-    button.addEventListener("click", () => {
-      color = button.dataset.color;
-      document.querySelectorAll("[data-color]").forEach((node) => node.classList.remove("active"));
-      button.classList.add("active");
-      playSystemSound("info");
-    });
-  });
-
-  document.querySelector("[data-paint-clear]")?.addEventListener("click", () => {
-    clear();
-    playSystemSound("error");
-  });
+  render();
 }
 
 function setupLife() {
@@ -325,73 +322,6 @@ function setupLife() {
   draw();
 }
 
-function setupGame() {
-  const canvas = document.querySelector("#game-canvas");
-  const scoreNode = document.querySelector("[data-score]");
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-  const keys = new Set();
-  const player = { x: canvas.width / 2 - 16, y: canvas.height - 28, width: 32, height: 16 };
-  const drops = [];
-  let score = 0;
-  let frame = 0;
-
-  function spawn() {
-    drops.push({
-      x: Math.floor(Math.random() * (canvas.width - 14)),
-      y: -14,
-      size: 14,
-      speed: 1.2 + Math.random() * 2.2,
-      good: Math.random() > 0.35,
-    });
-  }
-
-  function hit(a, b) {
-    return a.x < b.x + b.size && a.x + a.width > b.x && a.y < b.y + b.size && a.y + a.height > b.y;
-  }
-
-  function loop() {
-    frame += 1;
-    if (frame % 34 === 0) spawn();
-    if (keys.has("ArrowLeft") || keys.has("a")) player.x -= 4;
-    if (keys.has("ArrowRight") || keys.has("d")) player.x += 4;
-    player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-
-    ctx.fillStyle = "#080808";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#1f2937";
-    for (let x = 0; x < canvas.width; x += 20) ctx.fillRect(x, 0, 1, canvas.height);
-    for (let y = 0; y < canvas.height; y += 20) ctx.fillRect(0, y, canvas.width, 1);
-
-    ctx.fillStyle = "#ffd447";
-    ctx.fillRect(player.x, player.y, player.width, player.height);
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(player.x + 6, player.y + 4, 4, 4);
-    ctx.fillRect(player.x + 22, player.y + 4, 4, 4);
-
-    for (let i = drops.length - 1; i >= 0; i -= 1) {
-      const drop = drops[i];
-      drop.y += drop.speed;
-      ctx.fillStyle = drop.good ? "#33d17a" : "#ff3f8e";
-      ctx.fillRect(drop.x, drop.y, drop.size, drop.size);
-      if (hit(player, drop)) {
-        score += drop.good ? 1 : -2;
-        if (scoreNode) scoreNode.textContent = String(score);
-        playSystemSound(drop.good ? "info" : "error");
-        drops.splice(i, 1);
-      } else if (drop.y > canvas.height) {
-        drops.splice(i, 1);
-      }
-    }
-
-    requestAnimationFrame(loop);
-  }
-
-  window.addEventListener("keydown", (event) => keys.add(event.key));
-  window.addEventListener("keyup", (event) => keys.delete(event.key));
-  loop();
-}
-
 updateClock();
 setInterval(updateClock, 30000);
 
@@ -410,7 +340,6 @@ document.querySelectorAll("[data-popup]").forEach((button) => {
 });
 
 setupWindows();
-setupPaint();
+setupOpsConsole();
 setupLife();
-setupGame();
 playStartup();

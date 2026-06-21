@@ -50,7 +50,7 @@
             Error
           </button>
           <a class="desktop-icon" href="#tools">
-            <span class="icon-pixel paint-icon"></span>
+            <span class="icon-pixel tools-icon"></span>
             Tools
           </a>
         </aside>
@@ -252,10 +252,10 @@
           </div>
         </section>
 
-        <section id="tools" class="tools-grid" aria-label="Creative retro tools">
+        <section id="tools" class="tools-grid" aria-label="Meaningful retro tools">
           <div class="window tool-window">
             <div class="titlebar">
-              <span>paint.exe</span>
+              <span>exchange_console.exe</span>
               <div class="window-actions">
                 <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
                 <button type="button" aria-label="Flash window" data-window-effect="max"></button>
@@ -263,21 +263,40 @@
               </div>
             </div>
             <div class="tool-content">
-              <div class="paint-toolbar" aria-label="Paint colors">
-                <button type="button" class="swatch active" style="--swatch:#101010" data-color="#101010" aria-label="Black"></button>
-                <button type="button" class="swatch" style="--swatch:#ff3f8e" data-color="#ff3f8e" aria-label="Pink"></button>
-                <button type="button" class="swatch" style="--swatch:#33d17a" data-color="#33d17a" aria-label="Green"></button>
-                <button type="button" class="swatch" style="--swatch:#1084d0" data-color="#1084d0" aria-label="Blue"></button>
-                <button type="button" class="swatch" style="--swatch:#ffd447" data-color="#ffd447" aria-label="Yellow"></button>
-                <button type="button" class="button tiny" data-paint-clear>Clear</button>
+              <p class="tool-note">A tiny backend readout: orders, ledger settlement, reconciliation, and alerts.</p>
+              <div class="ops-toolbar">
+                <button type="button" class="button tiny primary" data-ops-tick>Process tick</button>
+                <button type="button" class="button tiny" data-ops-check>Run checks</button>
               </div>
-              <canvas id="paint-canvas" class="paint-canvas" width="420" height="260" aria-label="Retro paint canvas"></canvas>
+              <div class="ops-grid" aria-label="Exchange backend metrics">
+                <article>
+                  <span>Orders</span>
+                  <strong data-orders>1284</strong>
+                </article>
+                <article>
+                  <span>Latency</span>
+                  <strong data-latency>41ms</strong>
+                </article>
+                <article>
+                  <span>Ledger</span>
+                  <strong data-ledger>OK</strong>
+                </article>
+                <article>
+                  <span>Risk</span>
+                  <strong data-risk>LOW</strong>
+                </article>
+              </div>
+              <div class="ops-log" data-ops-log aria-live="polite">
+                <div>[boot] exchange services online</div>
+                <div>[sync] ledger mirror healthy</div>
+                <div>[risk] no abnormal flow detected</div>
+              </div>
             </div>
           </div>
 
           <div class="window tool-window">
             <div class="titlebar">
-              <span>life.exe</span>
+              <span>reliability_life.exe</span>
               <div class="window-actions">
                 <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
                 <button type="button" aria-label="Flash window" data-window-effect="max"></button>
@@ -285,6 +304,7 @@
               </div>
             </div>
             <div class="tool-content">
+              <p class="tool-note">Game of Life, used here as a small systems model: simple local rules, emergent global behavior.</p>
               <div class="life-toolbar">
                 <button type="button" class="button tiny primary" data-life-toggle>Run</button>
                 <button type="button" class="button tiny" data-life-step>Step</button>
@@ -292,22 +312,6 @@
                 <button type="button" class="button tiny" data-life-clear>Clear</button>
               </div>
               <canvas id="life-canvas" class="life-canvas" width="420" height="260" aria-label="Conway's Game of Life"></canvas>
-            </div>
-          </div>
-
-          <div class="window tool-window mini-game">
-            <div class="titlebar">
-              <span>coin_dodge.bat</span>
-              <div class="window-actions">
-                <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
-                <button type="button" aria-label="Flash window" data-window-effect="max"></button>
-                <button type="button" aria-label="Close window" data-window-effect="close"></button>
-              </div>
-            </div>
-            <div class="tool-content">
-              <p class="tool-note">Move with A/D or arrow keys. Catch green blocks, dodge pink blocks.</p>
-              <canvas id="game-canvas" class="game-canvas" width="420" height="220" aria-label="Retro mini game"></canvas>
-              <div class="game-hud">Score: <span data-score>0</span></div>
             </div>
           </div>
         </section>
