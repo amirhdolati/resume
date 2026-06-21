@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc" shape-rendering="crispEdges">
+  <title id="title">Pixel avatar</title>
+  <desc id="desc">Retro pixel art avatar with computer terminal colors.</desc>
+  <rect width="160" height="160" fill="#008080"/>
+  <rect x="16" y="16" width="128" height="128" fill="#c0c0c0"/>
+  <rect x="24" y="24" width="112" height="112" fill="#000080"/>
+  <rect x="40" y="32" width="80" height="16" fill="#202020"/>
+  <rect x="32" y="48" width="96" height="48" fill="#f0c7a8"/>
+  <rect x="48" y="64" width="16" height="16" fill="#101010"/>
+  <rect x="96" y="64" width="16" height="16" fill="#101010"/>
+  <rect x="64" y="88" width="32" height="8" fill="#9f5f4a"/>
+  <rect x="48" y="104" width="64" height="16" fill="#101010"/>
+  <rect x="32" y="120" width="96" height="16" fill="#33d17a"/>
+  <rect x="40" y="128" width="80" height="8" fill="#111111"/>
+  <rect x="24" y="136" width="112" height="8" fill="#ffffff"/>
+  <rect x="32" y="24" width="96" height="8" fill="#ffd447"/>
+</svg>
