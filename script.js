@@ -22,6 +22,21 @@ const startButton = document.querySelector("[data-start-button]");
 const startMenu = document.querySelector("[data-start-menu]");
 const taskbarApps = document.querySelector("[data-taskbar-apps]");
 const taskList = document.querySelector("[data-task-list]");
+const desktopSurface = document.querySelector(".desktop-surface");
+const guestbookForm = document.querySelector("[data-guestbook-form]");
+const guestbookList = document.querySelector("[data-guestbook-list]");
+const guestbookClear = document.querySelector("[data-guestbook-clear]");
+const GUESTBOOK_KEY = "amirhd-os98-guestbook";
+const DEFAULT_GUESTBOOK_NOTES = [
+  {
+    name: "System",
+    note: "Every window is a resume surface: backend, systems, exchange, contact, and CV stay one click away.",
+  },
+  {
+    name: "Visitor",
+    note: "The old-web guestbook is here as a small interaction, not a loud explanation.",
+  },
+];
 
 let audioContext;
 let zIndex = 40;
@@ -255,7 +270,13 @@ function showPopup(kind = "info", message) {
 
 function setupWindowControls() {
   document.querySelectorAll("[data-open-app]").forEach((button) => {
-    button.addEventListener("click", () => openApp(button.dataset.openApp));
+    button.addEventListener("click", () => {
+      if (button.dataset.justDragged === "true") {
+        delete button.dataset.justDragged;
+        return;
+      }
+      openApp(button.dataset.openApp);
+    });
   });
 
   document.querySelectorAll("[data-window-action]").forEach((button) => {
@@ -534,6 +555,72 @@ function setupLife() {
   start();
 }
 
+function loadGuestbookNotes() {
+  try {
+    const raw = localStorage.getItem(GUESTBOOK_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed)
+      ? parsed.filter((item) => item && typeof item.name === "string" && typeof item.note === "string")
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveGuestbookNotes(notes) {
+  try {
+    localStorage.setItem(GUESTBOOK_KEY, JSON.stringify(notes.slice(0, 12)));
+  } catch {
+    showPopup("error", "This browser blocked local guestbook storage.");
+  }
+}
+
+function renderGuestbook() {
+  if (!guestbookList) return;
+  guestbookList.innerHTML = "";
+  const notes = [...loadGuestbookNotes(), ...DEFAULT_GUESTBOOK_NOTES];
+
+  notes.forEach((entry) => {
+    const article = document.createElement("article");
+    const name = document.createElement("strong");
+    const note = document.createElement("p");
+    name.textContent = entry.name;
+    note.textContent = entry.note;
+    article.append(name, note);
+    guestbookList.appendChild(article);
+  });
+}
+
+function setupGuestbook() {
+  renderGuestbook();
+
+  guestbookForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(guestbookForm);
+    const name = String(formData.get("name") || "Visitor").trim().slice(0, 32) || "Visitor";
+    const note = String(formData.get("note") || "").trim().slice(0, 160);
+    if (!note) {
+      playSystemSound("error");
+      return;
+    }
+
+    const notes = loadGuestbookNotes();
+    notes.unshift({ name, note });
+    saveGuestbookNotes(notes);
+    guestbookForm.reset();
+    renderGuestbook();
+    playSystemSound("info");
+  });
+
+  guestbookClear?.addEventListener("click", () => {
+    try {
+      localStorage.removeItem(GUESTBOOK_KEY);
+    } catch {}
+    renderGuestbook();
+    playSystemSound("error");
+  });
+}
+
 function setupSmallApps() {
   document.querySelectorAll("[data-restore-file]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -547,23 +634,92 @@ function setupSmallApps() {
     if (list) list.innerHTML = "<div><span>Trash is empty.</span><span></span></div>";
     showPopup("error", "Trash emptied. The bad ideas are gone.");
   });
+}
 
-  document.querySelectorAll("[data-upvote]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const count = button.querySelector("span");
-      if (!count) return;
-      count.textContent = String(Number(count.textContent) + 1);
-      button.disabled = true;
-      playSystemSound("info");
-    });
+function desktopIcons() {
+  return Array.from(document.querySelectorAll(".desktop-icon"));
+}
+
+function layoutDesktopIcons() {
+  if (!desktopSurface) return;
+  const icons = desktopIcons();
+  const iconWidth = 88;
+  const iconHeight = 70;
+  const gap = 9;
+  const startX = 12;
+  const startY = 14;
+  const usableHeight = Math.max(iconHeight, desktopSurface.clientHeight - startY - 10);
+  const rows = Math.max(1, Math.floor((usableHeight + gap) / (iconHeight + gap)));
+
+  icons.forEach((icon, index) => {
+    if (icon.dataset.moved === "true") return;
+    const column = Math.floor(index / rows);
+    const row = index % rows;
+    icon.style.left = `${startX + column * (iconWidth + gap)}px`;
+    icon.style.top = `${startY + row * (iconHeight + gap)}px`;
   });
 }
 
-function setupDesktopSelection() {
-  document.querySelectorAll(".desktop-icon").forEach((icon) => {
+function selectDesktopIcon(icon) {
+  desktopIcons().forEach((node) => node.classList.remove("selected"));
+  icon.classList.add("selected");
+}
+
+function setupDesktopIcons() {
+  layoutDesktopIcons();
+  window.addEventListener("resize", layoutDesktopIcons);
+
+  desktopIcons().forEach((icon) => {
     icon.addEventListener("click", () => {
-      document.querySelectorAll(".desktop-icon").forEach((node) => node.classList.remove("selected"));
-      icon.classList.add("selected");
+      if (icon.dataset.justDragged === "true") return;
+      selectDesktopIcon(icon);
+    });
+
+    icon.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0 || !desktopSurface) return;
+      selectDesktopIcon(icon);
+
+      const iconRect = icon.getBoundingClientRect();
+      const surfaceRect = desktopSurface.getBoundingClientRect();
+      const offsetX = event.clientX - iconRect.left;
+      const offsetY = event.clientY - iconRect.top;
+      const startX = event.clientX;
+      const startY = event.clientY;
+      let dragging = false;
+
+      icon.setPointerCapture(event.pointerId);
+
+      function move(moveEvent) {
+        const distance = Math.abs(moveEvent.clientX - startX) + Math.abs(moveEvent.clientY - startY);
+        if (distance < 5 && !dragging) return;
+        dragging = true;
+        icon.classList.add("dragging");
+        icon.dataset.moved = "true";
+
+        const maxX = Math.max(4, surfaceRect.width - iconRect.width - 4);
+        const maxY = Math.max(4, surfaceRect.height - iconRect.height - 4);
+        const x = Math.max(4, Math.min(maxX, moveEvent.clientX - surfaceRect.left - offsetX));
+        const y = Math.max(4, Math.min(maxY, moveEvent.clientY - surfaceRect.top - offsetY));
+        icon.style.left = `${x}px`;
+        icon.style.top = `${y}px`;
+      }
+
+      function stop() {
+        icon.removeEventListener("pointermove", move);
+        icon.removeEventListener("pointerup", stop);
+        icon.removeEventListener("pointercancel", stop);
+        icon.classList.remove("dragging");
+        if (dragging) {
+          icon.dataset.justDragged = "true";
+          setTimeout(() => {
+            delete icon.dataset.justDragged;
+          }, 0);
+        }
+      }
+
+      icon.addEventListener("pointermove", move);
+      icon.addEventListener("pointerup", stop);
+      icon.addEventListener("pointercancel", stop);
     });
   });
 }
@@ -585,8 +741,9 @@ setupStartMenu();
 setupCommandLine();
 setupOpsConsole();
 setupLife();
+setupGuestbook();
 setupSmallApps();
-setupDesktopSelection();
+setupDesktopIcons();
 focusApp("resume");
 renderShell();
 playStartup();

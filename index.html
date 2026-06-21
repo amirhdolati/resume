@@ -7,9 +7,6 @@
     <meta name="theme-color" content="#008080">
     <title>AmirHossein Dolati | Win98 Resume Desktop</title>
     <link rel="icon" href="assets/pixel-avatar.svg" type="image/svg+xml">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -304,24 +301,22 @@
             </div>
           </div>
           <div class="window-content guestbook-content">
-            <p class="window-intro">Old-web guestbook meets Reddit-style signal: quick notes, tiny karma, no infinite feed.</p>
-            <div class="guestbook-list">
-              <article>
-                <strong>r/webdev style note</strong>
-                <p>Make the gimmick serve the resume: every window should reveal a skill, not hide it.</p>
-                <button class="button tiny" type="button" data-upvote>▲ <span>42</span></button>
-              </article>
-              <article>
-                <strong>r/retrobattlestations style note</strong>
-                <p>Boot screens, taskbars, internal scrollbars, and fake utilities make the illusion feel complete.</p>
-                <button class="button tiny" type="button" data-upvote>▲ <span>31</span></button>
-              </article>
-              <article>
-                <strong>Hiring manager mode</strong>
-                <p>Command prompt is cute, but contact and CV must stay one click away.</p>
-                <button class="button tiny" type="button" data-upvote>▲ <span>27</span></button>
-              </article>
-            </div>
+            <p class="window-intro">Leave a local note in this tiny old-web guestbook. It stays in your browser.</p>
+            <form class="guestbook-form" data-guestbook-form>
+              <label>
+                Name
+                <input name="name" maxlength="32" autocomplete="name" placeholder="Visitor">
+              </label>
+              <label>
+                Note
+                <textarea name="note" maxlength="160" rows="3" placeholder="Signed, a fellow builder"></textarea>
+              </label>
+              <div class="button-row">
+                <button class="button tiny primary" type="submit">Sign</button>
+                <button class="button tiny" type="button" data-guestbook-clear>Clear local notes</button>
+              </div>
+            </form>
+            <div class="guestbook-list" data-guestbook-list></div>
           </div>
         </section>
 
@@ -378,7 +373,7 @@
       </nav>
 
       <footer class="taskbar">
-        <button class="start-button" type="button" data-start-button><img class="start-logo" src="assets/icons/win.ico" alt="">Start</button>
+        <button class="start-button" type="button" data-start-button><img class="start-button-image" src="assets/start-button.jpg" alt="Start"></button>
         <div class="taskbar-apps" data-taskbar-apps aria-label="Running applications"></div>
         <button class="tray-button" type="button" data-open-app="taskmgr">Taskmgr</button>
         <div class="clock" data-clock>--:--</div>

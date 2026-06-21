@@ -1,3 +1,19 @@
+@font-face {
+  font-family: "MSW98UI";
+  src: url("assets/fonts/MSW98UI-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MSW98UI";
+  src: url("assets/fonts/MSW98UI-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --teal: #008080;
   --navy: #000080;
@@ -11,7 +27,7 @@
   --hot: #ff3f8e;
   --amber: #ffd447;
   --green: #33d17a;
-  --pixel-font: "Pixel Operator", "Press Start 2P", "VT323", "Perfect DOS VGA 437", "Courier New", monospace;
+  --pixel-font: "MSW98UI", "Pixel Operator", "Perfect DOS VGA 437", "Courier New", monospace;
 }
 
 * {
@@ -38,6 +54,7 @@ body {
 
 button,
 input,
+textarea,
 canvas {
   font: inherit;
 }
@@ -131,18 +148,15 @@ a {
 
 .desktop-icons {
   position: absolute;
-  top: 14px;
-  left: 12px;
-  max-height: calc(100vh - 66px);
-  width: auto;
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-rows: repeat(6, 70px);
-  gap: 9px;
+  inset: 0;
   z-index: 3;
+  pointer-events: none;
 }
 
 .desktop-icon {
+  position: absolute;
+  left: var(--icon-x, 12px);
+  top: var(--icon-y, 14px);
   width: 88px;
   min-height: 70px;
   padding: 4px 2px;
@@ -155,6 +169,8 @@ a {
   gap: 5px;
   text-align: center;
   text-shadow: 2px 2px 0 #000;
+  pointer-events: auto;
+  touch-action: none;
 }
 
 .desktop-icon:hover,
@@ -164,6 +180,11 @@ a {
   background: rgba(0, 0, 128, .72);
   border-color: rgba(255,255,255,.45);
   outline: 0;
+}
+
+.desktop-icon.dragging {
+  opacity: .8;
+  outline: 1px dotted var(--light);
 }
 
 .icon,
@@ -186,6 +207,14 @@ a {
   height: 20px;
   margin-right: 6px;
   object-fit: contain;
+}
+
+.start-button-image {
+  display: block;
+  width: 92px;
+  height: 30px;
+  object-fit: fill;
+  image-rendering: pixelated;
 }
 
 .icon-resume {
@@ -286,6 +315,11 @@ a {
   z-index: 10;
 }
 
+.app-window {
+  overflow: hidden;
+  resize: both;
+}
+
 .window.is-open {
   display: grid;
   grid-template-rows: 28px minmax(0, 1fr);
@@ -300,6 +334,21 @@ a {
   top: 8px !important;
   width: calc(100vw - 16px) !important;
   height: calc(100vh - 58px) !important;
+  resize: none;
+}
+
+.app-window.is-open:not(.is-maximized)::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, transparent 0 52%, var(--mid) 52% 58%, transparent 58% 100%),
+    linear-gradient(135deg, transparent 0 70%, var(--mid) 70% 76%, transparent 76% 100%),
+    linear-gradient(135deg, transparent 0 86%, var(--mid) 86% 92%, transparent 92% 100%);
 }
 
 .window.focused {
@@ -347,6 +396,9 @@ a {
 }
 
 .window-actions button {
+  position: relative;
+  display: grid;
+  place-items: center;
   width: 18px;
   height: 18px;
   padding: 0;
@@ -355,6 +407,45 @@ a {
   border-left: 2px solid var(--light);
   border-right: 2px solid var(--shadow);
   border-bottom: 2px solid var(--shadow);
+}
+
+.window-actions button::before,
+.window-actions button::after {
+  content: "";
+  position: absolute;
+  display: block;
+  background: #000;
+}
+
+.window-actions [data-window-action="minimize"]::before {
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  height: 2px;
+}
+
+.window-actions [data-window-action="maximize"]::before {
+  left: 4px;
+  top: 4px;
+  width: 8px;
+  height: 7px;
+  background: transparent;
+  border: 2px solid #000;
+  border-top-width: 3px;
+}
+
+.window-actions [data-window-action="close"]::before,
+.window-actions [data-popup-close]::before {
+  width: 11px;
+  height: 2px;
+  transform: rotate(45deg);
+}
+
+.window-actions [data-window-action="close"]::after,
+.window-actions [data-popup-close]::after {
+  width: 11px;
+  height: 2px;
+  transform: rotate(-45deg);
 }
 
 .window-content {
@@ -675,6 +766,45 @@ h2 {
   gap: 10px;
 }
 
+.guestbook-form {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 10px;
+  background: #ececec;
+  border-top: 2px solid var(--light);
+  border-left: 2px solid var(--light);
+  border-right: 2px solid var(--mid);
+  border-bottom: 2px solid var(--mid);
+}
+
+.guestbook-form label {
+  display: grid;
+  gap: 4px;
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.guestbook-form input,
+.guestbook-form textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 6px;
+  color: var(--ink);
+  background: var(--light);
+  border-top: 2px solid var(--mid);
+  border-left: 2px solid var(--mid);
+  border-right: 2px solid var(--light);
+  border-bottom: 2px solid var(--light);
+  outline: 0;
+  resize: vertical;
+}
+
+.guestbook-form textarea {
+  min-height: 72px;
+  line-height: 1.35;
+}
+
 .guestbook-list article {
   padding: 10px;
   background: #ececec;
@@ -779,7 +909,16 @@ h2 {
 
 .start-button {
   min-height: 30px;
-  padding: 5px 14px;
+  width: 92px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+.start-button:active .start-button-image,
+.start-button.active .start-button-image {
+  transform: translate(1px, 1px);
 }
 
 .taskbar-apps {
@@ -867,13 +1006,6 @@ h2 {
 }
 
 @media (max-width: 820px) {
-  .desktop-icons {
-    grid-template-columns: repeat(3, 88px);
-    grid-template-rows: none;
-    grid-auto-flow: row;
-    width: auto;
-  }
-
   .window {
     left: 8px !important;
     top: 92px !important;
