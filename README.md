@@ -4,13 +4,10 @@ Retro GitHub Pages resume site for AmirHossein Dolati.
 
 ## GitHub Pages
 
-This repo is ready to host as a static site.
+This repo includes a GitHub Pages workflow at `.github/workflows/pages.yml`.
 
-1. Push the repo to GitHub.
-2. Open repository `Settings`.
-3. Go to `Pages`.
-4. Set source to `Deploy from a branch`.
-5. Select branch `master` and folder `/ (root)`.
+After pushing to `master`, GitHub Actions deploys the static site. If Pages is not enabled yet, open repository
+`Settings` -> `Pages` and set the source to `GitHub Actions`.
 
 The site will be available at:
 
