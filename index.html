@@ -7,9 +7,22 @@
     <meta name="theme-color" content="#008080">
     <title>AmirHossein Dolati | Core Backend Engineer</title>
     <link rel="icon" href="assets/pixel-avatar.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <audio id="startup-audio" src="assets/statup.mp3" preload="auto"></audio>
+    <div class="boot-screen" data-boot-screen>
+      <div class="boot-box">
+        <img src="assets/pixel-avatar.svg" alt="" width="72" height="72">
+        <strong>AMIRHD OS 98</strong>
+        <span>Loading backend.exe...</span>
+        <button class="button primary" type="button" data-enable-audio hidden>Start with sound</button>
+      </div>
+    </div>
+
     <div class="desktop" aria-label="Retro desktop resume">
       <header class="topbar">
         <a class="brand" href="#home" aria-label="AmirHossein Dolati home">
@@ -20,17 +33,35 @@
           <a href="#experience">Experience</a>
           <a href="#stack">Stack</a>
           <a href="#projects">Projects</a>
+          <a href="#tools">Tools</a>
           <a href="#contact">Contact</a>
         </nav>
         <div class="clock" data-clock>--:--</div>
       </header>
 
       <main id="home" class="workspace">
+        <aside class="desktop-icons" aria-label="Desktop shortcuts">
+          <button class="desktop-icon" type="button" data-popup="info">
+            <span class="icon-pixel info-icon"></span>
+            Info
+          </button>
+          <button class="desktop-icon" type="button" data-popup="error">
+            <span class="icon-pixel error-icon"></span>
+            Error
+          </button>
+          <a class="desktop-icon" href="#tools">
+            <span class="icon-pixel paint-icon"></span>
+            Tools
+          </a>
+        </aside>
+
         <section class="hero-window window" aria-labelledby="intro-title">
           <div class="titlebar">
             <span>resume.exe</span>
-            <div class="window-actions" aria-hidden="true">
-              <span></span><span></span><span></span>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
+              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
+              <button type="button" aria-label="Close window" data-window-effect="close"></button>
             </div>
           </div>
           <div class="hero-grid">
@@ -44,6 +75,7 @@
               <div class="hero-actions">
                 <a class="button primary" href="#contact">Contact</a>
                 <a class="button" href="AmirHossein-Dolati-CV-11-20-24-1.pdf">Download CV</a>
+                <button class="button" type="button" data-popup="info">Open popup</button>
               </div>
             </div>
             <div class="crt-card" aria-label="Pixel terminal summary">
@@ -63,7 +95,11 @@
         <section class="window stats-window" aria-label="Quick facts">
           <div class="titlebar">
             <span>profile.ini</span>
-            <div class="window-actions" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
+              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
+              <button type="button" aria-label="Close window" data-window-effect="close"></button>
+            </div>
           </div>
           <div class="stats-grid">
             <article>
@@ -88,7 +124,11 @@
         <section id="experience" class="window">
           <div class="titlebar">
             <span>work_history.dat</span>
-            <div class="window-actions" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
+              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
+              <button type="button" aria-label="Close window" data-window-effect="close"></button>
+            </div>
           </div>
           <div class="section-head">
             <h2>Experience</h2>
@@ -151,7 +191,11 @@
         <section id="stack" class="window">
           <div class="titlebar">
             <span>skills.sys</span>
-            <div class="window-actions" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
+              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
+              <button type="button" aria-label="Close window" data-window-effect="close"></button>
+            </div>
           </div>
           <div class="section-head">
             <h2>Stack</h2>
@@ -182,7 +226,11 @@
         <section id="projects" class="window">
           <div class="titlebar">
             <span>selected_projects.lnk</span>
-            <div class="window-actions" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
+              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
+              <button type="button" aria-label="Close window" data-window-effect="close"></button>
+            </div>
           </div>
           <div class="project-grid">
             <article class="project">
@@ -204,10 +252,74 @@
           </div>
         </section>
 
+        <section id="tools" class="tools-grid" aria-label="Creative retro tools">
+          <div class="window tool-window">
+            <div class="titlebar">
+              <span>paint.exe</span>
+              <div class="window-actions">
+                <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
+                <button type="button" aria-label="Flash window" data-window-effect="max"></button>
+                <button type="button" aria-label="Close window" data-window-effect="close"></button>
+              </div>
+            </div>
+            <div class="tool-content">
+              <div class="paint-toolbar" aria-label="Paint colors">
+                <button type="button" class="swatch active" style="--swatch:#101010" data-color="#101010" aria-label="Black"></button>
+                <button type="button" class="swatch" style="--swatch:#ff3f8e" data-color="#ff3f8e" aria-label="Pink"></button>
+                <button type="button" class="swatch" style="--swatch:#33d17a" data-color="#33d17a" aria-label="Green"></button>
+                <button type="button" class="swatch" style="--swatch:#1084d0" data-color="#1084d0" aria-label="Blue"></button>
+                <button type="button" class="swatch" style="--swatch:#ffd447" data-color="#ffd447" aria-label="Yellow"></button>
+                <button type="button" class="button tiny" data-paint-clear>Clear</button>
+              </div>
+              <canvas id="paint-canvas" class="paint-canvas" width="420" height="260" aria-label="Retro paint canvas"></canvas>
+            </div>
+          </div>
+
+          <div class="window tool-window">
+            <div class="titlebar">
+              <span>life.exe</span>
+              <div class="window-actions">
+                <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
+                <button type="button" aria-label="Flash window" data-window-effect="max"></button>
+                <button type="button" aria-label="Close window" data-window-effect="close"></button>
+              </div>
+            </div>
+            <div class="tool-content">
+              <div class="life-toolbar">
+                <button type="button" class="button tiny primary" data-life-toggle>Run</button>
+                <button type="button" class="button tiny" data-life-step>Step</button>
+                <button type="button" class="button tiny" data-life-random>Random</button>
+                <button type="button" class="button tiny" data-life-clear>Clear</button>
+              </div>
+              <canvas id="life-canvas" class="life-canvas" width="420" height="260" aria-label="Conway's Game of Life"></canvas>
+            </div>
+          </div>
+
+          <div class="window tool-window mini-game">
+            <div class="titlebar">
+              <span>coin_dodge.bat</span>
+              <div class="window-actions">
+                <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
+                <button type="button" aria-label="Flash window" data-window-effect="max"></button>
+                <button type="button" aria-label="Close window" data-window-effect="close"></button>
+              </div>
+            </div>
+            <div class="tool-content">
+              <p class="tool-note">Move with A/D or arrow keys. Catch green blocks, dodge pink blocks.</p>
+              <canvas id="game-canvas" class="game-canvas" width="420" height="220" aria-label="Retro mini game"></canvas>
+              <div class="game-hud">Score: <span data-score>0</span></div>
+            </div>
+          </div>
+        </section>
+
         <section class="window education-window">
           <div class="titlebar">
             <span>education.txt</span>
-            <div class="window-actions" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
+              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
+              <button type="button" aria-label="Close window" data-window-effect="close"></button>
+            </div>
           </div>
           <h2>Bachelor of Computer Science</h2>
           <p>Azarbaijan Shahid Madani University, Tabriz, Iran. Thesis: open-source VoIP application written in C++/Qt/QML.</p>
@@ -217,10 +329,14 @@
         <section id="contact" class="window contact-window">
           <div class="titlebar">
             <span>contact.cmd</span>
-            <div class="window-actions" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
+              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
+              <button type="button" aria-label="Close window" data-window-effect="close"></button>
+            </div>
           </div>
           <div>
-            <h2>Let’s build something fast, reliable, and slightly nostalgic.</h2>
+            <h2>Let's build something fast, reliable, and slightly nostalgic.</h2>
             <p>Based in Tehran, working across backend, financial software, blockchain, and systems engineering.</p>
           </div>
           <div class="contact-actions">
@@ -233,9 +349,13 @@
 
       <footer class="taskbar">
         <a class="start-button" href="#home">Start</a>
+        <button class="task-button" type="button" data-popup="info">Info</button>
+        <button class="task-button" type="button" data-popup="error">Error</button>
         <span>Resume loaded successfully</span>
       </footer>
     </div>
+
+    <div class="popup-layer" data-popup-layer aria-live="polite"></div>
     <script src="script.js"></script>
   </body>
 </html>
