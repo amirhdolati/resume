@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Resume website of AmirHossein Dolati, Go backend and core software engineer focused on financial software, blockchain, and exchange systems.">
+    <meta name="description" content="Resume desktop of AmirHossein Dolati, Go backend and core software engineer focused on financial software, blockchain, and exchange systems.">
     <meta name="theme-color" content="#008080">
-    <title>AmirHossein Dolati | Core Backend Engineer</title>
+    <title>AmirHossein Dolati | Win98 Resume Desktop</title>
     <link rel="icon" href="assets/pixel-avatar.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,380 +14,338 @@
   </head>
   <body>
     <audio id="startup-audio" src="assets/statup.mp3" preload="auto"></audio>
+
     <div class="boot-screen" data-boot-screen>
       <div class="boot-box">
         <img src="assets/pixel-avatar.svg" alt="" width="72" height="72">
         <strong>AMIRHD OS 98</strong>
-        <span>Loading backend.exe...</span>
+        <span>Loading desktop shell...</span>
         <button class="button primary" type="button" data-enable-audio hidden>Start with sound</button>
       </div>
     </div>
 
-    <div class="desktop" aria-label="Retro desktop resume">
-      <header class="topbar">
-        <a class="brand" href="#home" aria-label="AmirHossein Dolati home">
-          <img src="assets/pixel-avatar.svg" alt="" width="28" height="28">
-          <span>AMIRHD.EXE</span>
-        </a>
-        <nav class="desktop-nav" aria-label="Resume sections">
-          <a href="#experience">Experience</a>
-          <a href="#stack">Stack</a>
-          <a href="#projects">Projects</a>
-          <a href="#tools">Tools</a>
-          <a href="#contact">Contact</a>
-        </nav>
-        <div class="clock" data-clock>--:--</div>
-      </header>
-
-      <main id="home" class="workspace">
-        <aside class="desktop-icons" aria-label="Desktop shortcuts">
-          <button class="desktop-icon" type="button" data-open-target="resume-window">
-            <span class="icon-pixel resume-icon"></span>
-            Resume
+    <div class="desktop" aria-label="Windows 98 style resume desktop">
+      <main class="desktop-surface" aria-label="Desktop workspace">
+        <section class="desktop-icons" aria-label="Desktop shortcuts">
+          <button class="desktop-icon" type="button" data-open-app="resume">
+            <span class="icon icon-resume"></span>
+            <span>Resume.exe</span>
           </button>
-          <button class="desktop-icon" type="button" data-open-target="cmd-window">
-            <span class="icon-pixel cmd-icon"></span>
-            Command
+          <button class="desktop-icon" type="button" data-open-app="experience">
+            <span class="icon icon-folder"></span>
+            <span>Experience.exe</span>
           </button>
-          <button class="desktop-icon" type="button" data-open-target="tools">
-            <span class="icon-pixel tools-icon"></span>
-            Tools
+          <button class="desktop-icon" type="button" data-open-app="stack">
+            <span class="icon icon-chip"></span>
+            <span>Stack.sys</span>
           </button>
-          <button class="desktop-icon" type="button" data-popup="error">
-            <span class="icon-pixel trash-icon"></span>
-            Trash
+          <button class="desktop-icon" type="button" data-open-app="projects">
+            <span class="icon icon-docs"></span>
+            <span>Projects.lnk</span>
           </button>
-        </aside>
+          <button class="desktop-icon" type="button" data-open-app="cmd">
+            <span class="icon icon-cmd"></span>
+            <span>Cmd.exe</span>
+          </button>
+          <button class="desktop-icon" type="button" data-open-app="exchange">
+            <span class="icon icon-monitor"></span>
+            <span>Exchange.exe</span>
+          </button>
+          <button class="desktop-icon" type="button" data-open-app="life">
+            <span class="icon icon-life"></span>
+            <span>Life.exe</span>
+          </button>
+          <button class="desktop-icon" type="button" data-open-app="education">
+            <span class="icon icon-book"></span>
+            <span>Education.txt</span>
+          </button>
+          <button class="desktop-icon" type="button" data-open-app="contact">
+            <span class="icon icon-mail"></span>
+            <span>Contact.cmd</span>
+          </button>
+          <button class="desktop-icon" type="button" data-open-app="taskmgr">
+            <span class="icon icon-taskmgr"></span>
+            <span>Taskmgr.exe</span>
+          </button>
+          <button class="desktop-icon" type="button" data-open-app="trash">
+            <span class="icon icon-trash"></span>
+            <span>Trash</span>
+          </button>
+        </section>
 
-        <section id="resume-window" class="hero-window window" aria-labelledby="intro-title">
+        <section id="app-resume" class="window app-window is-open" data-app="resume" style="--x: 142px; --y: 22px; --w: 690px; --h: 500px;">
           <div class="titlebar">
-            <span>resume.exe</span>
+            <span>Resume.exe</span>
             <div class="window-actions">
-              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
-              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
-              <button type="button" aria-label="Close window" data-window-effect="close"></button>
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
             </div>
           </div>
-          <div class="hero-grid">
-            <div class="hero-copy">
-              <p class="eyebrow">Core Backend Developer / Software Engineer</p>
-              <h1 id="intro-title">AmirHossein Dolati</h1>
-              <p class="intro">
-                I build reliable backend systems with Go, C++, and a strong systems mindset. My current work focuses on
-                core services for financial software, exchange platforms, and blockchain-adjacent products at Injast.
-              </p>
-              <div class="hero-actions">
-                <a class="button primary" href="#contact">Contact</a>
-                <a class="button" href="AmirHossein-Dolati-CV-11-20-24-1.pdf">Download CV</a>
-                <button class="button" type="button" data-popup="info">Open popup</button>
+          <div class="window-content resume-content">
+            <div class="resume-hero">
+              <div>
+                <p class="eyebrow">Core Backend Developer / Software Engineer</p>
+                <h1>AmirHossein Dolati</h1>
+                <p class="intro">
+                  I build reliable backend systems with Go, C++, and a systems mindset. My current work focuses on core
+                  services for financial software, exchange platforms, and blockchain-adjacent products at Injast.
+                </p>
+                <div class="button-row">
+                  <a class="button primary" href="mailto:AmirHossein_Dolati@outlook.com">Email</a>
+                  <a class="button" href="AmirHossein-Dolati-CV-11-20-24-1.pdf">Download CV</a>
+                  <button class="button" type="button" data-open-app="cmd">Open CMD</button>
+                </div>
               </div>
+              <img class="avatar" src="assets/pixel-avatar.svg" alt="Cute pixel avatar of AmirHossein with mustache">
             </div>
-            <div class="crt-card" aria-label="Pixel terminal summary">
-              <div class="terminal">
-                <div>$ whoami</div>
-                <strong>amirhossein_dolati</strong>
-                <div>$ focus --now</div>
-                <strong>go, backend, finance, blockchain</strong>
-                <div>$ status</div>
-                <strong>shipping core systems</strong>
-              </div>
-              <img class="avatar" src="assets/pixel-avatar.svg" alt="Pixel art avatar of AmirHossein">
+            <div class="quick-grid">
+              <article><strong>5+</strong><span>years professional engineering</span></article>
+              <article><strong>Go</strong><span>backend and core services</span></article>
+              <article><strong>C++</strong><span>systems, embedded, networking</span></article>
+              <article><strong>FinTech</strong><span>exchange, ledger, blockchain</span></article>
             </div>
           </div>
         </section>
 
-        <section id="cmd-window" class="window command-window" aria-label="Command line profile">
+        <section id="app-cmd" class="window app-window is-open" data-app="cmd" style="--x: 650px; --y: 330px; --w: 500px; --h: 300px;">
           <div class="titlebar">
-            <span>C:\AMIRHD\PROFILE.EXE</span>
+            <span>MS-DOS Prompt - C:\AMIRHD\PROFILE.EXE</span>
             <div class="window-actions">
-              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
-              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
-              <button type="button" aria-label="Close window" data-window-effect="close"></button>
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
             </div>
           </div>
-          <div class="command-body">
-            <div>C:\> whoami</div>
-            <strong>AmirHossein Dolati</strong>
-            <div>C:\> run stack --current</div>
-            <strong>Go backend | financial systems | exchange services | blockchain</strong>
-            <div>C:\> inspect strengths</div>
-            <strong>core logic, concurrency, networking, reliability, systems debugging</strong>
-            <div class="command-actions">
-              <button class="button tiny primary" type="button" data-cmd-run="backend">backend</button>
-              <button class="button tiny" type="button" data-cmd-run="systems">systems</button>
-              <button class="button tiny" type="button" data-cmd-run="contact">contact</button>
+          <div class="window-content command-content">
+            <div class="command-log" data-command-log>
+              <div>C:\&gt; whoami</div>
+              <strong>AmirHossein Dolati</strong>
+              <div>C:\&gt; help</div>
+              <strong>commands: backend, systems, contact, stack, clear</strong>
             </div>
-            <div class="command-output" data-command-output>[ready] select a command</div>
+            <form class="command-input" data-command-form>
+              <span>C:\&gt;</span>
+              <input aria-label="Command input" data-command-input autocomplete="off" spellcheck="false" value="backend">
+            </form>
           </div>
         </section>
 
-        <section class="window stats-window" aria-label="Quick facts">
+        <section id="app-life" class="window app-window is-open" data-app="life" style="--x: 858px; --y: 42px; --w: 430px; --h: 320px;">
           <div class="titlebar">
-            <span>profile.ini</span>
+            <span>Reliability_Life.exe</span>
             <div class="window-actions">
-              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
-              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
-              <button type="button" aria-label="Close window" data-window-effect="close"></button>
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
             </div>
           </div>
-          <div class="stats-grid">
-            <article>
-              <span class="stat">5+</span>
-              <p>years of professional software engineering</p>
-            </article>
-            <article>
-              <span class="stat">Go</span>
-              <p>current backend and core service stack</p>
-            </article>
-            <article>
-              <span class="stat">C++</span>
-              <p>systems, embedded, networking, and UI foundations</p>
-            </article>
-            <article>
-              <span class="stat">FinTech</span>
-              <p>financial software, exchanges, and blockchain products</p>
-            </article>
+          <div class="window-content">
+            <p class="tool-note">Auto-running Game of Life: local rules, emergent global behavior, a tiny reliability metaphor.</p>
+            <div class="toolbar">
+              <button type="button" class="button tiny primary" data-life-toggle>Pause</button>
+              <button type="button" class="button tiny" data-life-random>Random</button>
+              <button type="button" class="button tiny" data-life-clear>Clear</button>
+            </div>
+            <canvas id="life-canvas" class="life-canvas" width="390" height="200" aria-label="Conway's Game of Life"></canvas>
           </div>
         </section>
 
-        <section id="experience" class="window">
+        <section id="app-experience" class="window app-window" data-app="experience" style="--x: 188px; --y: 78px; --w: 720px; --h: 520px;">
           <div class="titlebar">
-            <span>work_history.dat</span>
+            <span>Experience - work_history.dat</span>
             <div class="window-actions">
-              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
-              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
-              <button type="button" aria-label="Close window" data-window-effect="close"></button>
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
             </div>
           </div>
-          <div class="section-head">
-            <h2>Experience</h2>
-            <p>From embedded and cross-platform systems into backend-heavy financial platforms.</p>
-          </div>
-          <div class="timeline">
-            <article class="job active">
-              <div class="job-meta">
-                <strong>Core Backend Developer</strong>
-                <span>Injast / 2025 - Present</span>
-              </div>
-              <p>
-                Building and maintaining backend services for financial software with Go. Work includes core business
-                logic, service APIs, infrastructure integration, exchange workflows, and blockchain-related systems.
-              </p>
-            </article>
-            <article class="job">
-              <div class="job-meta">
-                <strong>Embedded Software Engineer</strong>
-                <span>Software Motion / May 2024 - 2025</span>
-              </div>
-              <p>
-                Worked on self-driving automotive systems, ADAS, AUTOSAR-based solutions, ROS modules, RVIZ data
-                visualization, LiDAR preprocessing, code generation, and legacy C++/Python maintenance.
-              </p>
-            </article>
-            <article class="job">
-              <div class="job-meta">
-                <strong>Software Engineer</strong>
-                <span>IPAC / Oct 2022 - May 2024</span>
-              </div>
-              <p>
-                Built client-server file synchronization, encryption/decryption clients, responsive QML interfaces,
-                SQLite-backed models, and a peer-to-peer messenger for Android and Windows using Qt/QML, Java, and C++.
-              </p>
-            </article>
-            <article class="job">
-              <div class="job-meta">
-                <strong>Software Engineer</strong>
-                <span>Ai-Bridge + Freelance / 2022</span>
-              </div>
-              <p>
-                Delivered Qt/QML client applications, Qt Installer Framework setup, Python/C++ inter-process
-                communication, packet forwarding services, and ESP32 camera proof-of-concept work.
-              </p>
-            </article>
-            <article class="job">
-              <div class="job-meta">
-                <strong>C/C++ Developer</strong>
-                <span>FD Eshragh / Nov 2020 - Apr 2022</span>
-              </div>
-              <p>
-                Developed multi-user real-time servers for voice, text, and GPS delivery, improved low-latency VoIP
-                synchronization, rebuilt embedded UI with LVGL, and created tooling with Qt Widgets.
-              </p>
-            </article>
-          </div>
-        </section>
-
-        <section id="stack" class="window">
-          <div class="titlebar">
-            <span>skills.sys</span>
-            <div class="window-actions">
-              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
-              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
-              <button type="button" aria-label="Close window" data-window-effect="close"></button>
-            </div>
-          </div>
-          <div class="section-head">
-            <h2>Stack</h2>
-            <p>Current backend focus with a deep base in systems, networking, and cross-platform software.</p>
-          </div>
-          <div class="chip-grid">
-            <span>Go</span>
-            <span>C++17</span>
-            <span>C</span>
-            <span>Python</span>
-            <span>Financial Systems</span>
-            <span>Exchange Platforms</span>
-            <span>Blockchain</span>
-            <span>Concurrent Programming</span>
-            <span>Networking</span>
-            <span>REST APIs</span>
-            <span>SQLite</span>
-            <span>MySQL</span>
-            <span>Qt/QML</span>
-            <span>ROS</span>
-            <span>AUTOSAR</span>
-            <span>VoIP</span>
-            <span>Git</span>
-            <span>Flutter</span>
-          </div>
-        </section>
-
-        <section id="projects" class="window">
-          <div class="titlebar">
-            <span>selected_projects.lnk</span>
-            <div class="window-actions">
-              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
-              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
-              <button type="button" aria-label="Close window" data-window-effect="close"></button>
-            </div>
-          </div>
-          <div class="project-grid">
-            <article class="project">
-              <h2>Exchange & Financial Core</h2>
-              <p>Go backend services for financial workflows, core business rules, and exchange-related operations.</p>
-            </article>
-            <article class="project">
-              <h2>P2P Messenger</h2>
-              <p>Cross-platform Android and Windows messenger with Qt/QML, SQLite, Java, and C++ integration.</p>
-            </article>
-            <article class="project">
-              <h2>Real-Time Delivery Server</h2>
-              <p>Multi-user low-latency server for voice, text, and GPS delivery with thread-safe synchronization.</p>
-            </article>
-            <article class="project">
-              <h2>ADAS Tooling</h2>
-              <p>ROS/RVIZ modules, LiDAR preprocessing, and C++/Python tooling for self-driving automotive systems.</p>
-            </article>
-          </div>
-        </section>
-
-        <section id="tools" class="tools-grid" aria-label="Meaningful retro tools">
-          <div class="window tool-window">
-            <div class="titlebar">
-              <span>exchange_console.exe</span>
-              <div class="window-actions">
-                <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
-                <button type="button" aria-label="Flash window" data-window-effect="max"></button>
-                <button type="button" aria-label="Close window" data-window-effect="close"></button>
-              </div>
-            </div>
-            <div class="tool-content">
-              <p class="tool-note">A tiny backend readout: orders, ledger settlement, reconciliation, and alerts.</p>
-              <div class="ops-toolbar">
-                <button type="button" class="button tiny primary" data-ops-tick>Process tick</button>
-                <button type="button" class="button tiny" data-ops-check>Run checks</button>
-              </div>
-              <div class="ops-grid" aria-label="Exchange backend metrics">
-                <article>
-                  <span>Orders</span>
-                  <strong data-orders>1284</strong>
-                </article>
-                <article>
-                  <span>Latency</span>
-                  <strong data-latency>41ms</strong>
-                </article>
-                <article>
-                  <span>Ledger</span>
-                  <strong data-ledger>OK</strong>
-                </article>
-                <article>
-                  <span>Risk</span>
-                  <strong data-risk>LOW</strong>
-                </article>
-              </div>
-              <div class="ops-log" data-ops-log aria-live="polite">
-                <div>[boot] exchange services online</div>
-                <div>[sync] ledger mirror healthy</div>
-                <div>[risk] no abnormal flow detected</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="window tool-window">
-            <div class="titlebar">
-              <span>reliability_life.exe</span>
-              <div class="window-actions">
-                <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
-                <button type="button" aria-label="Flash window" data-window-effect="max"></button>
-                <button type="button" aria-label="Close window" data-window-effect="close"></button>
-              </div>
-            </div>
-            <div class="tool-content">
-              <p class="tool-note">Game of Life, used here as a small systems model: simple local rules, emergent global behavior.</p>
-              <div class="life-toolbar">
-                <button type="button" class="button tiny primary" data-life-toggle>Run</button>
-                <button type="button" class="button tiny" data-life-step>Step</button>
-                <button type="button" class="button tiny" data-life-random>Random</button>
-                <button type="button" class="button tiny" data-life-clear>Clear</button>
-              </div>
-              <canvas id="life-canvas" class="life-canvas" width="420" height="260" aria-label="Conway's Game of Life"></canvas>
+          <div class="window-content">
+            <div class="timeline">
+              <article class="job active">
+                <div class="job-meta"><strong>Core Backend Developer</strong><span>Injast / 2025 - Present</span></div>
+                <p>Building backend services for financial software with Go: core business logic, APIs, infrastructure integration, exchange workflows, and blockchain-related systems.</p>
+              </article>
+              <article class="job">
+                <div class="job-meta"><strong>Embedded Software Engineer</strong><span>Software Motion / May 2024 - 2025</span></div>
+                <p>Worked on ADAS, AUTOSAR-based solutions, ROS modules, RVIZ visualization, LiDAR preprocessing, code generation, and legacy C++/Python maintenance.</p>
+              </article>
+              <article class="job">
+                <div class="job-meta"><strong>Software Engineer</strong><span>IPAC / Oct 2022 - May 2024</span></div>
+                <p>Built client-server file synchronization, encryption/decryption clients, QML interfaces, SQLite-backed models, and a Qt/QML P2P messenger for Android and Windows.</p>
+              </article>
+              <article class="job">
+                <div class="job-meta"><strong>Software Engineer</strong><span>Ai-Bridge + Freelance / 2022</span></div>
+                <p>Delivered Qt/QML applications, installer setup, Python/C++ IPC, packet forwarding services, and ESP32 camera proof-of-concept work.</p>
+              </article>
+              <article class="job">
+                <div class="job-meta"><strong>C/C++ Developer</strong><span>FD Eshragh / Nov 2020 - Apr 2022</span></div>
+                <p>Developed real-time servers for voice, text, and GPS delivery, improved low-latency VoIP synchronization, rebuilt embedded UI with LVGL, and created Qt tooling.</p>
+              </article>
             </div>
           </div>
         </section>
 
-        <section class="window education-window">
+        <section id="app-stack" class="window app-window" data-app="stack" style="--x: 238px; --y: 110px; --w: 600px; --h: 390px;">
           <div class="titlebar">
-            <span>education.txt</span>
+            <span>Stack.sys</span>
             <div class="window-actions">
-              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
-              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
-              <button type="button" aria-label="Close window" data-window-effect="close"></button>
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
             </div>
           </div>
-          <h2>Bachelor of Computer Science</h2>
-          <p>Azarbaijan Shahid Madani University, Tabriz, Iran. Thesis: open-source VoIP application written in C++/Qt/QML.</p>
-          <p>Languages: Persian native, English C1 reading/listening/writing, B2 speaking.</p>
+          <div class="window-content">
+            <p class="window-intro">Current backend focus with a deep base in systems, networking, and cross-platform software.</p>
+            <div class="chip-grid">
+              <span>Go</span><span>C++17</span><span>C</span><span>Python</span><span>Financial Systems</span>
+              <span>Exchange Platforms</span><span>Blockchain</span><span>Concurrent Programming</span><span>Networking</span>
+              <span>REST APIs</span><span>SQLite</span><span>MySQL</span><span>Qt/QML</span><span>ROS</span><span>AUTOSAR</span><span>VoIP</span><span>Git</span><span>Flutter</span>
+            </div>
+          </div>
         </section>
 
-        <section id="contact" class="window contact-window">
+        <section id="app-projects" class="window app-window" data-app="projects" style="--x: 310px; --y: 130px; --w: 640px; --h: 430px;">
           <div class="titlebar">
-            <span>contact.cmd</span>
+            <span>Projects - selected_projects.lnk</span>
             <div class="window-actions">
-              <button type="button" aria-label="Minimize window" data-window-effect="min"></button>
-              <button type="button" aria-label="Flash window" data-window-effect="max"></button>
-              <button type="button" aria-label="Close window" data-window-effect="close"></button>
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
             </div>
           </div>
-          <div>
+          <div class="window-content">
+            <div class="project-grid">
+              <article class="project"><h2>Exchange & Financial Core</h2><p>Go backend services for financial workflows, core business rules, and exchange-related operations.</p></article>
+              <article class="project"><h2>P2P Messenger</h2><p>Cross-platform Android and Windows messenger with Qt/QML, SQLite, Java, and C++ integration.</p></article>
+              <article class="project"><h2>Real-Time Delivery Server</h2><p>Multi-user low-latency server for voice, text, and GPS delivery with thread-safe synchronization.</p></article>
+              <article class="project"><h2>ADAS Tooling</h2><p>ROS/RVIZ modules, LiDAR preprocessing, and C++/Python tooling for self-driving automotive systems.</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section id="app-exchange" class="window app-window" data-app="exchange" style="--x: 500px; --y: 94px; --w: 480px; --h: 390px;">
+          <div class="titlebar">
+            <span>Exchange_Console.exe</span>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
+            </div>
+          </div>
+          <div class="window-content">
+            <p class="tool-note">A tiny backend readout: orders, ledger settlement, reconciliation, and alerts.</p>
+            <div class="toolbar">
+              <button type="button" class="button tiny primary" data-ops-tick>Process tick</button>
+              <button type="button" class="button tiny" data-ops-check>Run checks</button>
+            </div>
+            <div class="ops-grid" aria-label="Exchange backend metrics">
+              <article><span>Orders</span><strong data-orders>1284</strong></article>
+              <article><span>Latency</span><strong data-latency>41ms</strong></article>
+              <article><span>Ledger</span><strong data-ledger>OK</strong></article>
+              <article><span>Risk</span><strong data-risk>LOW</strong></article>
+            </div>
+            <div class="ops-log" data-ops-log aria-live="polite">
+              <div>[boot] exchange services online</div>
+              <div>[sync] ledger mirror healthy</div>
+              <div>[risk] no abnormal flow detected</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="app-education" class="window app-window" data-app="education" style="--x: 420px; --y: 148px; --w: 520px; --h: 330px;">
+          <div class="titlebar">
+            <span>Education.txt</span>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
+            </div>
+          </div>
+          <div class="window-content text-window">
+            <h2>Bachelor of Computer Science</h2>
+            <p>Azarbaijan Shahid Madani University, Tabriz, Iran.</p>
+            <p>Thesis: open-source VoIP application written in C++/Qt/QML.</p>
+            <p>Languages: Persian native. English C1 reading/listening/writing, B2 speaking.</p>
+          </div>
+        </section>
+
+        <section id="app-contact" class="window app-window" data-app="contact" style="--x: 382px; --y: 180px; --w: 560px; --h: 320px;">
+          <div class="titlebar">
+            <span>Contact.cmd</span>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
+            </div>
+          </div>
+          <div class="window-content text-window">
             <h2>Let's build something fast, reliable, and slightly nostalgic.</h2>
             <p>Based in Tehran, working across backend, financial software, blockchain, and systems engineering.</p>
+            <div class="button-row">
+              <a class="button primary" href="mailto:AmirHossein_Dolati@outlook.com">Email</a>
+              <a class="button" href="https://www.linkedin.com/in/amirhossein-dolati-b26a1a109/">LinkedIn</a>
+              <a class="button" href="tel:+989190953651">Phone</a>
+            </div>
           </div>
-          <div class="contact-actions">
-            <a class="button primary" href="mailto:AmirHossein_Dolati@outlook.com">Email</a>
-            <a class="button" href="https://www.linkedin.com/in/amirhossein-dolati-b26a1a109/">LinkedIn</a>
-            <a class="button" href="tel:+989190953651">Phone</a>
+        </section>
+
+        <section id="app-taskmgr" class="window app-window" data-app="taskmgr" style="--x: 612px; --y: 118px; --w: 420px; --h: 390px;">
+          <div class="titlebar">
+            <span>Task Manager</span>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
+            </div>
+          </div>
+          <div class="window-content taskmgr-content">
+            <div class="taskmgr-header"><span>Application</span><span>Status</span><span>Action</span></div>
+            <div data-task-list></div>
+          </div>
+        </section>
+
+        <section id="app-trash" class="window app-window" data-app="trash" style="--x: 540px; --y: 156px; --w: 430px; --h: 330px;">
+          <div class="titlebar">
+            <span>Trash</span>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
+            </div>
+          </div>
+          <div class="window-content trash-content">
+            <p class="window-intro">Recovered deleted drafts. Nothing important was harmed.</p>
+            <div class="trash-list" data-trash-list>
+              <div><span>old_resume_final_FINAL.doc</span><button class="button tiny" type="button" data-restore-file>Restore</button></div>
+              <div><span>unused_gradient_hero.png</span><button class="button tiny" type="button" data-restore-file>Restore</button></div>
+              <div><span>bug_2021.tmp</span><button class="button tiny" type="button" data-restore-file>Restore</button></div>
+            </div>
+            <button class="button tiny primary" type="button" data-empty-trash>Empty Trash</button>
           </div>
         </section>
       </main>
 
+      <nav class="start-menu" data-start-menu aria-label="Start menu">
+        <div class="start-strip"><span>AMIRHD OS 98</span></div>
+        <div class="start-items">
+          <button type="button" data-open-app="resume"><span class="mini-icon icon-resume"></span>Resume.exe</button>
+          <button type="button" data-open-app="cmd"><span class="mini-icon icon-cmd"></span>Cmd.exe</button>
+          <button type="button" data-open-app="exchange"><span class="mini-icon icon-monitor"></span>Exchange.exe</button>
+          <button type="button" data-open-app="life"><span class="mini-icon icon-life"></span>Life.exe</button>
+          <button type="button" data-open-app="taskmgr"><span class="mini-icon icon-taskmgr"></span>Taskmgr.exe</button>
+          <button type="button" data-open-app="trash"><span class="mini-icon icon-trash"></span>Trash</button>
+          <hr>
+          <button type="button" data-popup="info"><span class="mini-icon win-logo"></span>About this desktop</button>
+          <button type="button" data-shutdown><span class="mini-icon icon-power"></span>Shut Down...</button>
+        </div>
+      </nav>
+
       <footer class="taskbar">
-        <a class="start-button" href="#home">Start</a>
-        <button class="task-button" type="button" data-open-target="resume-window">Resume</button>
-        <button class="task-button" type="button" data-open-target="cmd-window">CMD</button>
-        <button class="task-button" type="button" data-open-target="tools">Tools</button>
-        <button class="task-button" type="button" data-popup="info">Info</button>
-        <button class="task-button" type="button" data-popup="error">Error</button>
-        <span>Resume loaded successfully</span>
+        <button class="start-button" type="button" data-start-button><span class="win-logo"></span>Start</button>
+        <div class="taskbar-apps" data-taskbar-apps aria-label="Running applications"></div>
+        <button class="tray-button" type="button" data-open-app="taskmgr">Taskmgr</button>
+        <div class="clock" data-clock>--:--</div>
       </footer>
     </div>
 

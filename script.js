@@ -1,11 +1,30 @@
+const APP_TITLES = {
+  resume: "Resume.exe",
+  experience: "Experience.exe",
+  stack: "Stack.sys",
+  projects: "Projects.lnk",
+  cmd: "Cmd.exe",
+  exchange: "Exchange.exe",
+  life: "Life.exe",
+  education: "Education.txt",
+  contact: "Contact.cmd",
+  taskmgr: "Taskmgr.exe",
+  trash: "Trash",
+};
+
 const clock = document.querySelector("[data-clock]");
 const startupAudio = document.querySelector("#startup-audio");
 const bootScreen = document.querySelector("[data-boot-screen]");
 const enableAudioButton = document.querySelector("[data-enable-audio]");
 const popupLayer = document.querySelector("[data-popup-layer]");
+const startButton = document.querySelector("[data-start-button]");
+const startMenu = document.querySelector("[data-start-menu]");
+const taskbarApps = document.querySelector("[data-taskbar-apps]");
+const taskList = document.querySelector("[data-task-list]");
 
 let audioContext;
 let zIndex = 40;
+let focusedApp = "resume";
 
 function updateClock() {
   if (!clock) return;
@@ -46,13 +65,12 @@ function playSystemSound(kind) {
     tone(660, 0, 0.08, "square", 0.05);
     tone(880, 0.09, 0.12, "square", 0.04);
   } catch {
-    // Audio can be unavailable in some embedded browsers.
+    // Audio may be unavailable until the browser receives a user gesture.
   }
 }
 
 function hideBootScreen() {
-  if (!bootScreen) return;
-  bootScreen.classList.add("hidden");
+  bootScreen?.classList.add("hidden");
 }
 
 async function playStartup() {
@@ -69,15 +87,145 @@ async function playStartup() {
   }
 }
 
-function showPopup(kind = "info") {
+function getWindow(appId) {
+  return document.querySelector(`[data-app="${appId}"]`);
+}
+
+function appWindows() {
+  return Array.from(document.querySelectorAll("[data-app]"));
+}
+
+function focusApp(appId) {
+  const win = getWindow(appId);
+  if (!win) return;
+  appWindows().forEach((node) => node.classList.remove("focused"));
+  win.classList.add("focused");
+  win.style.zIndex = String(++zIndex);
+  focusedApp = appId;
+  renderShell();
+}
+
+function openApp(appId) {
+  const win = getWindow(appId);
+  if (!win) return;
+  win.classList.add("is-open");
+  win.classList.remove("is-minimized", "flash");
+  focusApp(appId);
+  win.classList.add("flash");
+  setTimeout(() => win.classList.remove("flash"), 450);
+  startMenu?.classList.remove("open");
+  startButton?.classList.remove("active");
+  playSystemSound("info");
+}
+
+function minimizeApp(appId) {
+  const win = getWindow(appId);
+  if (!win) return;
+  win.classList.add("is-minimized");
+  renderShell();
+}
+
+function closeApp(appId) {
+  const win = getWindow(appId);
+  if (!win) return;
+  win.classList.remove("is-open", "is-minimized", "is-maximized", "focused");
+  playSystemSound(appId === "trash" ? "error" : "info");
+  renderShell();
+}
+
+function toggleMaximize(appId) {
+  const win = getWindow(appId);
+  if (!win) return;
+  win.classList.toggle("is-maximized");
+  focusApp(appId);
+  playSystemSound("info");
+}
+
+function runningApps() {
+  return appWindows()
+    .filter((win) => win.classList.contains("is-open"))
+    .map((win) => ({
+      id: win.dataset.app,
+      title: APP_TITLES[win.dataset.app] || win.dataset.app,
+      minimized: win.classList.contains("is-minimized"),
+      focused: win.dataset.app === focusedApp && !win.classList.contains("is-minimized"),
+    }));
+}
+
+function renderTaskbar() {
+  if (!taskbarApps) return;
+  taskbarApps.innerHTML = "";
+  runningApps().forEach((app) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `task-button ${app.focused ? "active" : ""}`;
+    button.textContent = app.title;
+    button.addEventListener("click", () => {
+      const win = getWindow(app.id);
+      if (!win) return;
+      if (app.focused) {
+        minimizeApp(app.id);
+      } else {
+        openApp(app.id);
+      }
+    });
+    taskbarApps.appendChild(button);
+  });
+}
+
+function renderTaskManager() {
+  if (!taskList) return;
+  taskList.innerHTML = "";
+  Object.entries(APP_TITLES).forEach(([id, title]) => {
+    const win = getWindow(id);
+    const isRunning = win?.classList.contains("is-open");
+    const row = document.createElement("div");
+    row.className = "task-row";
+    row.innerHTML = `
+      <span>${title}</span>
+      <span>${isRunning ? (win.classList.contains("is-minimized") ? "Minimized" : "Running") : "Closed"}</span>
+      <span class="task-actions"></span>
+    `;
+    const actions = row.querySelector(".task-actions");
+    if (isRunning) {
+      const switchButton = document.createElement("button");
+      switchButton.className = "button tiny";
+      switchButton.type = "button";
+      switchButton.textContent = "Switch";
+      switchButton.addEventListener("click", () => openApp(id));
+      const endButton = document.createElement("button");
+      endButton.className = "button tiny";
+      endButton.type = "button";
+      endButton.textContent = "End";
+      endButton.addEventListener("click", () => closeApp(id));
+      actions.append(switchButton, endButton);
+    } else {
+      const runButton = document.createElement("button");
+      runButton.className = "button tiny";
+      runButton.type = "button";
+      runButton.textContent = "Run";
+      runButton.addEventListener("click", () => openApp(id));
+      actions.append(runButton);
+    }
+    row.addEventListener("dblclick", () => openApp(id));
+    taskList.appendChild(row);
+  });
+}
+
+function renderShell() {
+  renderTaskbar();
+  renderTaskManager();
+}
+
+function showPopup(kind = "info", message) {
   if (!popupLayer) return;
   const isError = kind === "error";
   const popup = document.createElement("div");
-  popup.className = `popup window ${isError ? "error" : "info"}`;
+  popup.className = `popup window is-open ${isError ? "error" : "info"}`;
   popup.style.zIndex = String(++zIndex);
   popup.innerHTML = `
     <div class="titlebar">
-      <span>${isError ? "system_error.wav" : "system_info.wav"}</span>
+      <span>${isError ? "System Error" : "Information"}</span>
       <div class="window-actions">
         <button type="button" aria-label="Close popup" data-popup-close></button>
       </div>
@@ -85,7 +233,7 @@ function showPopup(kind = "info") {
     <div class="popup-body">
       <div class="popup-symbol">${isError ? "!" : "i"}</div>
       <div>
-        <p>${isError ? "Legacy code detected. AmirHossein has entered debugging mode." : "Resume loaded. Backend services, exchange workflows, and pixel tools are online."}</p>
+        <p>${message || (isError ? "Trash contains old drafts, bad hero ideas, and one suspicious temp file." : "AMIRHD OS 98 is running resume applications.")}</p>
         <button class="button tiny primary" type="button" data-popup-close>OK</button>
       </div>
     </div>
@@ -95,84 +243,51 @@ function showPopup(kind = "info") {
   popup.querySelectorAll("[data-popup-close]").forEach((button) => {
     button.addEventListener("click", () => popup.remove());
   });
-  setTimeout(() => {
-    if (popup.isConnected) popup.remove();
-  }, 6500);
 }
 
-function setupWindows() {
-  document.querySelectorAll(".window").forEach((windowNode) => {
-    windowNode.classList.add("draggable");
-    windowNode.addEventListener("pointerdown", () => {
-      document.querySelectorAll(".window").forEach((node) => node.classList.remove("focused"));
-      windowNode.classList.add("focused");
-      windowNode.style.zIndex = String(++zIndex);
-    });
+function setupWindowControls() {
+  document.querySelectorAll("[data-open-app]").forEach((button) => {
+    button.addEventListener("click", () => openApp(button.dataset.openApp));
   });
 
-  document.querySelectorAll("[data-window-effect]").forEach((button) => {
+  document.querySelectorAll("[data-window-action]").forEach((button) => {
     button.addEventListener("click", (event) => {
       event.stopPropagation();
-      const win = button.closest(".window");
+      const win = button.closest("[data-app]");
       if (!win) return;
-      const effect = button.dataset.windowEffect;
-      playSystemSound(effect === "close" ? "error" : "info");
-      if (effect === "min") {
-        win.classList.toggle("minimized");
-      }
-      if (effect === "max") {
-        win.classList.remove("flash");
-        void win.offsetWidth;
-        win.classList.add("flash");
-      }
-      if (effect === "close") {
-        win.classList.add("closed");
-        setTimeout(() => {
-          win.classList.remove("closed");
-          win.style.display = "none";
-        }, 250);
-      }
+      const appId = win.dataset.app;
+      const action = button.dataset.windowAction;
+      if (action === "minimize") minimizeApp(appId);
+      if (action === "maximize") toggleMaximize(appId);
+      if (action === "close") closeApp(appId);
     });
   });
 
-  document.querySelectorAll("[data-open-target]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const target = document.getElementById(button.dataset.openTarget);
-      if (!target) return;
-      if (target.classList.contains("window")) {
-        target.style.display = "";
-        target.classList.remove("minimized", "closed");
-        target.classList.add("focused", "flash");
-        target.style.zIndex = String(++zIndex);
-        setTimeout(() => target.classList.remove("flash"), 450);
-      }
-      target.scrollIntoView({ behavior: "smooth", block: "center" });
-      playSystemSound("info");
-    });
+  appWindows().forEach((win) => {
+    win.addEventListener("pointerdown", () => focusApp(win.dataset.app));
   });
+}
 
-  document.querySelectorAll(".titlebar").forEach((titlebar) => {
+function setupDragging() {
+  document.querySelectorAll("[data-app] .titlebar").forEach((titlebar) => {
     titlebar.addEventListener("pointerdown", (event) => {
       if (event.target.closest("button")) return;
-      const win = titlebar.closest(".window");
-      if (!win || win.classList.contains("popup")) return;
+      const win = titlebar.closest("[data-app]");
+      if (!win || win.classList.contains("is-maximized")) return;
+      focusApp(win.dataset.app);
+
       const rect = win.getBoundingClientRect();
-      const startX = event.clientX;
-      const startY = event.clientY;
-      const currentX = Number(win.dataset.x || 0);
-      const currentY = Number(win.dataset.y || 0);
+      const offsetX = event.clientX - rect.left;
+      const offsetY = event.clientY - rect.top;
       titlebar.setPointerCapture(event.pointerId);
 
       function move(moveEvent) {
-        const nextX = currentX + moveEvent.clientX - startX;
-        const nextY = currentY + moveEvent.clientY - startY;
-        const maxX = window.innerWidth - rect.width - 8;
-        const maxY = window.innerHeight - 88;
-        const x = Math.max(-rect.left + 8, Math.min(nextX, maxX));
-        const y = Math.max(-rect.top + 8, Math.min(nextY, maxY));
-        win.dataset.x = String(x);
-        win.dataset.y = String(y);
-        win.style.transform = `translate(${x}px, ${y}px)`;
+        const maxX = window.innerWidth - rect.width - 4;
+        const maxY = window.innerHeight - rect.height - 46;
+        const x = Math.max(4, Math.min(maxX, moveEvent.clientX - offsetX));
+        const y = Math.max(4, Math.min(maxY, moveEvent.clientY - offsetY));
+        win.style.left = `${x}px`;
+        win.style.top = `${y}px`;
       }
 
       function stop() {
@@ -188,20 +303,64 @@ function setupWindows() {
   });
 }
 
+function setupStartMenu() {
+  startButton?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    startMenu?.classList.toggle("open");
+    startButton.classList.toggle("active");
+    playSystemSound("info");
+  });
+
+  document.addEventListener("pointerdown", (event) => {
+    if (!startMenu?.classList.contains("open")) return;
+    if (event.target.closest("[data-start-menu]") || event.target.closest("[data-start-button]")) return;
+    startMenu.classList.remove("open");
+    startButton?.classList.remove("active");
+  });
+
+  document.querySelector("[data-shutdown]")?.addEventListener("click", () => {
+    showPopup("info", "It is now safe to keep browsing this resume.");
+    startMenu?.classList.remove("open");
+    startButton?.classList.remove("active");
+  });
+}
+
 function setupCommandLine() {
-  const output = document.querySelector("[data-command-output]");
-  if (!output) return;
+  const log = document.querySelector("[data-command-log]");
+  const form = document.querySelector("[data-command-form]");
+  const input = document.querySelector("[data-command-input]");
+  if (!log || !form || !input) return;
+
   const commands = {
-    backend: "[backend] Go services, APIs, ledgers, exchange workflows, observability",
-    systems: "[systems] C/C++, concurrency, networking, ROS, embedded UI, low-latency delivery",
-    contact: "[contact] AmirHossein_Dolati@outlook.com | LinkedIn ready",
+    backend: "Go services, APIs, ledgers, exchange workflows, observability.",
+    systems: "C/C++, concurrency, networking, ROS, embedded UI, low-latency delivery.",
+    contact: "Email: AmirHossein_Dolati@outlook.com | LinkedIn is available from Contact.",
+    stack: "Go, C++17, Python, financial systems, exchange platforms, blockchain, Qt/QML, ROS.",
+    help: "commands: backend, systems, contact, stack, clear",
   };
 
-  document.querySelectorAll("[data-cmd-run]").forEach((button) => {
-    button.addEventListener("click", () => {
-      output.textContent = commands[button.dataset.cmdRun] || "[error] command not found";
-      playSystemSound(button.dataset.cmdRun === "contact" ? "info" : "info");
-    });
+  function append(command, output) {
+    const cmd = document.createElement("div");
+    cmd.textContent = `C:\\> ${command}`;
+    const result = document.createElement("strong");
+    result.textContent = output;
+    log.append(cmd, result);
+    log.parentElement.scrollTop = log.parentElement.scrollHeight;
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const command = input.value.trim().toLowerCase();
+    if (!command) return;
+    if (command === "clear") {
+      log.innerHTML = "";
+      input.value = "";
+      playSystemSound("info");
+      return;
+    }
+    append(command, commands[command] || "Bad command or file name");
+    playSystemSound(commands[command] ? "info" : "error");
+    input.value = "";
   });
 }
 
@@ -228,9 +387,7 @@ function setupOpsConsole() {
     const line = document.createElement("div");
     line.textContent = message;
     logNode.prepend(line);
-    while (logNode.children.length > 6) {
-      logNode.lastElementChild?.remove();
-    }
+    while (logNode.children.length > 12) logNode.lastElementChild?.remove();
   }
 
   function render() {
@@ -242,27 +399,29 @@ function setupOpsConsole() {
     riskNode.style.color = latency > 110 ? "#ff3f8e" : "#000080";
   }
 
-  function tick() {
+  function tick(makeSound = true) {
     orders += Math.floor(6 + Math.random() * 42);
     latency = Math.max(18, Math.floor(latency + (Math.random() * 28 - 11)));
     appendLog(messages[Math.floor(Math.random() * messages.length)]);
     render();
-    playSystemSound(latency > 110 ? "error" : "info");
+    if (makeSound) playSystemSound(latency > 110 ? "error" : "info");
   }
 
-  document.querySelector("[data-ops-tick]")?.addEventListener("click", tick);
+  document.querySelector("[data-ops-tick]")?.addEventListener("click", () => tick(true));
   document.querySelector("[data-ops-check]")?.addEventListener("click", () => {
     latency = Math.max(22, latency - 18);
     appendLog("[check] reconciliation passed");
     render();
-    showPopup("info");
+    showPopup("info", "Reconciliation passed. Ledger and wallet snapshots are aligned.");
   });
 
+  setInterval(() => tick(false), 3200);
   render();
 }
 
 function setupLife() {
   const canvas = document.querySelector("#life-canvas");
+  const toggleButton = document.querySelector("[data-life-toggle]");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
   const cell = 10;
@@ -321,6 +480,19 @@ function setupLife() {
     draw();
   }
 
+  function start() {
+    clearInterval(timer);
+    timer = setInterval(step, 120);
+    running = true;
+    if (toggleButton) toggleButton.textContent = "Pause";
+  }
+
+  function stop() {
+    clearInterval(timer);
+    running = false;
+    if (toggleButton) toggleButton.textContent = "Run";
+  }
+
   canvas.addEventListener("click", (event) => {
     const rect = canvas.getBoundingClientRect();
     const x = Math.floor((event.clientX - rect.left) / rect.width * cols);
@@ -330,33 +502,52 @@ function setupLife() {
     playSystemSound("info");
   });
 
-  document.querySelector("[data-life-toggle]")?.addEventListener("click", (event) => {
-    running = !running;
-    event.currentTarget.textContent = running ? "Pause" : "Run";
-    playSystemSound("info");
-    if (running) timer = setInterval(step, 120);
-    else clearInterval(timer);
-  });
-  document.querySelector("[data-life-step]")?.addEventListener("click", () => {
-    step();
+  toggleButton?.addEventListener("click", () => {
+    if (running) stop();
+    else start();
     playSystemSound("info");
   });
+
   document.querySelector("[data-life-random]")?.addEventListener("click", () => {
     randomize();
     draw();
     playSystemSound("info");
   });
+
   document.querySelector("[data-life-clear]")?.addEventListener("click", () => {
     grid = grid.map((row) => row.map(() => 0));
     draw();
+    stop();
     playSystemSound("error");
   });
 
   randomize();
   draw();
-  const toggleButton = document.querySelector("[data-life-toggle]");
-  if (toggleButton) toggleButton.textContent = "Pause";
-  timer = setInterval(step, 120);
+  start();
+}
+
+function setupTrash() {
+  document.querySelectorAll("[data-restore-file]").forEach((button) => {
+    button.addEventListener("click", () => {
+      button.closest("div")?.remove();
+      showPopup("info", "File restored to a very imaginary archive.");
+    });
+  });
+
+  document.querySelector("[data-empty-trash]")?.addEventListener("click", () => {
+    const list = document.querySelector("[data-trash-list]");
+    if (list) list.innerHTML = "<div><span>Trash is empty.</span><span></span></div>";
+    showPopup("error", "Trash emptied. The bad ideas are gone.");
+  });
+}
+
+function setupDesktopSelection() {
+  document.querySelectorAll(".desktop-icon").forEach((icon) => {
+    icon.addEventListener("click", () => {
+      document.querySelectorAll(".desktop-icon").forEach((node) => node.classList.remove("selected"));
+      icon.classList.add("selected");
+    });
+  });
 }
 
 updateClock();
@@ -376,8 +567,14 @@ document.querySelectorAll("[data-popup]").forEach((button) => {
   button.addEventListener("click", () => showPopup(button.dataset.popup));
 });
 
-setupWindows();
+setupWindowControls();
+setupDragging();
+setupStartMenu();
 setupCommandLine();
 setupOpsConsole();
 setupLife();
+setupTrash();
+setupDesktopSelection();
+focusApp("resume");
+renderShell();
 playStartup();
