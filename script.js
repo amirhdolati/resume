@@ -4,11 +4,11 @@ const APP_TITLES = {
   stack: "Stack.sys",
   projects: "Projects.lnk",
   cmd: "Cmd.exe",
-  exchange: "Exchange.exe",
+  paint: "Paint.exe",
   life: "Life.exe",
   education: "Education.txt",
   contact: "Contact.cmd",
-  guestbook: "Guestbook.exe",
+  readme: "Readme.nfo",
   taskmgr: "Taskmgr.exe",
   trash: "Trash",
 };
@@ -23,20 +23,7 @@ const startMenu = document.querySelector("[data-start-menu]");
 const taskbarApps = document.querySelector("[data-taskbar-apps]");
 const taskList = document.querySelector("[data-task-list]");
 const desktopSurface = document.querySelector(".desktop-surface");
-const guestbookForm = document.querySelector("[data-guestbook-form]");
-const guestbookList = document.querySelector("[data-guestbook-list]");
-const guestbookClear = document.querySelector("[data-guestbook-clear]");
-const GUESTBOOK_KEY = "amirhd-os98-guestbook";
-const DEFAULT_GUESTBOOK_NOTES = [
-  {
-    name: "System",
-    note: "Every window is a resume surface: backend, systems, exchange, contact, and CV stay one click away.",
-  },
-  {
-    name: "Visitor",
-    note: "The old-web guestbook is here as a small interaction, not a loud explanation.",
-  },
-];
+let startupSoundPlayed = false;
 
 let audioContext;
 let zIndex = 40;
@@ -89,6 +76,20 @@ function hideBootScreen() {
   bootScreen?.classList.add("hidden");
 }
 
+async function playStartupSound() {
+  if (!startupAudio || startupSoundPlayed) return false;
+  try {
+    startupAudio.pause();
+    startupAudio.currentTime = 0;
+    startupAudio.volume = 1;
+    await startupAudio.play();
+    startupSoundPlayed = true;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function playStartup() {
   const bootLines = [
     "Checking memory...",
@@ -101,12 +102,7 @@ async function playStartup() {
       if (bootStatus) bootStatus.textContent = line;
     }, index * 620);
   });
-  try {
-    if (startupAudio) {
-      startupAudio.currentTime = 0;
-      await startupAudio.play();
-    }
-  } catch {}
+  await playStartupSound();
   setTimeout(hideBootScreen, 2800);
 }
 
@@ -204,9 +200,12 @@ function renderTaskManager() {
     const isRunning = win?.classList.contains("is-open");
     const row = document.createElement("div");
     row.className = "task-row";
+    const status = isRunning ? (win.classList.contains("is-minimized") ? "Minimized" : "Running") : "Closed";
+    const memory = isRunning ? `${Math.round((title.length * 3 + id.length * 11) / 2)} KB` : "-";
     row.innerHTML = `
       <span>${title}</span>
-      <span>${isRunning ? (win.classList.contains("is-minimized") ? "Minimized" : "Running") : "Closed"}</span>
+      <span>${status}</span>
+      <span>${memory}</span>
       <span class="task-actions"></span>
     `;
     const actions = row.querySelector(".task-actions");
@@ -219,9 +218,14 @@ function renderTaskManager() {
       const endButton = document.createElement("button");
       endButton.className = "button tiny";
       endButton.type = "button";
-      endButton.textContent = "End";
+      endButton.textContent = "End Task";
       endButton.addEventListener("click", () => closeApp(id));
-      actions.append(switchButton, endButton);
+      const minimizeButton = document.createElement("button");
+      minimizeButton.className = "button tiny";
+      minimizeButton.type = "button";
+      minimizeButton.textContent = "Minimize";
+      minimizeButton.addEventListener("click", () => minimizeApp(id));
+      actions.append(switchButton, minimizeButton, endButton);
     } else {
       const runButton = document.createElement("button");
       runButton.className = "button tiny";
@@ -393,59 +397,128 @@ function setupCommandLine() {
   });
 }
 
-function setupOpsConsole() {
-  const ordersNode = document.querySelector("[data-orders]");
-  const latencyNode = document.querySelector("[data-latency]");
-  const ledgerNode = document.querySelector("[data-ledger]");
-  const riskNode = document.querySelector("[data-risk]");
-  const logNode = document.querySelector("[data-ops-log]");
-  if (!ordersNode || !latencyNode || !ledgerNode || !riskNode || !logNode) return;
+function setupPaint() {
+  const canvas = document.querySelector("#paint-canvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  let color = "#000080";
+  let tool = "pen";
+  let drawing = false;
+  let start = null;
 
-  let orders = 1284;
-  let latency = 41;
-  const messages = [
-    "[match] order batch accepted",
-    "[ledger] settlement queue drained",
-    "[wallet] balance snapshot verified",
-    "[risk] exposure limits checked",
-    "[chain] tx indexer caught up",
-    "[api] p95 latency inside budget",
-  ];
-
-  function appendLog(message) {
-    const line = document.createElement("div");
-    line.textContent = message;
-    logNode.prepend(line);
-    while (logNode.children.length > 12) logNode.lastElementChild?.remove();
+  function position(event) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: (event.clientX - rect.left) / rect.width * canvas.width,
+      y: (event.clientY - rect.top) / rect.height * canvas.height,
+    };
   }
 
-  function render() {
-    ordersNode.textContent = String(orders);
-    latencyNode.textContent = `${latency}ms`;
-    ledgerNode.textContent = latency > 90 ? "LAG" : "OK";
-    riskNode.textContent = latency > 110 ? "WATCH" : "LOW";
-    ledgerNode.style.color = latency > 90 ? "#ff3f8e" : "#000080";
-    riskNode.style.color = latency > 110 ? "#ff3f8e" : "#000080";
+  function drawTemplate() {
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "#c0c0c0";
+    ctx.lineWidth = 1;
+    for (let x = 0; x < canvas.width; x += 20) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, canvas.height);
+      ctx.stroke();
+    }
+    for (let y = 0; y < canvas.height; y += 20) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(canvas.width, y);
+      ctx.stroke();
+    }
+
+    ctx.fillStyle = "#000080";
+    ctx.font = "16px MSW98UI, monospace";
+    ctx.fillText("Go API", 34, 55);
+    ctx.fillText("Ledger", 194, 55);
+    ctx.fillText("Chain", 348, 55);
+    ctx.strokeStyle = "#101010";
+    ctx.lineWidth = 2;
+    [["Go API", 24, 68], ["Ledger", 184, 68], ["Chain", 338, 68]].forEach(([, x, y]) => {
+      ctx.strokeRect(x, y, 86, 44);
+    });
+    ctx.beginPath();
+    ctx.moveTo(110, 90);
+    ctx.lineTo(184, 90);
+    ctx.moveTo(270, 90);
+    ctx.lineTo(338, 90);
+    ctx.stroke();
   }
 
-  function tick(makeSound = true) {
-    orders += Math.floor(6 + Math.random() * 42);
-    latency = Math.max(18, Math.floor(latency + (Math.random() * 28 - 11)));
-    appendLog(messages[Math.floor(Math.random() * messages.length)]);
-    render();
-    if (makeSound) playSystemSound(latency > 110 ? "error" : "info");
+  function stamp(point) {
+    ctx.fillStyle = color;
+    ctx.fillRect(point.x - 28, point.y - 12, 56, 24);
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "13px MSW98UI, monospace";
+    ctx.fillText("service", point.x - 21, point.y + 4);
   }
 
-  document.querySelector("[data-ops-tick]")?.addEventListener("click", () => tick(true));
-  document.querySelector("[data-ops-check]")?.addEventListener("click", () => {
-    latency = Math.max(22, latency - 18);
-    appendLog("[check] reconciliation passed");
-    render();
-    showPopup("info", "Reconciliation passed. Ledger and wallet snapshots are aligned.");
+  function activateTool(button) {
+    document.querySelectorAll("[data-paint-tool]").forEach((node) => node.classList.remove("primary"));
+    button.classList.add("primary");
+    tool = button.dataset.paintTool;
+  }
+
+  document.querySelectorAll("[data-paint-tool]").forEach((button) => {
+    button.addEventListener("click", () => activateTool(button));
   });
 
-  setInterval(() => tick(false), 3200);
-  render();
+  document.querySelectorAll("[data-paint-color]").forEach((button) => {
+    button.addEventListener("click", () => {
+      color = button.dataset.paintColor;
+      document.querySelectorAll("[data-paint-color]").forEach((node) => node.classList.remove("active"));
+      button.classList.add("active");
+    });
+  });
+
+  document.querySelector("[data-paint-clear]")?.addEventListener("click", () => {
+    drawTemplate();
+    playSystemSound("error");
+  });
+
+  canvas.addEventListener("pointerdown", (event) => {
+    canvas.setPointerCapture(event.pointerId);
+    drawing = true;
+    start = position(event);
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = 3;
+    if (tool === "stamp") {
+      stamp(start);
+      drawing = false;
+    } else if (tool === "pen") {
+      ctx.beginPath();
+      ctx.moveTo(start.x, start.y);
+    }
+  });
+
+  canvas.addEventListener("pointermove", (event) => {
+    if (!drawing || tool !== "pen") return;
+    const point = position(event);
+    ctx.lineTo(point.x, point.y);
+    ctx.stroke();
+  });
+
+  canvas.addEventListener("pointerup", (event) => {
+    if (!drawing || !start) return;
+    const point = position(event);
+    if (tool === "line") {
+      ctx.beginPath();
+      ctx.moveTo(start.x, start.y);
+      ctx.lineTo(point.x, point.y);
+      ctx.stroke();
+    }
+    drawing = false;
+    start = null;
+  });
+
+  drawTemplate();
+  document.querySelector("[data-paint-color]")?.classList.add("active");
 }
 
 function setupLife() {
@@ -553,72 +626,6 @@ function setupLife() {
   randomize();
   draw();
   start();
-}
-
-function loadGuestbookNotes() {
-  try {
-    const raw = localStorage.getItem(GUESTBOOK_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed)
-      ? parsed.filter((item) => item && typeof item.name === "string" && typeof item.note === "string")
-      : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveGuestbookNotes(notes) {
-  try {
-    localStorage.setItem(GUESTBOOK_KEY, JSON.stringify(notes.slice(0, 12)));
-  } catch {
-    showPopup("error", "This browser blocked local guestbook storage.");
-  }
-}
-
-function renderGuestbook() {
-  if (!guestbookList) return;
-  guestbookList.innerHTML = "";
-  const notes = [...loadGuestbookNotes(), ...DEFAULT_GUESTBOOK_NOTES];
-
-  notes.forEach((entry) => {
-    const article = document.createElement("article");
-    const name = document.createElement("strong");
-    const note = document.createElement("p");
-    name.textContent = entry.name;
-    note.textContent = entry.note;
-    article.append(name, note);
-    guestbookList.appendChild(article);
-  });
-}
-
-function setupGuestbook() {
-  renderGuestbook();
-
-  guestbookForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const formData = new FormData(guestbookForm);
-    const name = String(formData.get("name") || "Visitor").trim().slice(0, 32) || "Visitor";
-    const note = String(formData.get("note") || "").trim().slice(0, 160);
-    if (!note) {
-      playSystemSound("error");
-      return;
-    }
-
-    const notes = loadGuestbookNotes();
-    notes.unshift({ name, note });
-    saveGuestbookNotes(notes);
-    guestbookForm.reset();
-    renderGuestbook();
-    playSystemSound("info");
-  });
-
-  guestbookClear?.addEventListener("click", () => {
-    try {
-      localStorage.removeItem(GUESTBOOK_KEY);
-    } catch {}
-    renderGuestbook();
-    playSystemSound("error");
-  });
 }
 
 function setupSmallApps() {
@@ -729,6 +736,7 @@ setInterval(updateClock, 30000);
 
 document.addEventListener("pointerdown", () => {
   if (audioContext?.state === "suspended") audioContext.resume();
+  playStartupSound();
 }, { once: true });
 
 document.querySelectorAll("[data-popup]").forEach((button) => {
@@ -739,9 +747,8 @@ setupWindowControls();
 setupDragging();
 setupStartMenu();
 setupCommandLine();
-setupOpsConsole();
+setupPaint();
 setupLife();
-setupGuestbook();
 setupSmallApps();
 setupDesktopIcons();
 focusApp("resume");

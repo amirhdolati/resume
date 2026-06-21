@@ -1,6 +1,6 @@
 @font-face {
   font-family: "MSW98UI";
-  src: url("assets/fonts/MSW98UI-Regular.woff2") format("woff2");
+  src: url("assets/fonts/MSW98UI-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: "MSW98UI";
-  src: url("assets/fonts/MSW98UI-Bold.woff2") format("woff2");
+  src: url("assets/fonts/MSW98UI-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -32,6 +32,7 @@
 
 * {
   box-sizing: border-box;
+  font-family: var(--pixel-font);
 }
 
 html,
@@ -55,6 +56,7 @@ body {
 button,
 input,
 textarea,
+pre,
 canvas {
   font: inherit;
 }
@@ -101,6 +103,12 @@ a {
 .boot-box strong {
   font-size: 22px;
   color: var(--navy);
+}
+
+.boot-avatar {
+  border: 2px solid var(--light);
+  object-fit: cover;
+  image-rendering: auto;
 }
 
 .boot-progress {
@@ -265,12 +273,6 @@ a {
   background:
     linear-gradient(35deg, transparent 0 43%, #000080 43% 57%, transparent 57% 100%),
     #ffffff;
-}
-
-.icon-guestbook {
-  background:
-    linear-gradient(#ffd447 0 18%, transparent 18% 100%),
-    linear-gradient(90deg, #ffffff 0 78%, #d9d9d9 78% 100%);
 }
 
 .icon-trash {
@@ -568,6 +570,12 @@ h2 {
 
 .avatar {
   width: min(160px, 100%);
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-top: 2px solid var(--light);
+  border-left: 2px solid var(--light);
+  border-right: 2px solid var(--shadow);
+  border-bottom: 2px solid var(--shadow);
   justify-self: end;
   filter: drop-shadow(8px 8px 0 rgba(0,0,0,.35));
 }
@@ -714,7 +722,7 @@ h2 {
 .taskmgr-header,
 .task-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 86px 150px;
+  grid-template-columns: minmax(0, 1fr) 76px 62px 216px;
   gap: 8px;
   align-items: center;
 }
@@ -734,6 +742,60 @@ h2 {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
+}
+
+.paint-content {
+  display: grid;
+  gap: 8px;
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.paint-toolbar,
+.paint-swatches {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.paint-swatches button {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: var(--swatch);
+  border-top: 2px solid var(--light);
+  border-left: 2px solid var(--light);
+  border-right: 2px solid var(--shadow);
+  border-bottom: 2px solid var(--shadow);
+}
+
+.paint-swatches button.active {
+  outline: 2px dotted var(--navy);
+  outline-offset: 2px;
+}
+
+.paint-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 210px;
+  background: var(--light);
+  border-top: 2px solid var(--mid);
+  border-left: 2px solid var(--mid);
+  border-right: 2px solid var(--light);
+  border-bottom: 2px solid var(--light);
+  image-rendering: pixelated;
+  touch-action: none;
+}
+
+.readme-content {
+  color: #33d17a;
+  background: #080808;
+}
+
+.readme-content pre {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.45;
 }
 
 .trash-list {
@@ -759,69 +821,6 @@ h2 {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
-
-.guestbook-list {
-  display: grid;
-  gap: 10px;
-}
-
-.guestbook-form {
-  display: grid;
-  gap: 8px;
-  margin-bottom: 12px;
-  padding: 10px;
-  background: #ececec;
-  border-top: 2px solid var(--light);
-  border-left: 2px solid var(--light);
-  border-right: 2px solid var(--mid);
-  border-bottom: 2px solid var(--mid);
-}
-
-.guestbook-form label {
-  display: grid;
-  gap: 4px;
-  color: var(--navy);
-  font-weight: 700;
-}
-
-.guestbook-form input,
-.guestbook-form textarea {
-  width: 100%;
-  min-width: 0;
-  padding: 6px;
-  color: var(--ink);
-  background: var(--light);
-  border-top: 2px solid var(--mid);
-  border-left: 2px solid var(--mid);
-  border-right: 2px solid var(--light);
-  border-bottom: 2px solid var(--light);
-  outline: 0;
-  resize: vertical;
-}
-
-.guestbook-form textarea {
-  min-height: 72px;
-  line-height: 1.35;
-}
-
-.guestbook-list article {
-  padding: 10px;
-  background: #ececec;
-  border-top: 2px solid var(--light);
-  border-left: 2px solid var(--light);
-  border-right: 2px solid var(--mid);
-  border-bottom: 2px solid var(--mid);
-}
-
-.guestbook-list strong {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--navy);
-}
-
-.guestbook-list p {
-  line-height: 1.5;
 }
 
 .start-menu {

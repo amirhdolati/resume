@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <audio id="startup-audio" src="assets/statup.mp3" preload="auto"></audio>
+    <audio id="startup-audio" src="assets/statup.mp3" preload="auto" autoplay playsinline></audio>
 
     <div class="boot-screen" data-boot-screen>
       <div class="boot-box">
-        <img src="assets/pixel-avatar.svg" alt="" width="72" height="72">
+        <img class="boot-avatar" src="assets/me.jpg" alt="" width="72" height="72">
         <strong>AMIRHD OS 98</strong>
         <span data-boot-status>Checking memory...</span>
         <div class="boot-progress" aria-hidden="true"><span></span></div>
@@ -44,9 +44,9 @@
             <img class="icon" src="assets/icons/cmd.ico" alt="">
             <span>Cmd.exe</span>
           </button>
-          <button class="desktop-icon" type="button" data-open-app="exchange">
-            <img class="icon" src="assets/icons/exchange.ico" alt="">
-            <span>Exchange.exe</span>
+          <button class="desktop-icon" type="button" data-open-app="paint">
+            <img class="icon" src="assets/icons/paint.ico" alt="">
+            <span>Paint.exe</span>
           </button>
           <button class="desktop-icon" type="button" data-open-app="life">
             <img class="icon" src="assets/icons/life.ico" alt="">
@@ -60,9 +60,9 @@
             <img class="icon" src="assets/icons/contact.ico" alt="">
             <span>Contact.cmd</span>
           </button>
-          <button class="desktop-icon" type="button" data-open-app="guestbook">
-            <img class="icon" src="assets/icons/guestbook.ico" alt="">
-            <span>Guestbook.exe</span>
+          <button class="desktop-icon" type="button" data-open-app="readme">
+            <img class="icon" src="assets/icons/readme.ico" alt="">
+            <span>Readme.nfo</span>
           </button>
           <button class="desktop-icon" type="button" data-open-app="taskmgr">
             <img class="icon" src="assets/icons/taskmgr.ico" alt="">
@@ -98,7 +98,7 @@
                   <button class="button" type="button" data-open-app="cmd">Open CMD</button>
                 </div>
               </div>
-              <img class="avatar" src="assets/pixel-avatar.svg" alt="Cute pixel avatar of AmirHossein with mustache">
+              <img class="avatar" src="assets/me.jpg" alt="AmirHossein Dolati">
             </div>
             <div class="quick-grid">
               <article><strong>5+</strong><span>years professional engineering</span></article>
@@ -225,32 +225,29 @@
           </div>
         </section>
 
-        <section id="app-exchange" class="window app-window" data-app="exchange" style="--x: 500px; --y: 94px; --w: 480px; --h: 390px;">
+        <section id="app-paint" class="window app-window" data-app="paint" style="--x: 500px; --y: 94px; --w: 520px; --h: 430px;">
           <div class="titlebar">
-            <span>Exchange_Console.exe</span>
+            <span>Paint.exe - system_sketch.bmp</span>
             <div class="window-actions">
               <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
               <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
               <button type="button" aria-label="Close" data-window-action="close"></button>
             </div>
           </div>
-          <div class="window-content">
-            <p class="tool-note">A tiny backend readout: orders, ledger settlement, reconciliation, and alerts.</p>
-            <div class="toolbar">
-              <button type="button" class="button tiny primary" data-ops-tick>Process tick</button>
-              <button type="button" class="button tiny" data-ops-check>Run checks</button>
+          <div class="window-content paint-content">
+            <div class="paint-toolbar" aria-label="Paint tools">
+              <button class="button tiny primary" type="button" data-paint-tool="pen">Pen</button>
+              <button class="button tiny" type="button" data-paint-tool="line">Line</button>
+              <button class="button tiny" type="button" data-paint-tool="stamp">Stamp</button>
+              <button class="button tiny" type="button" data-paint-clear>Clear</button>
             </div>
-            <div class="ops-grid" aria-label="Exchange backend metrics">
-              <article><span>Orders</span><strong data-orders>1284</strong></article>
-              <article><span>Latency</span><strong data-latency>41ms</strong></article>
-              <article><span>Ledger</span><strong data-ledger>OK</strong></article>
-              <article><span>Risk</span><strong data-risk>LOW</strong></article>
+            <div class="paint-swatches" aria-label="Paint colors">
+              <button type="button" style="--swatch:#000080" data-paint-color="#000080" aria-label="Blue"></button>
+              <button type="button" style="--swatch:#33d17a" data-paint-color="#33d17a" aria-label="Green"></button>
+              <button type="button" style="--swatch:#ff3f8e" data-paint-color="#ff3f8e" aria-label="Pink"></button>
+              <button type="button" style="--swatch:#101010" data-paint-color="#101010" aria-label="Black"></button>
             </div>
-            <div class="ops-log" data-ops-log aria-live="polite">
-              <div>[boot] exchange services online</div>
-              <div>[sync] ledger mirror healthy</div>
-              <div>[risk] no abnormal flow detected</div>
-            </div>
+            <canvas id="paint-canvas" class="paint-canvas" width="460" height="240" aria-label="Small architecture sketch canvas"></canvas>
           </div>
         </section>
 
@@ -291,36 +288,43 @@
           </div>
         </section>
 
-        <section id="app-guestbook" class="window app-window" data-app="guestbook" style="--x: 470px; --y: 205px; --w: 520px; --h: 370px;">
+        <section id="app-readme" class="window app-window" data-app="readme" style="--x: 470px; --y: 205px; --w: 560px; --h: 380px;">
           <div class="titlebar">
-            <span>Guestbook.exe</span>
+            <span>Readme.nfo</span>
             <div class="window-actions">
               <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
               <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
               <button type="button" aria-label="Close" data-window-action="close"></button>
             </div>
           </div>
-          <div class="window-content guestbook-content">
-            <p class="window-intro">Leave a local note in this tiny old-web guestbook. It stays in your browser.</p>
-            <form class="guestbook-form" data-guestbook-form>
-              <label>
-                Name
-                <input name="name" maxlength="32" autocomplete="name" placeholder="Visitor">
-              </label>
-              <label>
-                Note
-                <textarea name="note" maxlength="160" rows="3" placeholder="Signed, a fellow builder"></textarea>
-              </label>
-              <div class="button-row">
-                <button class="button tiny primary" type="submit">Sign</button>
-                <button class="button tiny" type="button" data-guestbook-clear>Clear local notes</button>
-              </div>
-            </form>
-            <div class="guestbook-list" data-guestbook-list></div>
+          <div class="window-content readme-content">
+<pre>
+AMIRHD / README.NFO
+===================
+
+ROLE
+  Core Backend Developer / Software Engineer
+
+CURRENT
+  Injast - Go backend services for financial software,
+  exchange workflows, ledgers, and blockchain-adjacent systems.
+
+SIGNAL
+  01. Production backend over decorative UI.
+  02. Systems background: C/C++, networking, embedded, ROS.
+  03. Comfortable where correctness, latency, and money meet.
+
+OPEN WINDOWS
+  Resume.exe      - short profile + CV
+  Experience.exe  - work history
+  Stack.sys       - languages and tools
+  Paint.exe       - tiny architecture sketchpad
+  Cmd.exe         - quick terminal facts
+</pre>
           </div>
         </section>
 
-        <section id="app-taskmgr" class="window app-window" data-app="taskmgr" style="--x: 612px; --y: 118px; --w: 420px; --h: 390px;">
+        <section id="app-taskmgr" class="window app-window" data-app="taskmgr" style="--x: 612px; --y: 118px; --w: 560px; --h: 390px;">
           <div class="titlebar">
             <span>Task Manager</span>
             <div class="window-actions">
@@ -330,7 +334,7 @@
             </div>
           </div>
           <div class="window-content taskmgr-content">
-            <div class="taskmgr-header"><span>Application</span><span>Status</span><span>Action</span></div>
+            <div class="taskmgr-header"><span>Application</span><span>Status</span><span>Memory</span><span>Action</span></div>
             <div data-task-list></div>
           </div>
         </section>
@@ -361,9 +365,9 @@
         <div class="start-items">
           <button type="button" data-open-app="resume"><img class="mini-icon" src="assets/icons/resume.ico" alt="">Resume.exe</button>
           <button type="button" data-open-app="cmd"><img class="mini-icon" src="assets/icons/cmd.ico" alt="">Cmd.exe</button>
-          <button type="button" data-open-app="exchange"><img class="mini-icon" src="assets/icons/exchange.ico" alt="">Exchange.exe</button>
+          <button type="button" data-open-app="paint"><img class="mini-icon" src="assets/icons/paint.ico" alt="">Paint.exe</button>
           <button type="button" data-open-app="life"><img class="mini-icon" src="assets/icons/life.ico" alt="">Life.exe</button>
-          <button type="button" data-open-app="guestbook"><img class="mini-icon" src="assets/icons/guestbook.ico" alt="">Guestbook.exe</button>
+          <button type="button" data-open-app="readme"><img class="mini-icon" src="assets/icons/readme.ico" alt="">Readme.nfo</button>
           <button type="button" data-open-app="taskmgr"><img class="mini-icon" src="assets/icons/taskmgr.ico" alt="">Taskmgr.exe</button>
           <button type="button" data-open-app="trash"><img class="mini-icon" src="assets/icons/trash.ico" alt="">Trash</button>
           <hr>
