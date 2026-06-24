@@ -527,21 +527,22 @@ function setupPaint() {
 function setupMediaPlayer() {
   const playButton = document.querySelector("[data-player-play]");
   const stopButton = document.querySelector("[data-player-stop]");
-  const tempoButton = document.querySelector("[data-player-tempo]");
   const progress = document.querySelector("[data-player-progress]");
   const timeNode = document.querySelector("[data-player-time]");
   const statusNode = document.querySelector("[data-player-status]");
+  const coverNode = document.querySelector("[data-player-cover]");
   const bars = Array.from(document.querySelectorAll(".player-bars span"));
-  if (!playButton || !stopButton || !tempoButton) return;
+  if (!playButton || !stopButton) return;
 
   const pattern = [
     82, 82, 98, 82, 123, 110, 98, 82,
     82, 92, 110, 92, 138, 123, 110, 92,
   ];
   let timer;
+  let visualTimer;
+  let audio;
   let step = 0;
   let running = false;
-  let turbo = false;
 
   function chipTone(frequency, delay, duration, volume, type = "square") {
     try {
@@ -550,9 +551,11 @@ function setupMediaPlayer() {
   }
 
   function render() {
-    if (progress) progress.style.width = `${step / pattern.length * 100}%`;
-    if (timeNode) timeNode.textContent = String(step).padStart(2, "0");
-    if (statusNode) statusNode.textContent = running ? (turbo ? "Playing - Turbo" : "Playing") : "Stopped";
+    const progressValue = audio?.duration ? audio.currentTime / audio.duration * 100 : step / pattern.length * 100;
+    const seconds = audio ? Math.floor(audio.currentTime) : step;
+    if (progress) progress.style.width = `${Math.max(0, Math.min(100, progressValue))}%`;
+    if (timeNode) timeNode.textContent = String(seconds % 60).padStart(2, "0");
+    if (statusNode) statusNode.textContent = running ? "Playing" : "Stopped";
     bars.forEach((bar, index) => {
       const height = 18 + ((step + index * 3) % 7) * 9;
       bar.style.height = running ? `${height}px` : "10px";
@@ -569,21 +572,71 @@ function setupMediaPlayer() {
     render();
   }
 
-  function start() {
+  function loadCover() {
+    if (!coverNode || coverNode.querySelector("img")) return;
+    const src = coverNode.dataset.coverSrc;
+    if (!src) return;
+    const image = document.createElement("img");
+    image.src = src;
+    image.alt = "";
+    image.loading = "lazy";
+    image.addEventListener("error", () => image.remove());
+    coverNode.appendChild(image);
+  }
+
+  function startVisualizer() {
+    clearInterval(visualTimer);
+    visualTimer = setInterval(() => {
+      step = (step + 1) % pattern.length;
+      render();
+    }, 132);
+  }
+
+  function startChipFallback() {
     const ctx = getAudioContext();
     if (ctx.state === "suspended") ctx.resume();
     clearInterval(timer);
     running = true;
-    playButton.textContent = "❚❚";
+    playButton.textContent = "Pause";
     playButton.setAttribute("aria-label", "Pause");
+    if (statusNode) statusNode.textContent = "Playing fallback";
     tick();
-    timer = setInterval(tick, turbo ? 90 : 132);
+    timer = setInterval(tick, 132);
+  }
+
+  async function startAudio() {
+    loadCover();
+    if (!audio) {
+      audio = new Audio(playButton.dataset.audioSrc);
+      audio.preload = "none";
+      audio.addEventListener("timeupdate", render);
+      audio.addEventListener("ended", stopMediaPlayer);
+      audio.addEventListener("error", () => {
+        if (!running) startChipFallback();
+      });
+    }
+    try {
+      if (statusNode) statusNode.textContent = "Downloading...";
+      await audio.play();
+      running = true;
+      playButton.textContent = "Pause";
+      playButton.setAttribute("aria-label", "Pause");
+      startVisualizer();
+      render();
+    } catch {
+      startChipFallback();
+    }
   }
 
   stopMediaPlayer = function stop() {
     clearInterval(timer);
+    clearInterval(visualTimer);
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
     running = false;
-    playButton.textContent = "▶";
+    playButton.textContent = "Play";
     playButton.setAttribute("aria-label", "Play");
     if (progress) progress.style.width = "0%";
     bars.forEach((bar) => {
@@ -594,19 +647,10 @@ function setupMediaPlayer() {
 
   playButton.addEventListener("click", () => {
     if (running) stopMediaPlayer();
-    else start();
+    else startAudio();
   });
 
   stopButton.addEventListener("click", stopMediaPlayer);
-
-  tempoButton.addEventListener("click", () => {
-    turbo = !turbo;
-    tempoButton.classList.toggle("primary", turbo);
-    tempoButton.textContent = turbo ? "›" : "»";
-    tempoButton.setAttribute("aria-label", turbo ? "Normal speed" : "Turbo");
-    if (running) start();
-    else render();
-  });
 
   render();
 }

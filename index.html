@@ -275,9 +275,12 @@
               </aside>
               <div class="player-main">
                 <div class="player-screen" aria-label="Media player visualization">
+                  <div class="player-cover" data-player-cover data-cover-src="assets/media/master-of-puppet-cover.png" aria-hidden="true">
+                    <span>album art</span>
+                  </div>
                   <div class="player-screen-title">
                     <strong>shaseter of shutted</strong>
-                    <span>8-bit original loop</span>
+                    <span>lazy MP3</span>
                   </div>
                   <div class="player-bars" aria-hidden="true">
                     <span></span><span></span><span></span><span></span><span></span><span></span>
@@ -285,16 +288,16 @@
                 </div>
                 <div class="player-track">
                   <span>Track 01</span>
-                  <strong>shaseter_of_shutted.mod</strong>
+                  <strong>master-of-puppet.mp3</strong>
                   <span>00:<span data-player-time>00</span></span>
                 </div>
               </div>
             </div>
             <div class="player-progress" aria-label="Playback progress"><span data-player-progress></span></div>
             <div class="player-controls">
-              <button class="player-control-button" type="button" data-player-stop aria-label="Stop">■</button>
-              <button class="player-control-button primary" type="button" data-player-play aria-label="Play">▶</button>
-              <button class="player-control-button" type="button" data-player-tempo aria-label="Turbo">»</button>
+              <button class="player-control-button" type="button" data-player-stop aria-label="Stop">Stop</button>
+              <button class="player-control-button primary" type="button" data-player-play data-audio-src="assets/media/master-of-puppet.mp3" aria-label="Play">Play</button>
+              <a class="player-control-button" href="assets/media/master-of-puppet.mp3" download aria-label="Download">Get</a>
               <div class="player-volume" aria-hidden="true"><span>Volume</span><i></i></div>
               <div class="player-status" data-player-status>Stopped</div>
             </div>
