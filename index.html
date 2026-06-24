@@ -52,12 +52,8 @@
             <img class="icon" src="assets/icons/player.ico" alt="">
             <span>Media Player.exe</span>
           </button>
-          <button class="desktop-icon" type="button" data-open-app="winamp">
-            <img class="icon" src="assets/icons/player.ico" alt="">
-            <span>Winamp.exe</span>
-          </button>
           <button class="desktop-icon" type="button" data-open-app="code">
-            <img class="icon" src="assets/icons/cmd.ico" alt="">
+            <img class="icon" src="assets/icons/stack.ico" alt="">
             <span>Code.exe</span>
           </button>
           <button class="desktop-icon" type="button" data-open-app="mines">
@@ -69,8 +65,12 @@
             <span>Internet Explorer.exe</span>
           </button>
           <button class="desktop-icon" type="button" data-open-app="life">
-            <img class="icon" src="assets/icons/life.ico" alt="">
+            <img class="icon" src="assets/icons/win.ico" alt="">
             <span>Life.exe</span>
+          </button>
+          <button class="desktop-icon" type="button" data-open-app="languages">
+            <img class="icon" src="assets/icons/education.ico" alt="">
+            <span>Language Pack.exe</span>
           </button>
           <button class="desktop-icon" type="button" data-open-app="education">
             <img class="icon" src="assets/icons/education.ico" alt="">
@@ -143,7 +143,7 @@
               <div>C:\&gt; whoami</div>
               <strong>AmirHossein Dolati</strong>
               <div>C:\&gt; help</div>
-              <strong>commands: help, about, backend, fintech, blockchain, projects, experience, contact, cv, life, mines, ie, trash, music, winamp, code, shutdown, clear</strong>
+              <strong>commands: help, about, backend, fintech, blockchain, projects, experience, contact, cv, life, mines, ie, trash, music, code, languages, shutdown, clear</strong>
             </div>
             <form class="command-input" data-command-form>
               <span>C:\&gt;</span>
@@ -324,36 +324,6 @@
           </div>
         </section>
 
-        <section id="app-winamp" class="window app-window winamp-window" data-app="winamp" style="--x: 620px; --y: 210px; --w: 520px; --h: 310px;">
-          <div class="titlebar">
-            <span>Winamp.exe - shaster of shutter</span>
-            <div class="window-actions">
-              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
-              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
-              <button type="button" aria-label="Close" data-window-action="close"></button>
-            </div>
-          </div>
-          <div class="window-content winamp-content">
-            <div class="winamp-display">
-              <img src="assets/media/shaster-of-shutter-cover.png" alt="">
-              <div>
-                <strong>shaster of shutter</strong>
-                <span data-winamp-status>stopped</span>
-              </div>
-              <span class="winamp-time">00:<b data-winamp-time>00</b></span>
-            </div>
-            <div class="winamp-spectrum" aria-hidden="true">
-              <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-            </div>
-            <div class="winamp-progress"><span data-winamp-progress></span></div>
-            <div class="winamp-controls">
-              <button class="button tiny" type="button" data-winamp-stop>Stop</button>
-              <button class="button tiny primary" type="button" data-winamp-play data-audio-src="assets/media/shaster-of-shutter.mp3">Play</button>
-              <span>playlist: resume_hits.m3u</span>
-            </div>
-          </div>
-        </section>
-
         <section id="app-code" class="window app-window code-window" data-app="code" style="--x: 328px; --y: 112px; --w: 720px; --h: 500px;">
           <div class="titlebar">
             <span>Code.exe - vim98.cpp</span>
@@ -432,7 +402,31 @@
             <h2>Bachelor of Computer Science</h2>
             <p>Azarbaijan Shahid Madani University, Tabriz, Iran.</p>
             <p>Thesis: open-source VoIP application written in C++/Qt/QML.</p>
-            <p>Languages: Persian native. English C1 reading/listening/writing, B2 speaking.</p>
+          </div>
+        </section>
+
+        <section id="app-languages" class="window app-window" data-app="languages" style="--x: 454px; --y: 170px; --w: 560px; --h: 360px;">
+          <div class="titlebar">
+            <span>Language Pack.exe</span>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
+            </div>
+          </div>
+          <div class="window-content language-content">
+            <h2>Installed Localization Packs</h2>
+            <div class="language-pack native">
+              <strong>Persian / fa-IR</strong>
+              <span>Native driver loaded. Zero missing DLLs.</span>
+              <i><b style="width: 100%"></b></i>
+            </div>
+            <div class="language-pack">
+              <strong>English / en-US</strong>
+              <span>C1 read, listen, write. B2 speech module, stable in meetings.</span>
+              <i><b style="width: 86%"></b></i>
+            </div>
+            <p class="tool-note">Packets can cross teams, docs, specs, code reviews, and production incidents.</p>
           </div>
         </section>
 
@@ -493,7 +487,7 @@
 
   BEST COMMANDS
     backend   fintech   blockchain   music
-    winamp    code      shutdown     cv
+    code      languages shutdown     cv
 
   NOTES
     This desktop is a resume disguised as an old machine.
@@ -553,11 +547,11 @@
           <button type="button" data-open-app="cmd"><img class="mini-icon" src="assets/icons/cmd.ico" alt="">Cmd.exe</button>
           <button type="button" data-open-app="paint"><img class="mini-icon" src="assets/icons/paint.ico" alt="">Paint.exe</button>
           <button type="button" data-open-app="player"><img class="mini-icon" src="assets/icons/player.ico" alt="">Media Player.exe</button>
-          <button type="button" data-open-app="winamp"><img class="mini-icon" src="assets/icons/player.ico" alt="">Winamp.exe</button>
-          <button type="button" data-open-app="code"><img class="mini-icon" src="assets/icons/cmd.ico" alt="">Code.exe</button>
+          <button type="button" data-open-app="code"><img class="mini-icon" src="assets/icons/stack.ico" alt="">Code.exe</button>
           <button type="button" data-open-app="mines"><img class="mini-icon" src="assets/icons/mines.ico" alt="">Minesweeper.exe</button>
           <button type="button" data-open-app="ie"><img class="mini-icon" src="assets/icons/ie.ico" alt="">Internet Explorer.exe</button>
-          <button type="button" data-open-app="life"><img class="mini-icon" src="assets/icons/life.ico" alt="">Life.exe</button>
+          <button type="button" data-open-app="life"><img class="mini-icon" src="assets/icons/win.ico" alt="">Life.exe</button>
+          <button type="button" data-open-app="languages"><img class="mini-icon" src="assets/icons/education.ico" alt="">Language Pack.exe</button>
           <button type="button" data-open-app="readme"><img class="mini-icon" src="assets/icons/readme.ico" alt="">Readme.nfo</button>
           <button type="button" data-open-app="taskmgr"><img class="mini-icon" src="assets/icons/taskmgr.ico" alt="">Taskmgr.exe</button>
           <button type="button" data-open-app="trash"><img class="mini-icon" src="assets/icons/trash.ico" alt="">Trash</button>

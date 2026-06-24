@@ -1094,103 +1094,6 @@ h2 {
   text-overflow: ellipsis;
 }
 
-.winamp-window .window-content {
-  padding: 0;
-  overflow: hidden;
-}
-
-.winamp-content {
-  display: grid;
-  grid-template-rows: auto minmax(70px, 1fr) 18px auto;
-  gap: 8px;
-  padding: 10px;
-  color: #9cff6a;
-  background:
-    linear-gradient(135deg, #2a2b40, #11121d 48%, #050509);
-}
-
-.winamp-display {
-  display: grid;
-  grid-template-columns: 74px minmax(0, 1fr) auto;
-  gap: 10px;
-  align-items: center;
-  padding: 8px;
-  background: #050509;
-  border-top: 2px solid #000;
-  border-left: 2px solid #000;
-  border-right: 2px solid #595b78;
-  border-bottom: 2px solid #595b78;
-}
-
-.winamp-display img {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-}
-
-.winamp-display strong,
-.winamp-display span {
-  display: block;
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.winamp-time {
-  color: #ffcf48;
-  font-size: 28px;
-}
-
-.winamp-spectrum {
-  display: flex;
-  align-items: end;
-  justify-content: center;
-  gap: 8px;
-  min-height: 72px;
-  padding: 8px;
-  background:
-    repeating-linear-gradient(0deg, rgba(156,255,106,.12) 0 2px, transparent 2px 8px),
-    #080a10;
-  border-top: 2px solid #000;
-  border-left: 2px solid #000;
-  border-right: 2px solid #595b78;
-  border-bottom: 2px solid #595b78;
-}
-
-.winamp-spectrum span {
-  width: 18px;
-  height: 8px;
-  background: linear-gradient(0deg, #9cff6a, #ffcf48 62%, #ff5f7e);
-  transition: height .08s steps(4);
-}
-
-.winamp-progress {
-  padding: 2px;
-  background: #050509;
-  border: 1px solid #595b78;
-}
-
-.winamp-progress span {
-  display: block;
-  width: 0;
-  height: 100%;
-  background: #ffcf48;
-}
-
-.winamp-controls {
-  display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr);
-  gap: 8px;
-  align-items: center;
-}
-
-.winamp-controls span {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
 .code-window .window-content {
   padding: 0;
 }
@@ -1218,6 +1121,7 @@ h2 {
 }
 
 .code-content pre {
+  min-height: 0;
   margin: 0;
   padding: 14px;
   overflow: auto;
@@ -1452,6 +1356,44 @@ h2 {
   margin: 0;
   white-space: pre-wrap;
   line-height: 1.45;
+}
+
+.language-content {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.language-pack {
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+  background: #ececec;
+  border-top: 2px solid var(--light);
+  border-left: 2px solid var(--light);
+  border-right: 2px solid var(--mid);
+  border-bottom: 2px solid var(--mid);
+}
+
+.language-pack.native {
+  background: #e8f6ff;
+}
+
+.language-pack i {
+  display: block;
+  height: 18px;
+  padding: 2px;
+  background: var(--light);
+  border-top: 2px solid var(--mid);
+  border-left: 2px solid var(--mid);
+  border-right: 2px solid var(--light);
+  border-bottom: 2px solid var(--light);
+}
+
+.language-pack b {
+  display: block;
+  height: 100%;
+  background: repeating-linear-gradient(90deg, var(--navy) 0 10px, var(--blue) 10px 20px);
 }
 
 .trash-list {
@@ -1835,9 +1777,7 @@ h2 {
   .ops-grid,
   .player-shell,
   .player-track,
-  .player-controls,
-  .winamp-display,
-  .winamp-controls {
+  .player-controls {
     grid-template-columns: 1fr;
   }
 

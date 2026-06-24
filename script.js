@@ -6,12 +6,12 @@ const APP_TITLES = {
   cmd: "Cmd.exe",
   paint: "Paint.exe",
   player: "Media Player.exe",
-  winamp: "Winamp.exe",
   code: "Code.exe",
   mines: "Minesweeper.exe",
   ie: "Internet Explorer.exe",
   life: "Life.exe",
   education: "Education.txt",
+  languages: "Language Pack.exe",
   contact: "Contact.cmd",
   readme: "Readme.nfo",
   taskmgr: "Taskmgr.exe",
@@ -39,7 +39,6 @@ let upsetClickCount = 0;
 let screenSaverTimer;
 let screenSaverActive = false;
 let stopMediaPlayer = () => {};
-let stopWinampPlayer = () => {};
 
 function updateClock() {
   if (!clock) return;
@@ -175,7 +174,6 @@ function closeApp(appId) {
   const win = getWindow(appId);
   if (!win) return;
   if (appId === "player") stopMediaPlayer();
-  if (appId === "winamp") stopWinampPlayer();
   win.classList.remove("is-open", "is-minimized", "is-maximized", "focused");
   playSystemSound(appId === "trash" ? "error" : "info");
   renderShell();
@@ -561,7 +559,7 @@ function setupCommandLine() {
   let historyIndex = 0;
 
   const commands = {
-    help: "commands: help, about, backend, fintech, blockchain, projects, experience, contact, cv, life, mines, ie, trash, music, winamp, code, shutdown, clear",
+    help: "commands: help, about, backend, fintech, blockchain, projects, experience, contact, cv, life, mines, ie, trash, music, code, languages, shutdown, clear",
     about: "AmirHossein Dolati - Go/backend engineer building financial, exchange, and blockchain-adjacent systems.",
     backend: "Go services, APIs, ledgers, exchange workflows, observability.",
     fintech: "Financial software: ledgers, reconciliation, risk checks, exchange operations.",
@@ -575,8 +573,8 @@ function setupCommandLine() {
     ie: "Opening Internet Explorer.exe...",
     trash: "Opening Trash...",
     music: "Opening Media Player.exe...",
-    winamp: "Opening Winamp.exe...",
     code: "Opening Code.exe...",
+    languages: "Opening Language Pack.exe...",
     shutdown: "Opening shutdown dialog...",
   };
 
@@ -589,8 +587,8 @@ function setupCommandLine() {
     ie: "ie",
     trash: "trash",
     music: "player",
-    winamp: "winamp",
     code: "code",
+    languages: "languages",
   };
 
   function append(command, output) {
@@ -923,88 +921,6 @@ function setupMediaPlayer() {
   render();
 }
 
-function setupWinampPlayer() {
-  const playButton = document.querySelector("[data-winamp-play]");
-  const stopButton = document.querySelector("[data-winamp-stop]");
-  const progress = document.querySelector("[data-winamp-progress]");
-  const timeNode = document.querySelector("[data-winamp-time]");
-  const statusNode = document.querySelector("[data-winamp-status]");
-  const bars = Array.from(document.querySelectorAll(".winamp-spectrum span"));
-  if (!playButton || !stopButton) return;
-
-  let audio;
-  let running = false;
-  let paused = false;
-  let visualTimer;
-  let step = 0;
-
-  function render() {
-    const value = audio?.duration ? audio.currentTime / audio.duration * 100 : 0;
-    if (progress) progress.style.width = `${Math.max(0, Math.min(100, value))}%`;
-    if (timeNode) timeNode.textContent = String(Math.floor((audio?.currentTime || 0) % 60)).padStart(2, "0");
-    if (statusNode) statusNode.textContent = running ? "playing" : (paused ? "paused" : "stopped");
-    bars.forEach((bar, index) => {
-      const height = 8 + ((step + index * 2) % 9) * 7;
-      bar.style.height = running ? `${height}px` : "8px";
-    });
-  }
-
-  function startVisualizer() {
-    clearInterval(visualTimer);
-    visualTimer = setInterval(() => {
-      step += 1;
-      render();
-    }, 110);
-  }
-
-  async function start() {
-    if (!audio) {
-      audio = new Audio(playButton.dataset.audioSrc);
-      audio.preload = "none";
-      audio.addEventListener("timeupdate", render);
-      audio.addEventListener("ended", stopWinampPlayer);
-    }
-    try {
-      await audio.play();
-      running = true;
-      paused = false;
-      playButton.textContent = "Pause";
-      startVisualizer();
-      render();
-    } catch {
-      showPopup("error", "Winamp cannot open the file. The llama is suspicious.");
-    }
-  }
-
-  function pause() {
-    clearInterval(visualTimer);
-    audio?.pause();
-    running = false;
-    paused = true;
-    playButton.textContent = "Resume";
-    render();
-  }
-
-  stopWinampPlayer = function stop() {
-    clearInterval(visualTimer);
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-    }
-    running = false;
-    paused = false;
-    playButton.textContent = "Play";
-    render();
-  };
-
-  playButton.addEventListener("click", () => {
-    if (running) pause();
-    else start();
-  });
-  stopButton.addEventListener("click", stopWinampPlayer);
-  render();
-}
-
 function setupCodeEditor() {
   const editor = document.querySelector("[data-code-editor]");
   const output = document.querySelector("[data-code-output]");
@@ -1100,7 +1016,10 @@ int main() {
     index += amount;
     const lines = output.textContent.split("\n").length;
     if (count) count.textContent = `${lines} LOC`;
-    editor.scrollTop = editor.scrollHeight;
+    requestAnimationFrame(() => {
+      output.scrollTop = output.scrollHeight;
+      editor.scrollTop = editor.scrollHeight;
+    });
     playTypeSound();
   }
 
@@ -1561,7 +1480,6 @@ setupStartMenu();
 setupCommandLine();
 setupPaint();
 setupMediaPlayer();
-setupWinampPlayer();
 setupCodeEditor();
 setupLife();
 setupMinesweeper();
