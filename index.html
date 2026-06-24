@@ -52,6 +52,14 @@
             <img class="icon" src="assets/icons/player.ico" alt="">
             <span>Media Player.exe</span>
           </button>
+          <button class="desktop-icon" type="button" data-open-app="winamp">
+            <img class="icon" src="assets/icons/player.ico" alt="">
+            <span>Winamp.exe</span>
+          </button>
+          <button class="desktop-icon" type="button" data-open-app="code">
+            <img class="icon" src="assets/icons/cmd.ico" alt="">
+            <span>Code.exe</span>
+          </button>
           <button class="desktop-icon" type="button" data-open-app="mines">
             <img class="icon" src="assets/icons/mines.ico" alt="">
             <span>Minesweeper.exe</span>
@@ -105,8 +113,8 @@
                   services for financial software, exchange platforms, and blockchain-adjacent products at Injast.
                 </p>
                 <div class="button-row">
-                  <a class="button primary" href="mailto:AmirHossein_Dolati@outlook.com">Email</a>
-                  <a class="button" href="AmirHossein-Dolati-CV-11-20-24-1.pdf">Download CV</a>
+                  <a class="button primary" href="mailto:AmirHossein_Dolati@outlook.com" target="_blank" rel="noopener">Email</a>
+                  <a class="button" href="AmirHossein-Dolati-CV-11-20-24-1.pdf" target="_blank" rel="noopener">Download CV</a>
                   <button class="button" type="button" data-open-app="cmd">Open CMD</button>
                 </div>
               </div>
@@ -135,7 +143,7 @@
               <div>C:\&gt; whoami</div>
               <strong>AmirHossein Dolati</strong>
               <div>C:\&gt; help</div>
-              <strong>commands: help, about, backend, fintech, blockchain, projects, experience, contact, cv, life, mines, ie, trash, music, shutdown, clear</strong>
+              <strong>commands: help, about, backend, fintech, blockchain, projects, experience, contact, cv, life, mines, ie, trash, music, winamp, code, shutdown, clear</strong>
             </div>
             <form class="command-input" data-command-form>
               <span>C:\&gt;</span>
@@ -316,6 +324,52 @@
           </div>
         </section>
 
+        <section id="app-winamp" class="window app-window winamp-window" data-app="winamp" style="--x: 620px; --y: 210px; --w: 520px; --h: 310px;">
+          <div class="titlebar">
+            <span>Winamp.exe - shaster of shutter</span>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
+            </div>
+          </div>
+          <div class="window-content winamp-content">
+            <div class="winamp-display">
+              <img src="assets/media/shaster-of-shutter-cover.png" alt="">
+              <div>
+                <strong>shaster of shutter</strong>
+                <span data-winamp-status>stopped</span>
+              </div>
+              <span class="winamp-time">00:<b data-winamp-time>00</b></span>
+            </div>
+            <div class="winamp-spectrum" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="winamp-progress"><span data-winamp-progress></span></div>
+            <div class="winamp-controls">
+              <button class="button tiny" type="button" data-winamp-stop>Stop</button>
+              <button class="button tiny primary" type="button" data-winamp-play data-audio-src="assets/media/shaster-of-shutter.mp3">Play</button>
+              <span>playlist: resume_hits.m3u</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="app-code" class="window app-window code-window" data-app="code" style="--x: 328px; --y: 112px; --w: 720px; --h: 500px;">
+          <div class="titlebar">
+            <span>Code.exe - vim98.cpp</span>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
+            </div>
+          </div>
+          <div class="window-content code-content" tabindex="0" data-code-editor aria-label="Retro code editor">
+            <div class="code-status"><span>-- INSERT --</span><span>vim98.cpp</span><span data-code-count>0 LOC</span></div>
+            <pre data-code-output>// Click here and type anything. Code.exe will translate panic into C++.</pre>
+            <div class="code-caret" aria-hidden="true"></div>
+          </div>
+        </section>
+
         <section id="app-mines" class="window app-window" data-app="mines" style="--x: 560px; --y: 90px; --w: 430px; --h: 500px;">
           <div class="titlebar">
             <span>Minesweeper.exe</span>
@@ -395,14 +449,14 @@
             <h2>Let's build something fast, reliable, and slightly nostalgic.</h2>
             <p>Based in Tehran, working across backend, financial software, blockchain, and systems engineering.</p>
             <div class="button-row">
-              <a class="button primary" href="mailto:AmirHossein_Dolati@outlook.com">Email</a>
-              <a class="button" href="https://www.linkedin.com/in/amirhossein-dolati-b26a1a109/">LinkedIn</a>
+              <a class="button primary" href="mailto:AmirHossein_Dolati@outlook.com" target="_blank" rel="noopener">Email</a>
+              <a class="button" href="https://www.linkedin.com/in/amirhossein-dolati-b26a1a109/" target="_blank" rel="noopener">LinkedIn</a>
               <a class="button" href="tel:+989190953651">Phone</a>
             </div>
           </div>
         </section>
 
-        <section id="app-readme" class="window app-window" data-app="readme" style="--x: 470px; --y: 205px; --w: 560px; --h: 380px;">
+        <section id="app-readme" class="window app-window" data-app="readme" style="--x: 420px; --y: 185px; --w: 720px; --h: 450px;">
           <div class="titlebar">
             <span>Readme.nfo</span>
             <div class="window-actions">
@@ -413,30 +467,37 @@
           </div>
           <div class="window-content readme-content">
 <pre>
-AMIRHD / README.NFO
-===================
+        _      __  __ ___ ____  _   _ ____
+       / \    |  \/  |_ _|  _ \| | | |  _ \
+      / _ \   | |\/| || || |_) | |_| | | | |
+     / ___ \  | |  | || ||  _ <|  _  | |_| |
+    /_/   \_\ |_|  |_|___|_| \_\_| |_|____/
 
-ROLE
-  Core Backend Developer / Software Engineer
+      .oO  README.NFO / AMIRHD OS 98  Oo.
+  =================================================
 
-CURRENT
-  Injast - Go backend services for financial software,
-  exchange workflows, ledgers, and blockchain-adjacent systems.
+  HANDLE
+    AmirHossein Dolati
 
-SIGNAL
-  01. Production backend over decorative UI.
-  02. Systems background: C/C++, networking, embedded, ROS.
-  03. Comfortable where correctness, latency, and money meet.
+  ROLE
+    Core Backend Developer / Software Engineer
 
-OPEN WINDOWS
-  Resume.exe      - short profile + CV
-  Experience.exe  - work history
-  Stack.sys       - languages and tools
-  Paint.exe       - tiny architecture sketchpad
-  Media Player    - shaster of shutter
-  Minesweeper.exe - production-safe minefield
-  Internet Explorer - restricted network simulator
-  Cmd.exe         - quick terminal facts
+  CURRENT PATCH
+    Injast experience installed:
+    Go backend services, financial software,
+    exchange workflows, ledgers, and blockchain-adjacent systems.
+
+  STACK
+    Go, C++, C, Python, Qt/QML, Linux, networking,
+    embedded systems, ROS, reliable APIs, production debugging.
+
+  BEST COMMANDS
+    backend   fintech   blockchain   music
+    winamp    code      shutdown     cv
+
+  NOTES
+    This desktop is a resume disguised as an old machine.
+    It boots, sulks, sings, mines, and still knows where the CV is.
 </pre>
           </div>
         </section>
@@ -478,6 +539,7 @@ OPEN WINDOWS
               <div><span>bad_tokenomics.xlsx</span><button class="button tiny" type="button" data-inspect-file>Inspect</button><button class="button tiny" type="button" data-restore-file>Restore</button></div>
               <div><span>production_hotfix_3am.tmp</span><button class="button tiny" type="button" data-inspect-file>Inspect</button><button class="button tiny" type="button" data-restore-file>Restore</button></div>
               <div><span>old_vpn_config.pbk</span><button class="button tiny" type="button" data-inspect-file>Inspect</button><button class="button tiny" type="button" data-restore-file>Restore</button></div>
+              <div><span>warcraft(dota).exe</span><button class="button tiny" type="button" data-inspect-file>Inspect</button><button class="button tiny" type="button" data-restore-file>Restore</button></div>
             </div>
             <button class="button tiny primary" type="button" data-empty-trash>Empty Trash</button>
           </div>
@@ -491,6 +553,8 @@ OPEN WINDOWS
           <button type="button" data-open-app="cmd"><img class="mini-icon" src="assets/icons/cmd.ico" alt="">Cmd.exe</button>
           <button type="button" data-open-app="paint"><img class="mini-icon" src="assets/icons/paint.ico" alt="">Paint.exe</button>
           <button type="button" data-open-app="player"><img class="mini-icon" src="assets/icons/player.ico" alt="">Media Player.exe</button>
+          <button type="button" data-open-app="winamp"><img class="mini-icon" src="assets/icons/player.ico" alt="">Winamp.exe</button>
+          <button type="button" data-open-app="code"><img class="mini-icon" src="assets/icons/cmd.ico" alt="">Code.exe</button>
           <button type="button" data-open-app="mines"><img class="mini-icon" src="assets/icons/mines.ico" alt="">Minesweeper.exe</button>
           <button type="button" data-open-app="ie"><img class="mini-icon" src="assets/icons/ie.ico" alt="">Internet Explorer.exe</button>
           <button type="button" data-open-app="life"><img class="mini-icon" src="assets/icons/life.ico" alt="">Life.exe</button>
@@ -509,6 +573,24 @@ OPEN WINDOWS
         <button class="tray-button" type="button" data-open-app="taskmgr">Taskmgr</button>
         <div class="clock" data-clock>--:--</div>
       </footer>
+    </div>
+
+    <div class="screensaver" data-screensaver aria-hidden="true">
+      <div class="screensaver-logo" data-screensaver-logo>
+        <strong>AMIRHD</strong>
+        <span>resume.exe</span>
+      </div>
+      <div class="toaster toaster-a" aria-hidden="true">CV</div>
+      <div class="toaster toaster-b" aria-hidden="true">Go</div>
+      <div class="toaster toaster-c" aria-hidden="true">API</div>
+    </div>
+
+    <div class="bsod" data-bsod tabindex="0" aria-hidden="true">
+      <div>
+        <strong>EMOTIONAL_EXCEPTION_NOT_HANDLED</strong>
+        <p>The desktop tried to shut down its feelings and failed.</p>
+        <p>Press any key to restart AMIRHD OS 98.</p>
+      </div>
     </div>
 
     <div class="popup-layer" data-popup-layer aria-live="polite"></div>

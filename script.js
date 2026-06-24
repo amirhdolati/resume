@@ -6,6 +6,8 @@ const APP_TITLES = {
   cmd: "Cmd.exe",
   paint: "Paint.exe",
   player: "Media Player.exe",
+  winamp: "Winamp.exe",
+  code: "Code.exe",
   mines: "Minesweeper.exe",
   ie: "Internet Explorer.exe",
   life: "Life.exe",
@@ -33,7 +35,11 @@ let zIndex = 40;
 let focusedApp = "resume";
 let selectedTaskId = "resume";
 let upsetMode = false;
+let upsetClickCount = 0;
+let screenSaverTimer;
+let screenSaverActive = false;
 let stopMediaPlayer = () => {};
+let stopWinampPlayer = () => {};
 
 function updateClock() {
   if (!clock) return;
@@ -76,6 +82,13 @@ function playSystemSound(kind) {
   } catch {
     // Audio may be unavailable until the browser receives a user gesture.
   }
+}
+
+function playTypeSound() {
+  try {
+    const base = 420 + Math.floor(Math.random() * 180);
+    tone(base, 0, 0.035, "square", 0.025);
+  } catch {}
 }
 
 function hideBootScreen() {
@@ -162,6 +175,7 @@ function closeApp(appId) {
   const win = getWindow(appId);
   if (!win) return;
   if (appId === "player") stopMediaPlayer();
+  if (appId === "winamp") stopWinampPlayer();
   win.classList.remove("is-open", "is-minimized", "is-maximized", "focused");
   playSystemSound(appId === "trash" ? "error" : "info");
   renderShell();
@@ -391,6 +405,67 @@ function triggerUpsetMode() {
   });
 }
 
+function showBlueScreen() {
+  const bsod = document.querySelector("[data-bsod]");
+  if (!bsod) return;
+  upsetMode = false;
+  upsetClickCount = 0;
+  document.body.classList.remove("upset-mode");
+  bsod.classList.add("active");
+  bsod.setAttribute("aria-hidden", "false");
+  bsod.focus();
+  playSystemSound("error");
+}
+
+function hideBlueScreen() {
+  const bsod = document.querySelector("[data-bsod]");
+  if (!bsod?.classList.contains("active")) return;
+  bsod.classList.remove("active");
+  bsod.setAttribute("aria-hidden", "true");
+  bootScreen?.classList.remove("hidden");
+  if (bootStatus) bootStatus.textContent = "Restarting after emotional exception...";
+  setTimeout(hideBootScreen, 1600);
+}
+
+function setupBlueScreenAchievement() {
+  document.addEventListener("click", (event) => {
+    if (!upsetMode) return;
+    if (event.target.closest("[data-patrick-apology]")) return;
+    upsetClickCount += 1;
+    if (upsetClickCount >= 8) showBlueScreen();
+  }, true);
+
+  document.addEventListener("keydown", () => hideBlueScreen());
+  document.querySelector("[data-bsod]")?.addEventListener("click", () => hideBlueScreen());
+}
+
+function setupScreenSaver() {
+  const saver = document.querySelector("[data-screensaver]");
+  if (!saver) return;
+
+  function show() {
+    if (screenSaverActive) return;
+    screenSaverActive = true;
+    saver.classList.add("active");
+    saver.setAttribute("aria-hidden", "false");
+  }
+
+  function hide() {
+    if (screenSaverActive) {
+      screenSaverActive = false;
+      saver.classList.remove("active");
+      saver.setAttribute("aria-hidden", "true");
+    }
+    clearTimeout(screenSaverTimer);
+    screenSaverTimer = setTimeout(show, 45000);
+  }
+
+  ["pointermove", "pointerdown", "keydown", "wheel", "touchstart"].forEach((eventName) => {
+    document.addEventListener(eventName, hide, { passive: true });
+  });
+  hide();
+}
+
 function setupWindowControls() {
   document.querySelectorAll("[data-open-app]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -482,9 +557,11 @@ function setupCommandLine() {
   const form = document.querySelector("[data-command-form]");
   const input = document.querySelector("[data-command-input]");
   if (!log || !form || !input) return;
+  const history = [];
+  let historyIndex = 0;
 
   const commands = {
-    help: "commands: help, about, backend, fintech, blockchain, projects, experience, contact, cv, life, mines, ie, trash, music, shutdown, clear",
+    help: "commands: help, about, backend, fintech, blockchain, projects, experience, contact, cv, life, mines, ie, trash, music, winamp, code, shutdown, clear",
     about: "AmirHossein Dolati - Go/backend engineer building financial, exchange, and blockchain-adjacent systems.",
     backend: "Go services, APIs, ledgers, exchange workflows, observability.",
     fintech: "Financial software: ledgers, reconciliation, risk checks, exchange operations.",
@@ -498,6 +575,8 @@ function setupCommandLine() {
     ie: "Opening Internet Explorer.exe...",
     trash: "Opening Trash...",
     music: "Opening Media Player.exe...",
+    winamp: "Opening Winamp.exe...",
+    code: "Opening Code.exe...",
     shutdown: "Opening shutdown dialog...",
   };
 
@@ -510,6 +589,8 @@ function setupCommandLine() {
     ie: "ie",
     trash: "trash",
     music: "player",
+    winamp: "winamp",
+    code: "code",
   };
 
   function append(command, output) {
@@ -525,6 +606,8 @@ function setupCommandLine() {
     event.preventDefault();
     const command = input.value.trim().toLowerCase();
     if (!command) return;
+    history.push(command);
+    historyIndex = history.length;
     if (command === "clear") {
       log.innerHTML = "";
       input.value = "";
@@ -534,9 +617,46 @@ function setupCommandLine() {
     append(command, commands[command] || "Bad command or file name");
     if (openCommands[command]) openApp(openCommands[command]);
     if (command === "shutdown") showShutdownDialog();
-    if (command === "cv") window.location.href = "AmirHossein-Dolati-CV-11-20-24-1.pdf";
+    if (command === "cv") window.open("AmirHossein-Dolati-CV-11-20-24-1.pdf", "_blank", "noopener");
     playSystemSound(commands[command] ? "info" : "error");
     input.value = "";
+  });
+
+  input.addEventListener("keydown", (event) => {
+    if (event.ctrlKey && event.key.toLowerCase() === "c") {
+      event.preventDefault();
+      append("^C", "Break");
+      input.value = "";
+      playSystemSound("error");
+      return;
+    }
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      historyIndex = Math.max(0, historyIndex - 1);
+      input.value = history[historyIndex] || "";
+      input.setSelectionRange(input.value.length, input.value.length);
+      return;
+    }
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      historyIndex = Math.min(history.length, historyIndex + 1);
+      input.value = history[historyIndex] || "";
+      input.setSelectionRange(input.value.length, input.value.length);
+      return;
+    }
+    if (event.key === "Tab") {
+      event.preventDefault();
+      const prefix = input.value.trim().toLowerCase();
+      if (!prefix) return;
+      const matches = Object.keys(commands).concat("clear").filter((name) => name.startsWith(prefix));
+      if (matches.length === 1) {
+        input.value = matches[0];
+        input.setSelectionRange(input.value.length, input.value.length);
+        playSystemSound("info");
+      } else if (matches.length > 1) {
+        append(prefix, matches.join("  "));
+      }
+    }
   });
 
   document.querySelector("[data-app='cmd'] .command-content")?.addEventListener("click", () => {
@@ -801,6 +921,195 @@ function setupMediaPlayer() {
   stopButton.addEventListener("click", stopMediaPlayer);
 
   render();
+}
+
+function setupWinampPlayer() {
+  const playButton = document.querySelector("[data-winamp-play]");
+  const stopButton = document.querySelector("[data-winamp-stop]");
+  const progress = document.querySelector("[data-winamp-progress]");
+  const timeNode = document.querySelector("[data-winamp-time]");
+  const statusNode = document.querySelector("[data-winamp-status]");
+  const bars = Array.from(document.querySelectorAll(".winamp-spectrum span"));
+  if (!playButton || !stopButton) return;
+
+  let audio;
+  let running = false;
+  let paused = false;
+  let visualTimer;
+  let step = 0;
+
+  function render() {
+    const value = audio?.duration ? audio.currentTime / audio.duration * 100 : 0;
+    if (progress) progress.style.width = `${Math.max(0, Math.min(100, value))}%`;
+    if (timeNode) timeNode.textContent = String(Math.floor((audio?.currentTime || 0) % 60)).padStart(2, "0");
+    if (statusNode) statusNode.textContent = running ? "playing" : (paused ? "paused" : "stopped");
+    bars.forEach((bar, index) => {
+      const height = 8 + ((step + index * 2) % 9) * 7;
+      bar.style.height = running ? `${height}px` : "8px";
+    });
+  }
+
+  function startVisualizer() {
+    clearInterval(visualTimer);
+    visualTimer = setInterval(() => {
+      step += 1;
+      render();
+    }, 110);
+  }
+
+  async function start() {
+    if (!audio) {
+      audio = new Audio(playButton.dataset.audioSrc);
+      audio.preload = "none";
+      audio.addEventListener("timeupdate", render);
+      audio.addEventListener("ended", stopWinampPlayer);
+    }
+    try {
+      await audio.play();
+      running = true;
+      paused = false;
+      playButton.textContent = "Pause";
+      startVisualizer();
+      render();
+    } catch {
+      showPopup("error", "Winamp cannot open the file. The llama is suspicious.");
+    }
+  }
+
+  function pause() {
+    clearInterval(visualTimer);
+    audio?.pause();
+    running = false;
+    paused = true;
+    playButton.textContent = "Resume";
+    render();
+  }
+
+  stopWinampPlayer = function stop() {
+    clearInterval(visualTimer);
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+    running = false;
+    paused = false;
+    playButton.textContent = "Play";
+    render();
+  };
+
+  playButton.addEventListener("click", () => {
+    if (running) pause();
+    else start();
+  });
+  stopButton.addEventListener("click", stopWinampPlayer);
+  render();
+}
+
+function setupCodeEditor() {
+  const editor = document.querySelector("[data-code-editor]");
+  const output = document.querySelector("[data-code-output]");
+  const count = document.querySelector("[data-code-count]");
+  if (!editor || !output) return;
+
+  const source = `#include <chrono>
+#include <cstdint>
+#include <iostream>
+#include <optional>
+#include <queue>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+namespace exchange {
+
+struct Money {
+  std::int64_t atoms{};
+  static Money fromAtoms(std::int64_t value) { return Money{value}; }
+};
+
+struct Order {
+  std::string id;
+  std::string user;
+  Money price;
+  Money quantity;
+  bool bid{};
+};
+
+class Ledger {
+ public:
+  void reserve(const std::string& user, Money amount) {
+    balances_[user] -= amount.atoms;
+    reserved_[user] += amount.atoms;
+  }
+
+  void settle(const std::string& maker, const std::string& taker, Money notional) {
+    reserved_[maker] -= notional.atoms;
+    balances_[taker] -= notional.atoms;
+    balances_[maker] += notional.atoms;
+  }
+
+ private:
+  std::unordered_map<std::string, std::int64_t> balances_;
+  std::unordered_map<std::string, std::int64_t> reserved_;
+};
+
+class MatchingEngine {
+ public:
+  void submit(Order order) {
+    auto& side = order.bid ? bids_ : asks_;
+    side.push(std::move(order));
+    match();
+  }
+
+ private:
+  void match() {
+    while (!bids_.empty() && !asks_.empty()) {
+      auto bid = bids_.front();
+      auto ask = asks_.front();
+      if (bid.price.atoms < ask.price.atoms) return;
+      const auto traded = Money::fromAtoms(std::min(bid.quantity.atoms, ask.quantity.atoms));
+      ledger_.settle(ask.user, bid.user, traded);
+      std::cout << "fill " << bid.id << " x " << ask.id << "\\n";
+      bids_.pop();
+      asks_.pop();
+    }
+  }
+
+  std::queue<Order> bids_;
+  std::queue<Order> asks_;
+  Ledger ledger_;
+};
+
+}  // namespace exchange
+
+int main() {
+  exchange::MatchingEngine engine;
+  engine.submit({"B-100", "recruiter", {4200}, {10}, true});
+  engine.submit({"A-200", "amirhd", {4100}, {10}, false});
+  std::cout << "backend online\\n";
+  return 0;
+}
+`;
+
+  let index = 0;
+  output.textContent = "";
+
+  function writeNext(amount = 1) {
+    if (index >= source.length) index = 0;
+    output.textContent += source.slice(index, index + amount);
+    index += amount;
+    const lines = output.textContent.split("\n").length;
+    if (count) count.textContent = `${lines} LOC`;
+    editor.scrollTop = editor.scrollHeight;
+    playTypeSound();
+  }
+
+  editor.addEventListener("keydown", (event) => {
+    if (event.ctrlKey || event.altKey || event.metaKey) return;
+    event.preventDefault();
+    writeNext(event.key === "Enter" ? 5 : 2 + Math.floor(Math.random() * 4));
+  });
+  editor.addEventListener("click", () => editor.focus());
 }
 
 function setupLife() {
@@ -1123,6 +1432,7 @@ function setupSmallApps() {
         "bad_tokenomics.xlsx": "Forecast says: number goes sideways, investor confidence goes downstairs.",
         "production_hotfix_3am.tmp": "Contains a fix, two TODOs, and no memory of who approved it.",
         "old_vpn_config.pbk": "VPN profile found. Status: still cannot connect.",
+        "warcraft(dota).exe": "A sacred LAN artifact. Restoring may summon mid-only arguments.",
       };
       showPopup("info", messages[name] || `${name} looks suspiciously recoverable.`);
     });
@@ -1251,10 +1561,14 @@ setupStartMenu();
 setupCommandLine();
 setupPaint();
 setupMediaPlayer();
+setupWinampPlayer();
+setupCodeEditor();
 setupLife();
 setupMinesweeper();
 setupInternetExplorer();
 setupSmallApps();
+setupBlueScreenAchievement();
+setupScreenSaver();
 setupTaskManagerButtons();
 setupDesktopIcons();
 focusApp("resume");
