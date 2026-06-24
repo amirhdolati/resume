@@ -529,7 +529,9 @@ function setupMediaPlayer() {
   const stopButton = document.querySelector("[data-player-stop]");
   const tempoButton = document.querySelector("[data-player-tempo]");
   const progress = document.querySelector("[data-player-progress]");
-  const bars = Array.from(document.querySelectorAll(".player-screen span"));
+  const timeNode = document.querySelector("[data-player-time]");
+  const statusNode = document.querySelector("[data-player-status]");
+  const bars = Array.from(document.querySelectorAll(".player-bars span"));
   if (!playButton || !stopButton || !tempoButton) return;
 
   const pattern = [
@@ -549,6 +551,8 @@ function setupMediaPlayer() {
 
   function render() {
     if (progress) progress.style.width = `${step / pattern.length * 100}%`;
+    if (timeNode) timeNode.textContent = String(step).padStart(2, "0");
+    if (statusNode) statusNode.textContent = running ? (turbo ? "Playing - Turbo" : "Playing") : "Stopped";
     bars.forEach((bar, index) => {
       const height = 18 + ((step + index * 3) % 7) * 9;
       bar.style.height = running ? `${height}px` : "10px";
@@ -570,7 +574,8 @@ function setupMediaPlayer() {
     if (ctx.state === "suspended") ctx.resume();
     clearInterval(timer);
     running = true;
-    playButton.textContent = "Pause";
+    playButton.textContent = "❚❚";
+    playButton.setAttribute("aria-label", "Pause");
     tick();
     timer = setInterval(tick, turbo ? 90 : 132);
   }
@@ -578,11 +583,13 @@ function setupMediaPlayer() {
   stopMediaPlayer = function stop() {
     clearInterval(timer);
     running = false;
-    playButton.textContent = "Play";
+    playButton.textContent = "▶";
+    playButton.setAttribute("aria-label", "Play");
     if (progress) progress.style.width = "0%";
     bars.forEach((bar) => {
       bar.style.height = "10px";
     });
+    render();
   };
 
   playButton.addEventListener("click", () => {
@@ -595,8 +602,10 @@ function setupMediaPlayer() {
   tempoButton.addEventListener("click", () => {
     turbo = !turbo;
     tempoButton.classList.toggle("primary", turbo);
-    tempoButton.textContent = turbo ? "Normal" : "Turbo";
+    tempoButton.textContent = turbo ? "›" : "»";
+    tempoButton.setAttribute("aria-label", turbo ? "Normal speed" : "Turbo");
     if (running) start();
+    else render();
   });
 
   render();

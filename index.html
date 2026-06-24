@@ -255,9 +255,9 @@
           </div>
         </section>
 
-        <section id="app-player" class="window app-window" data-app="player" style="--x: 560px; --y: 160px; --w: 470px; --h: 320px;">
+        <section id="app-player" class="window app-window media-player-window" data-app="player" style="--x: 560px; --y: 160px; --w: 540px; --h: 390px;">
           <div class="titlebar">
-            <span>Windows Media Player - shaseter_of_shutted.mod</span>
+            <span>Windows Media Player</span>
             <div class="window-actions">
               <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
               <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
@@ -265,21 +265,38 @@
             </div>
           </div>
           <div class="window-content player-content">
-            <div class="player-display">
-              <div class="player-screen" aria-hidden="true">
-                <span></span><span></span><span></span><span></span><span></span><span></span>
-              </div>
-              <div>
-                <p class="player-kicker">8-bit original loop</p>
-                <h2>shaseter of shutted</h2>
-                <p class="tool-note">A browser-generated chip riff for this desktop. No external audio file.</p>
+            <div class="player-menu" aria-hidden="true"><span>File</span><span>View</span><span>Play</span><span>Favorites</span><span>Help</span></div>
+            <div class="player-shell">
+              <aside class="player-sidebar" aria-hidden="true">
+                <button type="button">Now Playing</button>
+                <button type="button">Media Guide</button>
+                <button type="button">CD Audio</button>
+                <button type="button">Media Library</button>
+              </aside>
+              <div class="player-main">
+                <div class="player-screen" aria-label="Media player visualization">
+                  <div class="player-screen-title">
+                    <strong>shaseter of shutted</strong>
+                    <span>8-bit original loop</span>
+                  </div>
+                  <div class="player-bars" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span><span></span><span></span>
+                  </div>
+                </div>
+                <div class="player-track">
+                  <span>Track 01</span>
+                  <strong>shaseter_of_shutted.mod</strong>
+                  <span>00:<span data-player-time>00</span></span>
+                </div>
               </div>
             </div>
-            <div class="player-progress" aria-hidden="true"><span data-player-progress></span></div>
-            <div class="toolbar">
-              <button class="button tiny primary" type="button" data-player-play>Play</button>
-              <button class="button tiny" type="button" data-player-stop>Stop</button>
-              <button class="button tiny" type="button" data-player-tempo>Turbo</button>
+            <div class="player-progress" aria-label="Playback progress"><span data-player-progress></span></div>
+            <div class="player-controls">
+              <button class="player-control-button" type="button" data-player-stop aria-label="Stop">■</button>
+              <button class="player-control-button primary" type="button" data-player-play aria-label="Play">▶</button>
+              <button class="player-control-button" type="button" data-player-tempo aria-label="Turbo">»</button>
+              <div class="player-volume" aria-hidden="true"><span>Volume</span><i></i></div>
+              <div class="player-status" data-player-status>Stopped</div>
             </div>
           </div>
         </section>
