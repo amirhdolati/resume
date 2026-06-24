@@ -436,7 +436,7 @@ function setupPaint() {
     }
 
     ctx.fillStyle = "#000080";
-    ctx.font = "16px MSW98UI, monospace";
+    ctx.font = "16px ByteBounce, monospace";
     ctx.fillText("Go API", 34, 55);
     ctx.fillText("Ledger", 194, 55);
     ctx.fillText("Chain", 348, 55);
@@ -457,7 +457,7 @@ function setupPaint() {
     ctx.fillStyle = color;
     ctx.fillRect(point.x - 28, point.y - 12, 56, 24);
     ctx.fillStyle = "#ffffff";
-    ctx.font = "13px MSW98UI, monospace";
+    ctx.font = "13px ByteBounce, monospace";
     ctx.fillText("service", point.x - 21, point.y + 4);
   }
 
