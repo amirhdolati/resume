@@ -451,8 +451,14 @@ OPEN WINDOWS
             </div>
           </div>
           <div class="window-content taskmgr-content">
-            <div class="taskmgr-header"><span>Application</span><span>Status</span><span>Memory</span><span>Action</span></div>
+            <div class="taskmgr-tabs" aria-hidden="true"><span class="active">Applications</span><span>Processes</span><span>Performance</span></div>
+            <div class="taskmgr-header"><span>Task</span><span>Status</span><span>Mem Usage</span></div>
             <div data-task-list></div>
+            <div class="taskmgr-footer">
+              <button class="button tiny" type="button" data-task-switch>Switch To</button>
+              <button class="button tiny" type="button" data-task-minimize>Minimize</button>
+              <button class="button tiny primary" type="button" data-task-end>End Task</button>
+            </div>
           </div>
         </section>
 

@@ -31,6 +31,8 @@ let startupSoundPlayed = false;
 let audioContext;
 let zIndex = 40;
 let focusedApp = "resume";
+let selectedTaskId = "resume";
+let upsetMode = false;
 let stopMediaPlayer = () => {};
 
 function updateClock() {
@@ -119,6 +121,10 @@ function appWindows() {
 }
 
 function focusApp(appId) {
+  if (upsetMode && appId !== "taskmgr") {
+    showPopup("error", "AMIRHD OS is crying right now. Applications are refusing to cooperate.");
+    return;
+  }
   const win = getWindow(appId);
   if (!win) return;
   appWindows().forEach((node) => node.classList.remove("focused"));
@@ -129,6 +135,10 @@ function focusApp(appId) {
 }
 
 function openApp(appId) {
+  if (upsetMode && appId !== "taskmgr") {
+    showPopup("error", "The desktop is upset. It only trusts Task Manager at the moment.");
+    return;
+  }
   const win = getWindow(appId);
   if (!win) return;
   win.classList.add("is-open");
@@ -204,43 +214,40 @@ function renderTaskManager() {
     const win = getWindow(id);
     const isRunning = win?.classList.contains("is-open");
     const row = document.createElement("div");
-    row.className = "task-row";
+    row.className = `task-row ${selectedTaskId === id ? "selected" : ""}`;
+    row.dataset.taskId = id;
     const status = isRunning ? (win.classList.contains("is-minimized") ? "Minimized" : "Running") : "Closed";
     const memory = isRunning ? `${Math.round((title.length * 3 + id.length * 11) / 2)} KB` : "-";
     row.innerHTML = `
       <span>${title}</span>
       <span>${status}</span>
       <span>${memory}</span>
-      <span class="task-actions"></span>
     `;
-    const actions = row.querySelector(".task-actions");
-    if (isRunning) {
-      const switchButton = document.createElement("button");
-      switchButton.className = "button tiny";
-      switchButton.type = "button";
-      switchButton.textContent = "Switch";
-      switchButton.addEventListener("click", () => openApp(id));
-      const endButton = document.createElement("button");
-      endButton.className = "button tiny";
-      endButton.type = "button";
-      endButton.textContent = "End Task";
-      endButton.addEventListener("click", () => closeApp(id));
-      const minimizeButton = document.createElement("button");
-      minimizeButton.className = "button tiny";
-      minimizeButton.type = "button";
-      minimizeButton.textContent = "Minimize";
-      minimizeButton.addEventListener("click", () => minimizeApp(id));
-      actions.append(switchButton, minimizeButton, endButton);
-    } else {
-      const runButton = document.createElement("button");
-      runButton.className = "button tiny";
-      runButton.type = "button";
-      runButton.textContent = "Run";
-      runButton.addEventListener("click", () => openApp(id));
-      actions.append(runButton);
-    }
+    row.addEventListener("click", () => {
+      selectedTaskId = id;
+      renderTaskManager();
+    });
     row.addEventListener("dblclick", () => openApp(id));
     taskList.appendChild(row);
+  });
+}
+
+function selectedTaskWindow() {
+  return selectedTaskId ? getWindow(selectedTaskId) : null;
+}
+
+function setupTaskManagerButtons() {
+  document.querySelector("[data-task-switch]")?.addEventListener("click", () => {
+    if (!selectedTaskId) return;
+    openApp(selectedTaskId);
+  });
+  document.querySelector("[data-task-minimize]")?.addEventListener("click", () => {
+    if (!selectedTaskWindow()?.classList.contains("is-open")) return;
+    minimizeApp(selectedTaskId);
+  });
+  document.querySelector("[data-task-end]")?.addEventListener("click", () => {
+    if (!selectedTaskWindow()?.classList.contains("is-open")) return;
+    closeApp(selectedTaskId);
   });
 }
 
@@ -334,9 +341,53 @@ function showShutdownDialog() {
         setTimeout(hideBootScreen, 1800);
       }
       if (action === "shutdown") {
-        showPopup("info", "It is now safe to review this resume.");
+        triggerUpsetMode();
       }
     });
+  });
+}
+
+function clearUpsetMode() {
+  upsetMode = false;
+  document.body.classList.remove("upset-mode");
+  showPopup("info", "Apology accepted. AMIRHD OS 98 is emotionally available again.");
+}
+
+function triggerUpsetMode() {
+  if (!popupLayer) return;
+  upsetMode = true;
+  document.body.classList.add("upset-mode");
+  playSystemSound("error");
+
+  const dialog = document.createElement("div");
+  dialog.className = "popup window is-open patrick-popup";
+  dialog.style.zIndex = String(++zIndex);
+  dialog.innerHTML = `
+    <div class="titlebar">
+      <span>System Feelings</span>
+      <div class="window-actions">
+        <button type="button" aria-label="Close feelings dialog" data-patrick-close></button>
+      </div>
+    </div>
+    <div class="patrick-body">
+      <img src="assets/imge.webp" alt="Crying Patrick meme">
+      <p>Why do you hate me? I only wanted to show you backend experience.</p>
+      <div class="patrick-actions">
+        <button class="button tiny primary" type="button" data-patrick-apology>Apologize</button>
+        <button class="button tiny" type="button" data-patrick-close>Let it cry</button>
+      </div>
+    </div>
+  `;
+  popupLayer.appendChild(dialog);
+  appendCommandLine("shutdown denied: desktop feelings.exe is now running");
+  renderShell();
+
+  dialog.querySelector("[data-patrick-apology]")?.addEventListener("click", () => {
+    dialog.remove();
+    clearUpsetMode();
+  });
+  dialog.querySelectorAll("[data-patrick-close]").forEach((button) => {
+    button.addEventListener("click", () => dialog.remove());
   });
 }
 
@@ -1204,6 +1255,7 @@ setupLife();
 setupMinesweeper();
 setupInternetExplorer();
 setupSmallApps();
+setupTaskManagerButtons();
 setupDesktopIcons();
 focusApp("resume");
 renderShell();

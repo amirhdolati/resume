@@ -431,14 +431,18 @@ a {
 }
 
 .window-actions [data-window-action="close"]::before,
-.window-actions [data-popup-close]::before {
+.window-actions [data-popup-close]::before,
+.window-actions [data-shutdown-cancel]::before,
+.window-actions [data-patrick-close]::before {
   width: 11px;
   height: 2px;
   transform: rotate(45deg);
 }
 
 .window-actions [data-window-action="close"]::after,
-.window-actions [data-popup-close]::after {
+.window-actions [data-popup-close]::after,
+.window-actions [data-shutdown-cancel]::after,
+.window-actions [data-patrick-close]::after {
   width: 11px;
   height: 2px;
   transform: rotate(-45deg);
@@ -727,23 +731,88 @@ h2 {
   border-bottom: 2px solid var(--mid);
 }
 
+.taskmgr-content {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: 0;
+  overflow: hidden;
+}
+
+.taskmgr-tabs {
+  display: flex;
+  align-items: end;
+  gap: 2px;
+  margin-bottom: 0;
+  border-bottom: 2px solid var(--light);
+}
+
+.taskmgr-tabs span {
+  padding: 7px 14px 5px;
+  background: #b7b7b7;
+  border-top: 2px solid var(--light);
+  border-left: 2px solid var(--light);
+  border-right: 2px solid var(--shadow);
+  border-bottom: 0;
+}
+
+.taskmgr-tabs span.active {
+  position: relative;
+  top: 2px;
+  padding-top: 9px;
+  background: var(--silver);
+}
+
 .taskmgr-header,
 .task-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 110px 82px 280px;
-  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) 138px 112px;
+  gap: 10px;
   align-items: center;
 }
 
 .taskmgr-header {
-  padding: 8px;
+  padding: 8px 10px;
   color: var(--light);
   background: var(--navy);
 }
 
+.taskmgr-content [data-task-list] {
+  min-height: 0;
+  overflow: auto;
+  background: var(--light);
+  border-top: 2px solid var(--mid);
+  border-left: 2px solid var(--mid);
+  border-right: 2px solid var(--light);
+  border-bottom: 2px solid var(--light);
+}
+
 .task-row {
-  padding: 8px;
+  padding: 8px 10px;
   border-bottom: 1px solid var(--mid);
+  cursor: default;
+}
+
+.task-row:hover {
+  outline: 1px dotted var(--navy);
+  outline-offset: -3px;
+}
+
+.task-row.selected {
+  color: var(--light);
+  background: var(--navy);
+}
+
+.task-row span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.taskmgr-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 10px;
 }
 
 .task-actions {
@@ -1185,6 +1254,48 @@ h2 {
   filter: brightness(.45) saturate(.7);
 }
 
+.upset-mode .desktop {
+  background:
+    linear-gradient(45deg, rgba(255,255,255,.03) 25%, transparent 25%) 0 0 / 18px 18px,
+    linear-gradient(-45deg, rgba(0,0,0,.28) 25%, transparent 25%) 0 0 / 18px 18px,
+    #1b1b24;
+  filter: saturate(.35) brightness(.78);
+}
+
+.upset-mode .taskbar,
+.upset-mode .start-menu,
+.upset-mode .window {
+  filter: grayscale(.85) brightness(.72);
+}
+
+.upset-mode .patrick-popup,
+.upset-mode [data-app="taskmgr"] {
+  filter: none;
+}
+
+.upset-mode .app-window:not([data-app="taskmgr"]) .window-content,
+.upset-mode .desktop-icon:not([data-open-app="taskmgr"]) {
+  pointer-events: none;
+  opacity: .58;
+}
+
+.upset-mode .app-window:not([data-app="taskmgr"]) .titlebar {
+  background: linear-gradient(90deg, #1b1b24, #3d3d48);
+}
+
+.upset-mode .desktop::after {
+  content: "system feelings.exe is not responding";
+  position: absolute;
+  left: 18px;
+  bottom: 76px;
+  z-index: 8;
+  padding: 8px 12px;
+  color: #d6d6ff;
+  background: rgba(0, 0, 0, .58);
+  border: 1px dotted #d6d6ff;
+  text-shadow: 2px 2px 0 #000;
+}
+
 .readme-content {
   color: #33d17a;
   background: #080808;
@@ -1393,6 +1504,44 @@ h2 {
 .popup p {
   margin-bottom: 12px;
   line-height: 1.45;
+}
+
+.patrick-popup {
+  right: 50%;
+  bottom: 50%;
+  width: min(560px, calc(100vw - 32px));
+  transform: translate(50%, 50%);
+}
+
+.patrick-body {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  background: var(--silver);
+}
+
+.patrick-body img {
+  display: block;
+  width: 100%;
+  max-height: min(380px, 52vh);
+  object-fit: contain;
+  background: #0b0b12;
+  border-top: 2px solid var(--mid);
+  border-left: 2px solid var(--mid);
+  border-right: 2px solid var(--light);
+  border-bottom: 2px solid var(--light);
+}
+
+.patrick-body p {
+  margin: 0;
+  font-size: 24px;
+}
+
+.patrick-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 @keyframes popup-in {
