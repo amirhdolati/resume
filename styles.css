@@ -787,6 +787,66 @@ h2 {
   touch-action: none;
 }
 
+.player-content {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.player-display {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.player-screen {
+  height: 108px;
+  padding: 10px;
+  display: flex;
+  align-items: end;
+  gap: 7px;
+  background:
+    repeating-linear-gradient(0deg, rgba(51, 209, 122, .08) 0 2px, transparent 2px 6px),
+    #080808;
+  border-top: 2px solid var(--mid);
+  border-left: 2px solid var(--mid);
+  border-right: 2px solid var(--light);
+  border-bottom: 2px solid var(--light);
+}
+
+.player-screen span {
+  width: 14px;
+  height: 10px;
+  background: var(--green);
+  box-shadow: 0 -12px 0 #ffd447;
+  transition: height .08s steps(4);
+}
+
+.player-kicker {
+  margin-bottom: 4px;
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.player-progress {
+  height: 18px;
+  padding: 2px;
+  background: var(--light);
+  border-top: 2px solid var(--mid);
+  border-left: 2px solid var(--mid);
+  border-right: 2px solid var(--light);
+  border-bottom: 2px solid var(--light);
+}
+
+.player-progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--navy);
+  transition: width .08s steps(4);
+}
+
 .readme-content {
   color: #33d17a;
   background: #080808;
@@ -1015,7 +1075,8 @@ h2 {
   .resume-hero,
   .quick-grid,
   .project-grid,
-  .ops-grid {
+  .ops-grid,
+  .player-display {
     grid-template-columns: 1fr;
   }
 

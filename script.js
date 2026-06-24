@@ -5,6 +5,7 @@ const APP_TITLES = {
   projects: "Projects.lnk",
   cmd: "Cmd.exe",
   paint: "Paint.exe",
+  player: "Media Player.exe",
   life: "Life.exe",
   education: "Education.txt",
   contact: "Contact.cmd",
@@ -28,6 +29,7 @@ let startupSoundPlayed = false;
 let audioContext;
 let zIndex = 40;
 let focusedApp = "resume";
+let stopMediaPlayer = () => {};
 
 function updateClock() {
   if (!clock) return;
@@ -147,6 +149,7 @@ function minimizeApp(appId) {
 function closeApp(appId) {
   const win = getWindow(appId);
   if (!win) return;
+  if (appId === "player") stopMediaPlayer();
   win.classList.remove("is-open", "is-minimized", "is-maximized", "focused");
   playSystemSound(appId === "trash" ? "error" : "info");
   renderShell();
@@ -521,6 +524,84 @@ function setupPaint() {
   document.querySelector("[data-paint-color]")?.classList.add("active");
 }
 
+function setupMediaPlayer() {
+  const playButton = document.querySelector("[data-player-play]");
+  const stopButton = document.querySelector("[data-player-stop]");
+  const tempoButton = document.querySelector("[data-player-tempo]");
+  const progress = document.querySelector("[data-player-progress]");
+  const bars = Array.from(document.querySelectorAll(".player-screen span"));
+  if (!playButton || !stopButton || !tempoButton) return;
+
+  const pattern = [
+    82, 82, 98, 82, 123, 110, 98, 82,
+    82, 92, 110, 92, 138, 123, 110, 92,
+  ];
+  let timer;
+  let step = 0;
+  let running = false;
+  let turbo = false;
+
+  function chipTone(frequency, delay, duration, volume, type = "square") {
+    try {
+      tone(frequency, delay, duration, type, volume);
+    } catch {}
+  }
+
+  function render() {
+    if (progress) progress.style.width = `${step / pattern.length * 100}%`;
+    bars.forEach((bar, index) => {
+      const height = 18 + ((step + index * 3) % 7) * 9;
+      bar.style.height = running ? `${height}px` : "10px";
+    });
+  }
+
+  function tick() {
+    const base = pattern[step % pattern.length];
+    chipTone(base, 0, 0.09, 0.045);
+    chipTone(base / 2, 0.01, 0.12, 0.035, "triangle");
+    if (step % 4 === 0) chipTone(base * 2, 0.04, 0.06, 0.032);
+    if (step % 8 === 6) chipTone(base * 3, 0.02, 0.05, 0.025);
+    step = (step + 1) % pattern.length;
+    render();
+  }
+
+  function start() {
+    const ctx = getAudioContext();
+    if (ctx.state === "suspended") ctx.resume();
+    clearInterval(timer);
+    running = true;
+    playButton.textContent = "Pause";
+    tick();
+    timer = setInterval(tick, turbo ? 90 : 132);
+  }
+
+  stopMediaPlayer = function stop() {
+    clearInterval(timer);
+    running = false;
+    playButton.textContent = "Play";
+    if (progress) progress.style.width = "0%";
+    bars.forEach((bar) => {
+      bar.style.height = "10px";
+    });
+  };
+
+  playButton.addEventListener("click", () => {
+    if (running) stopMediaPlayer();
+    else start();
+  });
+
+  stopButton.addEventListener("click", stopMediaPlayer);
+
+  tempoButton.addEventListener("click", () => {
+    turbo = !turbo;
+    tempoButton.classList.toggle("primary", turbo);
+    tempoButton.textContent = turbo ? "Normal" : "Turbo";
+    if (running) start();
+  });
+
+  render();
+}
+
 function setupLife() {
   const canvas = document.querySelector("#life-canvas");
   const toggleButton = document.querySelector("[data-life-toggle]");
@@ -748,6 +829,7 @@ setupDragging();
 setupStartMenu();
 setupCommandLine();
 setupPaint();
+setupMediaPlayer();
 setupLife();
 setupSmallApps();
 setupDesktopIcons();

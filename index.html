@@ -48,6 +48,10 @@
             <img class="icon" src="assets/icons/paint.ico" alt="">
             <span>Paint.exe</span>
           </button>
+          <button class="desktop-icon" type="button" data-open-app="player">
+            <img class="icon" src="assets/icons/player.ico" alt="">
+            <span>Media Player.exe</span>
+          </button>
           <button class="desktop-icon" type="button" data-open-app="life">
             <img class="icon" src="assets/icons/life.ico" alt="">
             <span>Life.exe</span>
@@ -251,6 +255,35 @@
           </div>
         </section>
 
+        <section id="app-player" class="window app-window" data-app="player" style="--x: 560px; --y: 160px; --w: 470px; --h: 320px;">
+          <div class="titlebar">
+            <span>Windows Media Player - shaseter_of_shutted.mod</span>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
+            </div>
+          </div>
+          <div class="window-content player-content">
+            <div class="player-display">
+              <div class="player-screen" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div>
+                <p class="player-kicker">8-bit original loop</p>
+                <h2>shaseter of shutted</h2>
+                <p class="tool-note">A browser-generated chip riff for this desktop. No external audio file.</p>
+              </div>
+            </div>
+            <div class="player-progress" aria-hidden="true"><span data-player-progress></span></div>
+            <div class="toolbar">
+              <button class="button tiny primary" type="button" data-player-play>Play</button>
+              <button class="button tiny" type="button" data-player-stop>Stop</button>
+              <button class="button tiny" type="button" data-player-tempo>Turbo</button>
+            </div>
+          </div>
+        </section>
+
         <section id="app-education" class="window app-window" data-app="education" style="--x: 420px; --y: 148px; --w: 520px; --h: 330px;">
           <div class="titlebar">
             <span>Education.txt</span>
@@ -319,6 +352,7 @@ OPEN WINDOWS
   Experience.exe  - work history
   Stack.sys       - languages and tools
   Paint.exe       - tiny architecture sketchpad
+  Media Player    - original 8-bit loop
   Cmd.exe         - quick terminal facts
 </pre>
           </div>
@@ -366,6 +400,7 @@ OPEN WINDOWS
           <button type="button" data-open-app="resume"><img class="mini-icon" src="assets/icons/resume.ico" alt="">Resume.exe</button>
           <button type="button" data-open-app="cmd"><img class="mini-icon" src="assets/icons/cmd.ico" alt="">Cmd.exe</button>
           <button type="button" data-open-app="paint"><img class="mini-icon" src="assets/icons/paint.ico" alt="">Paint.exe</button>
+          <button type="button" data-open-app="player"><img class="mini-icon" src="assets/icons/player.ico" alt="">Media Player.exe</button>
           <button type="button" data-open-app="life"><img class="mini-icon" src="assets/icons/life.ico" alt="">Life.exe</button>
           <button type="button" data-open-app="readme"><img class="mini-icon" src="assets/icons/readme.ico" alt="">Readme.nfo</button>
           <button type="button" data-open-app="taskmgr"><img class="mini-icon" src="assets/icons/taskmgr.ico" alt="">Taskmgr.exe</button>
