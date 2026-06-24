@@ -530,7 +530,6 @@ function setupMediaPlayer() {
   const progress = document.querySelector("[data-player-progress]");
   const timeNode = document.querySelector("[data-player-time]");
   const statusNode = document.querySelector("[data-player-status]");
-  const coverNode = document.querySelector("[data-player-cover]");
   const bars = Array.from(document.querySelectorAll(".player-bars span"));
   if (!playButton || !stopButton) return;
 
@@ -572,18 +571,6 @@ function setupMediaPlayer() {
     render();
   }
 
-  function loadCover() {
-    if (!coverNode || coverNode.querySelector("img")) return;
-    const src = coverNode.dataset.coverSrc;
-    if (!src) return;
-    const image = document.createElement("img");
-    image.src = src;
-    image.alt = "";
-    image.loading = "lazy";
-    image.addEventListener("error", () => image.remove());
-    coverNode.appendChild(image);
-  }
-
   function startVisualizer() {
     clearInterval(visualTimer);
     visualTimer = setInterval(() => {
@@ -605,7 +592,6 @@ function setupMediaPlayer() {
   }
 
   async function startAudio() {
-    loadCover();
     if (!audio) {
       audio = new Audio(playButton.dataset.audioSrc);
       audio.preload = "none";
@@ -616,7 +602,7 @@ function setupMediaPlayer() {
       });
     }
     try {
-      if (statusNode) statusNode.textContent = "Downloading...";
+      if (statusNode) statusNode.textContent = "Opening...";
       await audio.play();
       running = true;
       playButton.textContent = "Pause";
