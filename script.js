@@ -6,6 +6,8 @@ const APP_TITLES = {
   cmd: "Cmd.exe",
   paint: "Paint.exe",
   player: "Media Player.exe",
+  mines: "Minesweeper.exe",
+  ie: "Internet Explorer.exe",
   life: "Life.exe",
   education: "Education.txt",
   contact: "Contact.cmd",
@@ -275,6 +277,69 @@ function showPopup(kind = "info", message) {
   });
 }
 
+function appendCommandLine(text) {
+  const log = document.querySelector("[data-command-log]");
+  if (!log) return;
+  const line = document.createElement("strong");
+  line.textContent = text;
+  log.append(line);
+  log.parentElement.scrollTop = log.parentElement.scrollHeight;
+}
+
+function showShutdownDialog() {
+  if (!popupLayer) return;
+  const dialog = document.createElement("div");
+  dialog.className = "popup window is-open shutdown-dialog";
+  dialog.style.zIndex = String(++zIndex);
+  dialog.innerHTML = `
+    <div class="titlebar">
+      <span>Shut Down Windows</span>
+      <div class="window-actions">
+        <button type="button" aria-label="Close shutdown dialog" data-shutdown-cancel></button>
+      </div>
+    </div>
+    <div class="shutdown-body">
+      <p>What do you want AMIRHD OS 98 to do?</p>
+      <div class="shutdown-actions">
+        <button class="button tiny" type="button" data-shutdown-action="standby">Stand by</button>
+        <button class="button tiny" type="button" data-shutdown-action="restart">Restart</button>
+        <button class="button tiny primary" type="button" data-shutdown-action="shutdown">Shut down</button>
+        <button class="button tiny" type="button" data-shutdown-cancel>Cancel</button>
+      </div>
+    </div>
+  `;
+  popupLayer.appendChild(dialog);
+  playSystemSound("info");
+
+  function close() {
+    dialog.remove();
+  }
+
+  dialog.querySelectorAll("[data-shutdown-cancel]").forEach((button) => {
+    button.addEventListener("click", close);
+  });
+
+  dialog.querySelectorAll("[data-shutdown-action]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const action = button.dataset.shutdownAction;
+      close();
+      if (action === "standby") {
+        document.body.classList.add("standby-mode");
+        showPopup("info", "Stand by failed. Backend is still running.");
+        setTimeout(() => document.body.classList.remove("standby-mode"), 1800);
+      }
+      if (action === "restart") {
+        bootScreen?.classList.remove("hidden");
+        if (bootStatus) bootStatus.textContent = "Restarting without losing tabs...";
+        setTimeout(hideBootScreen, 1800);
+      }
+      if (action === "shutdown") {
+        showPopup("info", "It is now safe to review this resume.");
+      }
+    });
+  });
+}
+
 function setupWindowControls() {
   document.querySelectorAll("[data-open-app]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -319,7 +384,7 @@ function setupDragging() {
 
       function move(moveEvent) {
         const maxX = window.innerWidth - rect.width - 4;
-        const maxY = window.innerHeight - rect.height - 46;
+        const maxY = window.innerHeight - rect.height - 64;
         const x = Math.max(4, Math.min(maxX, moveEvent.clientX - offsetX));
         const y = Math.max(4, Math.min(maxY, moveEvent.clientY - offsetY));
         win.style.left = `${x}px`;
@@ -355,7 +420,7 @@ function setupStartMenu() {
   });
 
   document.querySelector("[data-shutdown]")?.addEventListener("click", () => {
-    showPopup("info", "It is now safe to keep browsing this resume.");
+    showShutdownDialog();
     startMenu?.classList.remove("open");
     startButton?.classList.remove("active");
   });
@@ -368,11 +433,32 @@ function setupCommandLine() {
   if (!log || !form || !input) return;
 
   const commands = {
+    help: "commands: help, about, backend, fintech, blockchain, projects, experience, contact, cv, life, mines, ie, trash, music, shutdown, clear",
+    about: "AmirHossein Dolati - Go/backend engineer building financial, exchange, and blockchain-adjacent systems.",
     backend: "Go services, APIs, ledgers, exchange workflows, observability.",
-    systems: "C/C++, concurrency, networking, ROS, embedded UI, low-latency delivery.",
-    contact: "Email: AmirHossein_Dolati@outlook.com | LinkedIn is available from Contact.",
-    stack: "Go, C++17, Python, financial systems, exchange platforms, blockchain, Qt/QML, ROS.",
-    help: "commands: backend, systems, contact, stack, clear",
+    fintech: "Financial software: ledgers, reconciliation, risk checks, exchange operations.",
+    blockchain: "Blockchain-adjacent backend work: indexers, wallets, transaction flows, settlement thinking.",
+    projects: "Opening Projects.lnk...",
+    experience: "Opening Experience.exe...",
+    contact: "Email: AmirHossein_Dolati@outlook.com | LinkedIn is available from Contact.cmd.",
+    cv: "Opening CV download...",
+    life: "Opening Life.exe...",
+    mines: "Opening Minesweeper.exe...",
+    ie: "Opening Internet Explorer.exe...",
+    trash: "Opening Trash...",
+    music: "Opening Media Player.exe...",
+    shutdown: "Opening shutdown dialog...",
+  };
+
+  const openCommands = {
+    projects: "projects",
+    experience: "experience",
+    contact: "contact",
+    life: "life",
+    mines: "mines",
+    ie: "ie",
+    trash: "trash",
+    music: "player",
   };
 
   function append(command, output) {
@@ -395,8 +481,15 @@ function setupCommandLine() {
       return;
     }
     append(command, commands[command] || "Bad command or file name");
+    if (openCommands[command]) openApp(openCommands[command]);
+    if (command === "shutdown") showShutdownDialog();
+    if (command === "cv") window.location.href = "AmirHossein-Dolati-CV-11-20-24-1.pdf";
     playSystemSound(commands[command] ? "info" : "error");
     input.value = "";
+  });
+
+  document.querySelector("[data-app='cmd'] .command-content")?.addEventListener("click", () => {
+    input.focus();
   });
 }
 
@@ -542,6 +635,7 @@ function setupMediaPlayer() {
   let audio;
   let step = 0;
   let running = false;
+  let paused = false;
 
   function chipTone(frequency, delay, duration, volume, type = "square") {
     try {
@@ -554,7 +648,7 @@ function setupMediaPlayer() {
     const seconds = audio ? Math.floor(audio.currentTime) : step;
     if (progress) progress.style.width = `${Math.max(0, Math.min(100, progressValue))}%`;
     if (timeNode) timeNode.textContent = String(seconds % 60).padStart(2, "0");
-    if (statusNode) statusNode.textContent = running ? "Playing" : "Stopped";
+    if (statusNode) statusNode.textContent = running ? "Playing" : (paused ? "Paused" : "Stopped");
     bars.forEach((bar, index) => {
       const height = 18 + ((step + index * 3) % 7) * 9;
       bar.style.height = running ? `${height}px` : "10px";
@@ -584,6 +678,7 @@ function setupMediaPlayer() {
     if (ctx.state === "suspended") ctx.resume();
     clearInterval(timer);
     running = true;
+    paused = false;
     playButton.textContent = "Pause";
     playButton.setAttribute("aria-label", "Pause");
     if (statusNode) statusNode.textContent = "Playing fallback";
@@ -605,6 +700,7 @@ function setupMediaPlayer() {
       if (statusNode) statusNode.textContent = "Opening...";
       await audio.play();
       running = true;
+      paused = false;
       playButton.textContent = "Pause";
       playButton.setAttribute("aria-label", "Pause");
       startVisualizer();
@@ -622,6 +718,7 @@ function setupMediaPlayer() {
       audio.currentTime = 0;
     }
     running = false;
+    paused = false;
     playButton.textContent = "Play";
     playButton.setAttribute("aria-label", "Play");
     if (progress) progress.style.width = "0%";
@@ -631,8 +728,22 @@ function setupMediaPlayer() {
     render();
   };
 
+  function pauseMediaPlayer() {
+    clearInterval(timer);
+    clearInterval(visualTimer);
+    if (audio) audio.pause();
+    running = false;
+    paused = true;
+    playButton.textContent = "Resume";
+    playButton.setAttribute("aria-label", "Resume");
+    bars.forEach((bar) => {
+      bar.style.height = "10px";
+    });
+    render();
+  }
+
   playButton.addEventListener("click", () => {
-    if (running) stopMediaPlayer();
+    if (running) pauseMediaPlayer();
     else startAudio();
   });
 
@@ -748,18 +859,238 @@ function setupLife() {
   start();
 }
 
+function setupMinesweeper() {
+  const board = document.querySelector("[data-mines-board]");
+  const minesLeft = document.querySelector("[data-mines-left]");
+  const timeNode = document.querySelector("[data-mines-time]");
+  const resetButton = document.querySelector("[data-mines-reset]");
+  if (!board || !minesLeft || !timeNode || !resetButton) return;
+
+  const size = 9;
+  const mineCount = 10;
+  let cells = [];
+  let started = false;
+  let gameOver = false;
+  let flags = 0;
+  let seconds = 0;
+  let timer;
+
+  function pad(value) {
+    return String(Math.max(0, Math.min(999, value))).padStart(3, "0");
+  }
+
+  function updatePanel() {
+    minesLeft.textContent = pad(mineCount - flags);
+    timeNode.textContent = pad(seconds);
+  }
+
+  function neighbors(index) {
+    const x = index % size;
+    const y = Math.floor(index / size);
+    const result = [];
+    for (let yy = y - 1; yy <= y + 1; yy += 1) {
+      for (let xx = x - 1; xx <= x + 1; xx += 1) {
+        if (xx === x && yy === y) continue;
+        if (xx < 0 || yy < 0 || xx >= size || yy >= size) continue;
+        result.push(yy * size + xx);
+      }
+    }
+    return result;
+  }
+
+  function startTimer() {
+    if (started) return;
+    started = true;
+    timer = setInterval(() => {
+      seconds += 1;
+      updatePanel();
+    }, 1000);
+  }
+
+  function renderCell(cell) {
+    const button = board.querySelector(`[data-cell="${cell.index}"]`);
+    if (!button) return;
+    button.className = "mine-cell";
+    button.textContent = "";
+    if (cell.revealed) {
+      button.classList.add("revealed");
+      if (cell.mine) {
+        button.classList.add("mine");
+        button.textContent = "*";
+      } else if (cell.count) {
+        button.textContent = String(cell.count);
+        button.dataset.count = String(cell.count);
+      }
+    } else if (cell.flagged) {
+      button.classList.add("flagged");
+      button.textContent = "F";
+    }
+  }
+
+  function renderAll() {
+    cells.forEach(renderCell);
+    updatePanel();
+  }
+
+  function reveal(index) {
+    const cell = cells[index];
+    if (!cell || cell.revealed || cell.flagged || gameOver) return;
+    startTimer();
+    cell.revealed = true;
+    if (cell.mine) {
+      gameOver = true;
+      clearInterval(timer);
+      resetButton.textContent = ":(";
+      cells.forEach((item) => {
+        if (item.mine) item.revealed = true;
+      });
+      renderAll();
+      showPopup("error", "Boom. Production deploy stepped on a mine.");
+      return;
+    }
+    if (!cell.count) neighbors(index).forEach(reveal);
+    renderCell(cell);
+    const safeOpen = cells.filter((item) => item.revealed && !item.mine).length;
+    if (safeOpen === size * size - mineCount) {
+      gameOver = true;
+      clearInterval(timer);
+      resetButton.textContent = "B)";
+      showPopup("info", "Mines cleared. Resume survived the deployment.");
+    }
+  }
+
+  function toggleFlag(index) {
+    const cell = cells[index];
+    if (!cell || cell.revealed || gameOver) return;
+    startTimer();
+    cell.flagged = !cell.flagged;
+    flags += cell.flagged ? 1 : -1;
+    renderCell(cell);
+    updatePanel();
+  }
+
+  function reset() {
+    clearInterval(timer);
+    started = false;
+    gameOver = false;
+    flags = 0;
+    seconds = 0;
+    resetButton.textContent = ":)";
+    const mineIndexes = new Set();
+    while (mineIndexes.size < mineCount) {
+      mineIndexes.add(Math.floor(Math.random() * size * size));
+    }
+    cells = Array.from({ length: size * size }, (_, index) => ({
+      index,
+      mine: mineIndexes.has(index),
+      flagged: false,
+      revealed: false,
+      count: 0,
+    }));
+    cells.forEach((cell) => {
+      cell.count = cell.mine ? 0 : neighbors(cell.index).filter((idx) => cells[idx].mine).length;
+    });
+    board.innerHTML = "";
+    cells.forEach((cell) => {
+      const button = document.createElement("button");
+      button.className = "mine-cell";
+      button.type = "button";
+      button.dataset.cell = String(cell.index);
+      button.addEventListener("click", () => reveal(cell.index));
+      button.addEventListener("contextmenu", (event) => {
+        event.preventDefault();
+        toggleFlag(cell.index);
+      });
+      button.addEventListener("pointerdown", (event) => {
+        if (event.pointerType === "touch") {
+          button.longPress = setTimeout(() => toggleFlag(cell.index), 450);
+        }
+      });
+      button.addEventListener("pointerup", () => clearTimeout(button.longPress));
+      button.addEventListener("pointercancel", () => clearTimeout(button.longPress));
+      board.appendChild(button);
+    });
+    renderAll();
+  }
+
+  resetButton.addEventListener("click", reset);
+  reset();
+}
+
+function setupInternetExplorer() {
+  const form = document.querySelector("[data-ie-form]");
+  const input = document.querySelector("[data-ie-input]");
+  const error = document.querySelector("[data-ie-error]");
+  const status = document.querySelector("[data-ie-status]");
+  const vpnStatus = document.querySelector("[data-vpn-status]");
+  const vpnButton = document.querySelector("[data-vpn-button]");
+  const page = document.querySelector("[data-ie-page]");
+  if (!form || !input || !error || !status || !vpnStatus || !vpnButton || !page) return;
+
+  const errors = [
+    "This site is filtered in your region.",
+    "VPN connection failed. Subscription expired during handshake.",
+    "Your country is not allowed to view this website.",
+    "Proxy timeout. Packets are waiting behind a very tired firewall.",
+    "DNS says no. Try again after tea.",
+  ];
+  let index = 0;
+
+  function fail(url) {
+    const message = errors[index % errors.length];
+    index += 1;
+    page.classList.add("shake");
+    setTimeout(() => page.classList.remove("shake"), 350);
+    error.textContent = message;
+    status.textContent = `Cannot open ${url || "about:blank"} - restricted route`;
+    playSystemSound("error");
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    fail(input.value.trim());
+  });
+
+  vpnButton.addEventListener("click", () => {
+    const states = [
+      "VPN: connecting...",
+      "VPN: auth failed",
+      "VPN: server full",
+      "VPN: disconnected again",
+    ];
+    vpnStatus.textContent = states[index % states.length];
+    fail(input.value.trim() || "vpn://resume");
+  });
+}
+
 function setupSmallApps() {
+  document.querySelectorAll("[data-inspect-file]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const name = button.closest("div")?.querySelector("span")?.textContent || "mystery file";
+      const messages = {
+        "node_modules_final.zip": "Size: infinite. Contents: one package-lock and ancient regret.",
+        "bad_tokenomics.xlsx": "Forecast says: number goes sideways, investor confidence goes downstairs.",
+        "production_hotfix_3am.tmp": "Contains a fix, two TODOs, and no memory of who approved it.",
+        "old_vpn_config.pbk": "VPN profile found. Status: still cannot connect.",
+      };
+      showPopup("info", messages[name] || `${name} looks suspiciously recoverable.`);
+    });
+  });
+
   document.querySelectorAll("[data-restore-file]").forEach((button) => {
     button.addEventListener("click", () => {
+      const name = button.closest("div")?.querySelector("span")?.textContent || "file";
       button.closest("div")?.remove();
-      showPopup("info", "File restored to a very imaginary archive.");
+      appendCommandLine(`restored ${name} to C:\\CHAOS\\`);
+      showPopup("info", `${name} restored. Please pretend this was a good idea.`);
     });
   });
 
   document.querySelector("[data-empty-trash]")?.addEventListener("click", () => {
     const list = document.querySelector("[data-trash-list]");
-    if (list) list.innerHTML = "<div><span>Trash is empty.</span><span></span></div>";
-    showPopup("error", "Trash emptied. The bad ideas are gone.");
+    if (list) list.innerHTML = "<div class=\"trash-empty\"><span>Trash is empty. Bad ideas are in cold storage.</span></div>";
+    document.querySelector("[data-open-app='trash'] img")?.setAttribute("src", "assets/icons/trash.ico");
+    showPopup("error", "Trash emptied. The bad ideas are gone, but the audit log remembers.");
   });
 }
 
@@ -770,9 +1101,9 @@ function desktopIcons() {
 function layoutDesktopIcons() {
   if (!desktopSurface) return;
   const icons = desktopIcons();
-  const iconWidth = 88;
-  const iconHeight = 70;
-  const gap = 9;
+  const iconWidth = 122;
+  const iconHeight = 100;
+  const gap = 12;
   const startX = 12;
   const startY = 14;
   const usableHeight = Math.max(iconHeight, desktopSurface.clientHeight - startY - 10);
@@ -870,6 +1201,8 @@ setupCommandLine();
 setupPaint();
 setupMediaPlayer();
 setupLife();
+setupMinesweeper();
+setupInternetExplorer();
 setupSmallApps();
 setupDesktopIcons();
 focusApp("resume");

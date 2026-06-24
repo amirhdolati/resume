@@ -52,6 +52,14 @@
             <img class="icon" src="assets/icons/player.ico" alt="">
             <span>Media Player.exe</span>
           </button>
+          <button class="desktop-icon" type="button" data-open-app="mines">
+            <img class="icon" src="assets/icons/mines.ico" alt="">
+            <span>Minesweeper.exe</span>
+          </button>
+          <button class="desktop-icon" type="button" data-open-app="ie">
+            <img class="icon" src="assets/icons/ie.ico" alt="">
+            <span>Internet Explorer.exe</span>
+          </button>
           <button class="desktop-icon" type="button" data-open-app="life">
             <img class="icon" src="assets/icons/life.ico" alt="">
             <span>Life.exe</span>
@@ -113,7 +121,7 @@
           </div>
         </section>
 
-        <section id="app-cmd" class="window app-window is-open" data-app="cmd" style="--x: 650px; --y: 330px; --w: 500px; --h: 300px;">
+        <section id="app-cmd" class="window app-window is-open" data-app="cmd" style="--x: 610px; --y: 310px; --w: 650px; --h: 360px;">
           <div class="titlebar">
             <span>MS-DOS Prompt - C:\AMIRHD\PROFILE.EXE</span>
             <div class="window-actions">
@@ -127,7 +135,7 @@
               <div>C:\&gt; whoami</div>
               <strong>AmirHossein Dolati</strong>
               <div>C:\&gt; help</div>
-              <strong>commands: backend, systems, contact, stack, clear</strong>
+              <strong>commands: help, about, backend, fintech, blockchain, projects, experience, contact, cv, life, mines, ie, trash, music, shutdown, clear</strong>
             </div>
             <form class="command-input" data-command-form>
               <span>C:\&gt;</span>
@@ -136,7 +144,7 @@
           </div>
         </section>
 
-        <section id="app-life" class="window app-window is-open" data-app="life" style="--x: 858px; --y: 42px; --w: 430px; --h: 320px;">
+        <section id="app-life" class="window app-window is-open" data-app="life" style="--x: 858px; --y: 42px; --w: 500px; --h: 390px;">
           <div class="titlebar">
             <span>Reliability_Life.exe</span>
             <div class="window-actions">
@@ -146,7 +154,12 @@
             </div>
           </div>
           <div class="window-content">
-            <p class="tool-note">Auto-running Game of Life: local rules, emergent global behavior, a tiny reliability metaphor.</p>
+            <div class="life-rules">
+              <strong>Rules</strong>
+              <span>Live cell with 2 or 3 neighbors survives.</span>
+              <span>Dead cell with 3 neighbors becomes alive.</span>
+              <span>All other cells die or stay dead.</span>
+            </div>
             <div class="toolbar">
               <button type="button" class="button tiny primary" data-life-toggle>Pause</button>
               <button type="button" class="button tiny" data-life-random>Random</button>
@@ -255,7 +268,7 @@
           </div>
         </section>
 
-        <section id="app-player" class="window app-window media-player-window" data-app="player" style="--x: 560px; --y: 160px; --w: 540px; --h: 390px;">
+        <section id="app-player" class="window app-window media-player-window" data-app="player" style="--x: 560px; --y: 160px; --w: 650px; --h: 460px;">
           <div class="titlebar">
             <span>Windows Media Player - shaster of shutter</span>
             <div class="window-actions">
@@ -300,6 +313,55 @@
               <div class="player-volume" aria-hidden="true"><span>Volume</span><i></i></div>
               <div class="player-status" data-player-status>Stopped</div>
             </div>
+          </div>
+        </section>
+
+        <section id="app-mines" class="window app-window" data-app="mines" style="--x: 560px; --y: 90px; --w: 430px; --h: 500px;">
+          <div class="titlebar">
+            <span>Minesweeper.exe</span>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
+            </div>
+          </div>
+          <div class="window-content mines-content">
+            <div class="mines-panel">
+              <span class="mines-counter" data-mines-left>010</span>
+              <button class="mines-face" type="button" data-mines-reset aria-label="Reset Minesweeper">:)</button>
+              <span class="mines-counter" data-mines-time>000</span>
+            </div>
+            <div class="mines-board" data-mines-board aria-label="Minesweeper board"></div>
+            <p class="tool-note">Left click reveals. Right click flags. The resume survives if you avoid production mines.</p>
+          </div>
+        </section>
+
+        <section id="app-ie" class="window app-window ie-window" data-app="ie" style="--x: 500px; --y: 120px; --w: 680px; --h: 460px;">
+          <div class="titlebar">
+            <span>Internet Explorer</span>
+            <div class="window-actions">
+              <button type="button" aria-label="Minimize" data-window-action="minimize"></button>
+              <button type="button" aria-label="Maximize" data-window-action="maximize"></button>
+              <button type="button" aria-label="Close" data-window-action="close"></button>
+            </div>
+          </div>
+          <div class="window-content ie-content">
+            <div class="ie-menu" aria-hidden="true"><span>File</span><span>Edit</span><span>View</span><span>Favorites</span><span>Tools</span><span>Help</span></div>
+            <form class="ie-address" data-ie-form>
+              <span>Address</span>
+              <input data-ie-input aria-label="Website address" value="https://github.com/amirhdolati">
+              <button class="button tiny primary" type="submit">Go</button>
+            </form>
+            <div class="ie-vpn">
+              <span data-vpn-status>VPN: disconnected</span>
+              <button class="button tiny" type="button" data-vpn-button>Connect VPN</button>
+            </div>
+            <div class="ie-page" data-ie-page>
+              <h2>Cannot display this page</h2>
+              <p data-ie-error>This site is filtered in your region.</p>
+              <p class="ie-small">Try connecting VPN, changing DNS, waiting three business years, or asking the packets politely.</p>
+            </div>
+            <div class="ie-status" data-ie-status>Done, but not really.</div>
           </div>
         </section>
 
@@ -371,13 +433,15 @@ OPEN WINDOWS
   Experience.exe  - work history
   Stack.sys       - languages and tools
   Paint.exe       - tiny architecture sketchpad
-  Media Player    - original 8-bit loop
+  Media Player    - shaster of shutter
+  Minesweeper.exe - production-safe minefield
+  Internet Explorer - restricted network simulator
   Cmd.exe         - quick terminal facts
 </pre>
           </div>
         </section>
 
-        <section id="app-taskmgr" class="window app-window" data-app="taskmgr" style="--x: 612px; --y: 118px; --w: 560px; --h: 390px;">
+        <section id="app-taskmgr" class="window app-window" data-app="taskmgr" style="--x: 612px; --y: 118px; --w: 680px; --h: 430px;">
           <div class="titlebar">
             <span>Task Manager</span>
             <div class="window-actions">
@@ -392,7 +456,7 @@ OPEN WINDOWS
           </div>
         </section>
 
-        <section id="app-trash" class="window app-window" data-app="trash" style="--x: 540px; --y: 156px; --w: 430px; --h: 330px;">
+        <section id="app-trash" class="window app-window" data-app="trash" style="--x: 540px; --y: 156px; --w: 560px; --h: 430px;">
           <div class="titlebar">
             <span>Trash</span>
             <div class="window-actions">
@@ -402,11 +466,12 @@ OPEN WINDOWS
             </div>
           </div>
           <div class="window-content trash-content">
-            <p class="window-intro">Recovered deleted drafts. Nothing important was harmed.</p>
+            <p class="window-intro">Recovered deleted ideas. Some are dangerous, some are just embarrassing.</p>
             <div class="trash-list" data-trash-list>
-              <div><span>old_resume_final_FINAL.doc</span><button class="button tiny" type="button" data-restore-file>Restore</button></div>
-              <div><span>unused_gradient_hero.png</span><button class="button tiny" type="button" data-restore-file>Restore</button></div>
-              <div><span>bug_2021.tmp</span><button class="button tiny" type="button" data-restore-file>Restore</button></div>
+              <div><span>node_modules_final.zip</span><button class="button tiny" type="button" data-inspect-file>Inspect</button><button class="button tiny" type="button" data-restore-file>Restore</button></div>
+              <div><span>bad_tokenomics.xlsx</span><button class="button tiny" type="button" data-inspect-file>Inspect</button><button class="button tiny" type="button" data-restore-file>Restore</button></div>
+              <div><span>production_hotfix_3am.tmp</span><button class="button tiny" type="button" data-inspect-file>Inspect</button><button class="button tiny" type="button" data-restore-file>Restore</button></div>
+              <div><span>old_vpn_config.pbk</span><button class="button tiny" type="button" data-inspect-file>Inspect</button><button class="button tiny" type="button" data-restore-file>Restore</button></div>
             </div>
             <button class="button tiny primary" type="button" data-empty-trash>Empty Trash</button>
           </div>
@@ -420,6 +485,8 @@ OPEN WINDOWS
           <button type="button" data-open-app="cmd"><img class="mini-icon" src="assets/icons/cmd.ico" alt="">Cmd.exe</button>
           <button type="button" data-open-app="paint"><img class="mini-icon" src="assets/icons/paint.ico" alt="">Paint.exe</button>
           <button type="button" data-open-app="player"><img class="mini-icon" src="assets/icons/player.ico" alt="">Media Player.exe</button>
+          <button type="button" data-open-app="mines"><img class="mini-icon" src="assets/icons/mines.ico" alt="">Minesweeper.exe</button>
+          <button type="button" data-open-app="ie"><img class="mini-icon" src="assets/icons/ie.ico" alt="">Internet Explorer.exe</button>
           <button type="button" data-open-app="life"><img class="mini-icon" src="assets/icons/life.ico" alt="">Life.exe</button>
           <button type="button" data-open-app="readme"><img class="mini-icon" src="assets/icons/readme.ico" alt="">Readme.nfo</button>
           <button type="button" data-open-app="taskmgr"><img class="mini-icon" src="assets/icons/taskmgr.ico" alt="">Taskmgr.exe</button>
