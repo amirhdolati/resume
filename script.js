@@ -559,11 +559,14 @@ function setupCommandLine() {
   let historyIndex = 0;
 
   const commands = {
-    help: "commands: help, about, backend, fintech, blockchain, projects, experience, contact, cv, life, mines, ie, trash, music, code, languages, shutdown, clear",
-    about: "AmirHossein Dolati - Go/backend engineer building financial, exchange, and blockchain-adjacent systems.",
-    backend: "Go services, APIs, ledgers, exchange workflows, observability.",
-    fintech: "Financial software: ledgers, reconciliation, risk checks, exchange operations.",
-    blockchain: "Blockchain-adjacent backend work: indexers, wallets, transaction flows, settlement thinking.",
+    help: "commands: help, about, backend, fintech, leadership, ai, education, blockchain, projects, experience, contact, cv, life, mines, ie, trash, music, code, languages, shutdown, clear",
+    about: "AmirHossein Dolati - Senior Software Engineer and Tech Lead with 6+ years building backend, distributed, and embedded systems in Go and C++.",
+    backend: "Go services, production API gateways, authentication, authorization, API security, and payment infrastructure.",
+    fintech: "Core fintech at Injast (Entekhab Group): Exchange, BNPL, SOD, Super App services, and payments.",
+    leadership: "Tech Lead at Injast since Oct 2025: service architecture, TRDs, team support, and approximately 90% faster development deployments (15-20 minutes to 1-2 minutes).",
+    ai: "Established AI-assisted development workflows and project-specific AI skills to improve team productivity.",
+    education: "Opening Education.txt...",
+    blockchain: "Reusable, secure, cheat-resistant token-mining engines for in-app mini-games that reward the platform's native currency.",
     projects: "Opening Projects.lnk...",
     experience: "Opening Experience.exe...",
     contact: "Email: AmirHossein_Dolati@outlook.com | LinkedIn is available from Contact.cmd.",
@@ -581,6 +584,7 @@ function setupCommandLine() {
   const openCommands = {
     projects: "projects",
     experience: "experience",
+    education: "education",
     contact: "contact",
     life: "life",
     mines: "mines",
@@ -615,7 +619,7 @@ function setupCommandLine() {
     append(command, commands[command] || "Bad command or file name");
     if (openCommands[command]) openApp(openCommands[command]);
     if (command === "shutdown") showShutdownDialog();
-    if (command === "cv") window.open("AmirHossein-Dolati-CV-11-20-24-1.pdf", "_blank", "noopener");
+    if (command === "cv") window.open("amirhossein-dolati.pdf", "_blank", "noopener");
     playSystemSound(commands[command] ? "info" : "error");
     input.value = "";
   });
