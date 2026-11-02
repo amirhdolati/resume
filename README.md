@@ -16,6 +16,20 @@ A Windows 98-inspired interactive résumé for AmirHossein Dolati, Senior Softwa
 - **Media Player:** a nostalgic music player with cover art, playback controls, volume, and progress.
 - **Games and extras:** playable Minesweeper, Conway's Game of Life, a mock Internet Explorer, a recycle bin, startup sounds, a screensaver, and shutdown surprises.
 
+## Featured Open-Source Projects
+
+Open **Projects.lnk** from the desktop, use the **Featured Projects** button in Resume.exe, or type `projects` in the command prompt.
+
+- **[GlyphForge Engine](https://github.com/amirhdolati/glyphforge-engine):** a pure-Python terminal rendering library for colored ASCII scenes, 3D meshes, and moving cameras.
+- **[Glyph City: Afterlight](https://github.com/amirhdolati/glyph-city):** a living terminal city with autonomous residents, weather, reflections, and first-person exploration.
+- **[PurgeLog](https://github.com/amirhdolati/PurgeLog):** an additional developer tool for offline log sanitization.
+
+The first two projects have prominent cards with their original animated previews and links to their source and galleries. Existing professional work remains available under **More engineering work**.
+
+Preview assets in `assets/projects/` come from the projects' own repositories: [GlyphForge orbit camera](https://github.com/amirhdolati/glyphforge-engine/blob/main/docs/images/orbit_camera.gif) and [Glyph City City Watch](https://github.com/amirhdolati/glyph-city/blob/master/docs/media/city-watch.webp).
+
+![Featured project showcase with GlyphForge Engine and Glyph City](docs/screenshots/featured-projects.jpg)
+
 ## Screenshot Gallery
 
 Click any screenshot to view it at full size. All screenshots were captured from the live website.

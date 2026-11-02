@@ -567,7 +567,7 @@ function setupCommandLine() {
     ai: "Established AI-assisted development workflows and project-specific AI skills to improve team productivity.",
     education: "Opening Education.txt...",
     blockchain: "Reusable, secure, cheat-resistant token-mining engines for in-app mini-games that reward the platform's native currency.",
-    projects: "Opening Projects.lnk...",
+    projects: "Opening Projects.lnk: GlyphForge Engine, Glyph City: Afterlight, and PurgeLog...",
     experience: "Opening Experience.exe...",
     contact: "Email: AmirHossein_Dolati@outlook.com | LinkedIn is available from Contact.cmd.",
     cv: "Opening CV download...",

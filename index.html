@@ -117,6 +117,7 @@
                 <div class="button-row">
                   <a class="button primary" href="mailto:AmirHossein_Dolati@outlook.com" target="_blank" rel="noopener">Email</a>
                   <a class="button" href="amirhossein-dolati.pdf" target="_blank" rel="noopener">Download CV</a>
+                  <button class="button" type="button" data-open-app="projects">Featured Projects</button>
                   <button class="button" type="button" data-open-app="cmd">Open CMD</button>
                 </div>
               </div>
@@ -266,7 +267,7 @@
           </div>
         </section>
 
-        <section id="app-projects" class="window app-window" data-app="projects" style="--x: 310px; --y: 130px; --w: 640px; --h: 430px;">
+        <section id="app-projects" class="window app-window" data-app="projects" style="--x: 160px; --y: 60px; --w: 960px; --h: 570px;">
           <div class="titlebar">
             <span>Projects - selected_projects.lnk</span>
             <div class="window-actions">
@@ -276,6 +277,52 @@
             </div>
           </div>
           <div class="window-content">
+            <p class="eyebrow">Open-source / Built by AmirHossein</p>
+            <h2 class="showcase-heading">Worlds made of characters.</h2>
+            <p class="window-intro">Two experiments in terminal graphics: an engine for building scenes and a city that lives on its own.</p>
+            <div class="project-grid featured-projects">
+              <article class="project featured-project">
+                <a class="project-preview" href="https://github.com/amirhdolati/glyphforge-engine" target="_blank" rel="noopener" aria-label="Explore GlyphForge Engine on GitHub">
+                  <img src="assets/projects/glyphforge-engine.gif" alt="GlyphForge Engine rendering a moving camera around a stationary 3D sculpture using colored terminal characters" width="960" height="540" loading="lazy" decoding="async">
+                </a>
+                <div class="project-body">
+                  <span class="project-kind">Rendering library / Python</span>
+                  <h2>GlyphForge Engine</h2>
+                  <p>Build worlds out of characters. A pure-Python terminal rendering library with 3D triangle meshes, moving cameras, atmospheric grid scenes, and colored ASCII graphics.</p>
+                  <p class="project-detail">Depth testing, OBJ/MTL loading, truecolor output, and ANSI, HTML, SVG, and text exports. No runtime dependencies.</p>
+                  <div class="button-row">
+                    <a class="button primary" href="https://github.com/amirhdolati/glyphforge-engine" target="_blank" rel="noopener">View on GitHub</a>
+                    <a class="button" href="https://github.com/amirhdolati/glyphforge-engine/blob/main/docs/gallery.md" target="_blank" rel="noopener">Explore Gallery</a>
+                  </div>
+                </div>
+              </article>
+              <article class="project featured-project">
+                <a class="project-preview" href="https://github.com/amirhdolati/glyph-city" target="_blank" rel="noopener" aria-label="Explore Glyph City on GitHub">
+                  <img src="assets/projects/glyph-city.webp" alt="Glyph City animated canal scene with changing light, rainfall, and reflections rendered as colored ASCII" width="960" height="540" loading="lazy" decoding="async">
+                </a>
+                <div class="project-body">
+                  <span class="project-kind">Living city / Python</span>
+                  <h2>Glyph City: Afterlight</h2>
+                  <p>A living ASCII city that keeps running without keyboard input. Watch autonomous residents go about their day, or take control in first-person walking mode.</p>
+                  <p class="project-detail">Six districts, furnished shop windows, day/night lighting, weather, canal reflections, cinematic City Watch, and photo mode.</p>
+                  <div class="button-row">
+                    <a class="button primary" href="https://github.com/amirhdolati/glyph-city" target="_blank" rel="noopener">View on GitHub</a>
+                    <a class="button" href="https://github.com/amirhdolati/glyph-city/blob/master/docs/preview-gallery.md" target="_blank" rel="noopener">Explore Gallery</a>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <p class="tool-note">Original animated captures from each project's renderer. Both projects run locally in a terminal; these previews show their output.</p>
+            <article class="project supporting-project">
+              <div>
+                <span class="project-kind">Also built / Developer tools</span>
+                <h2>PurgeLog</h2>
+                <p>An offline log sanitizer with a CLI, settings TUI, local browser GUI, and reusable JavaScript library. Redacts sensitive values while preserving useful debugging context. Detection is best effort; review output before sharing.</p>
+              </div>
+              <a class="button" href="https://github.com/amirhdolati/PurgeLog" target="_blank" rel="noopener">View on GitHub</a>
+            </article>
+            <details class="work-projects">
+              <summary>More engineering work</summary>
             <div class="project-grid">
               <article class="project"><h2>Core Fintech Services</h2><p>Technical leadership and Go development for Exchange, BNPL, SOD, Super App services, and payment infrastructure at Injast.</p></article>
               <article class="project"><h2>API Gateway &amp; Security</h2><p>Production API gateway, authentication, authorization, API security, and service switching across the platform.</p></article>
@@ -285,6 +332,7 @@
               <article class="project"><h2>Real-Time Delivery Server</h2><p>Multi-user low-latency server for voice, text, and GPS delivery with thread-safe synchronization.</p></article>
               <article class="project"><h2>ADAS Tooling</h2><p>ROS/RVIZ modules, LiDAR preprocessing, and C++/Python tooling for self-driving automotive systems.</p></article>
             </div>
+            </details>
           </div>
         </section>
 
