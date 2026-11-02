@@ -1,5 +1,4 @@
 const APP_TITLES = {
-  detective: "Detective.exe",
   resume: "Resume.exe",
   experience: "Experience.exe",
   stack: "Stack.sys",
@@ -560,8 +559,7 @@ function setupCommandLine() {
   let historyIndex = 0;
 
   const commands = {
-    detective: "Opening Production Detective: inspect the evidence, diagnose an outage, and verify your fix.",
-    help: "commands: help, detective, about, backend, fintech, leadership, ai, education, blockchain, projects, experience, contact, cv, life, mines, ie, trash, music, code, languages, shutdown, clear",
+    help: "commands: help, about, backend, fintech, leadership, ai, education, blockchain, projects, experience, contact, cv, life, mines, ie, trash, music, code, languages, shutdown, clear",
     about: "AmirHossein Dolati - Senior Software Engineer and Tech Lead with 6+ years building backend, distributed, and embedded systems in Go and C++.",
     backend: "Go services, production API gateways, authentication, authorization, API security, and payment infrastructure.",
     fintech: "Core fintech at Injast (Entekhab Group): Exchange, BNPL, SOD, Super App services, and payments.",
@@ -584,7 +582,6 @@ function setupCommandLine() {
   };
 
   const openCommands = {
-    detective: "detective",
     projects: "projects",
     experience: "experience",
     education: "education",
@@ -1499,5 +1496,3 @@ setupDesktopIcons();
 focusApp("resume");
 renderShell();
 playStartup();
-
-if (new URLSearchParams(window.location.search).get("app") === "detective") openApp("detective");
