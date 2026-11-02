@@ -16,6 +16,22 @@ A Windows 98-inspired interactive résumé for AmirHossein Dolati, Senior Softwa
 - **Media Player:** a nostalgic music player with cover art, playback controls, volume, and progress.
 - **Games and extras:** playable Minesweeper, Conway's Game of Life, a mock Internet Explorer, a recycle bin, startup sounds, a screensaver, and shutdown surprises.
 
+## Production Detective
+
+**[Play the debugging game](https://amirhdolati.github.io/resume/?app=detective)** — or open **Detective.exe** from the desktop or Start menu, click **Play Production Detective**, or type `detective` in CMD.
+
+Investigate three fictional incidents: **The double charge**, **The midnight avalanche**, and **The vanishing connections**. Inspect logs, distributed traces, and metrics; submit a diagnosis; choose a fix; and replay the failure conditions. Wrong choices explain why the incident persists. Correct fixes reveal recovery metrics, regression checks, a score, and incident notes.
+
+Each case has six evidence items. Inspect at least one item from each telemetry category before diagnosing. Complete evidence collection earns up to 30 points and resolving the case earns 70; incorrect attempts cost 10 points and hints cost 5. Case progress survives switching cases during the session. **Restart case** resets that case; reloading the page resets the game.
+
+![Production Detective investigating a payment outage with distributed traces and hypotheses](docs/screenshots/production-detective.jpg)
+
+All data and replay outcomes are synthetic, deterministic, and browser-local. No account, installation, or production access is needed. The rules and scenarios are in `detective-engine.mjs`; run their tests with:
+
+```sh
+node --test tests/detective.test.mjs
+```
+
 ## Featured Open-Source Projects
 
 Open **Projects.lnk** from the desktop, use the **Featured Projects** button in Resume.exe, or type `projects` in the command prompt.
